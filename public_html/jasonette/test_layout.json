@@ -1,0 +1,91 @@
+{
+    "$jason": {
+        "head": {
+            "title": "Never Ready Records",
+            "offline": "true",
+            "styles": {
+                "release_thumbnail": { "width": "132", "height": "132", "corner_radius": "2" },
+                "release_artist": { "size": "18", "font": "AvenirNext-Medium" },
+                "release_title": { "size": "14" },
+                "release_catno": { "size": "10" },
+                "artist_thumbnail": { "width": "96", "height": "96", "corner_radius": "2" },
+                "artist_tiny_bio": { "size": "12" }
+            },
+            "data": {
+                "releases": [
+                    { "artist": "Artist Name", "title": "Track title", "catno": "NVR001", "image": "http://gpcodes.com/jasonette/img/placeholder-1.png", "tracklist": { "1": "song number 1", "2": "song 2", "3": "song 3" }, "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3" },
+                    { "artist": "Artist Name", "title": "Track title", "catno": "NVR002", "image": "http://gpcodes.com/jasonette/img/placeholder-1.png", "tracklist": { "1": "song number 1", "2": "song 2", "3": "song 3" }, "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3" },
+                    { "artist": "Artist Name", "title": "Track title", "catno": "NVR003", "image": "http://gpcodes.com/jasonette/img/placeholder-1.png", "tracklist": { "1": "song number 1", "2": "song 2", "3": "song 3" }, "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3" },
+                    { "artist": "Artist Name", "title": "Track title", "catno": "NVR004", "image": "http://gpcodes.com/jasonette/img/placeholder-1.png", "tracklist": { "1": "song number 1", "2": "song 2", "3": "song 3" }, "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3" },
+                    { "artist": "Artist Name", "title": "Track title", "catno": "NVR005", "image": "http://gpcodes.com/jasonette/img/placeholder-1.png", "tracklist": { "1": "song number 1", "2": "song 2", "3": "song 3" }, "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3" }
+                ],
+                "artists": [
+                    { "pic": "http://gpcodes.com/jasonette/img/placeholder-1.png", "name": "Artist name", "tiny_bio": "Spicy jalapeno pig burgdoggen ground round biltong tri-tip meatloaf leberkas tongue shoulder.", "social_media": { "facebook": "1", "twitter": "2", "soundcloud": "3", "instagram": "4" } },
+                    { "pic": "http://gpcodes.com/jasonette/img/placeholder-1.png", "name": "Artist name", "tiny_bio": "Spicy jalapeno pig burgdoggen ground round biltong tri-tip meatloaf leberkas tongue shoulder.", "social_media": { "facebook": "1", "twitter": "2", "soundcloud": "3", "instagram": "4" } },
+                    { "pic": "http://gpcodes.com/jasonette/img/placeholder-1.png", "name": "Artist name", "tiny_bio": "Spicy jalapeno pig burgdoggen ground round biltong tri-tip meatloaf leberkas tongue shoulder.", "social_media": { "facebook": "1", "twitter": "2", "soundcloud": "3", "instagram": "4" } },
+                    { "pic": "http://gpcodes.com/jasonette/img/placeholder-1.png", "name": "Artist name", "tiny_bio": "Spicy jalapeno pig burgdoggen ground round biltong tri-tip meatloaf leberkas tongue shoulder.", "social_media": { "facebook": "1", "twitter": "2", "soundcloud": "3", "instagram": "4" } },
+                    { "pic": "http://gpcodes.com/jasonette/img/placeholder-1.png", "name": "Artist name", "tiny_bio": "Spicy jalapeno pig burgdoggen ground round biltong tri-tip meatloaf leberkas tongue shoulder.", "social_media": { "facebook": "1", "twitter": "2", "soundcloud": "3", "instagram": "4" } }
+                ]
+            } ,
+            "templates": {
+                "body": {
+                    "style": { "background": "#FFFFFF", "border": "#000000", "font": "AvenirNext" },
+                    "header": {
+                        "title": { "type": "image", "style": { "width": "240", "height": "30" } },
+                        "style": { "background": "#000000" }
+                    },
+                    "sections": [ 
+                        {
+                            "type": "horizontal",
+                            "header": {
+                                "type": "vertical",
+                                "style": { "align": "center", "background": "#EEEEEE", "spacing": "8" },
+                                "components": [ { "type": "label", "text": "Vinyl & Digital Releasez" } ]
+                            },
+                            "items": {
+                                "{{ #each releases }}": {
+                                    "type": "vertical",
+                                    "style": { "width": "160", "padding": "16", "background": "#ffffff", "align": "center", "height": "272" },
+                                    "components": [
+                                        { "type": "image", "class": "release_thumbnail", "url": "{{ image }}" },
+                                        { "type": "label", "class": "release_artist", "text": "{{ artist }}" },
+                                        { "type": "space" },
+                                        { "type": "label", "class": "release_title", "text": "{{ title }}" },
+                                        { "type": "space" },
+                                        { "type": "button", "text": "Listen", "style": { "background": "#17BF63", "color": "#ffffff", "align": "center", "width": "150", "height": "40", "corner_radius": "2" },
+                                            "action": { "type": "$audio.play", "options": { "url": "{{ snippet }}" } }
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "horizontal",
+                            "header": {
+                                "type": "vertical",
+                                "style": { "align": "center", "background": "#EEEEEE", "spacing": "8" },
+                                "components": [ { "type": "label", "text": "Artists" } ]
+                            },
+                            "items": {
+                                "{{ #each artists }}": {
+                                    "type": "vertical",
+                                    "style": { "width": "120", "padding": "12", "background": "#ffffff", "align": "center", "height": "300" },
+                                    "href": { "url": "http://gpcodes.com/jasonette/test_profile.json" },
+                                    "components": [
+                                        { "type": "image", "class": "artist_thumbnail", "url": "{{ pic }}" },
+                                        { "type": "space" , "style": { "height": "8" } },
+                                        { "type": "label", "text": "{{ name }}" },
+                                        { "type": "space" , "style": { "height": "8" } },
+                                        { "type": "label", "class": "artist_tiny_bio", "text": "{{ tiny_bio }}" },
+                                        { "type": "space" , "style": { "height": "12" } },
+                                        { "type": "label", "text": "Full bio", "style": { "color": "#17BF63", "align": "center" } }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

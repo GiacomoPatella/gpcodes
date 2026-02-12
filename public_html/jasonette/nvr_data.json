@@ -1,0 +1,187 @@
+{
+  "artists": [
+    {
+      "pic": "http://gpcodes.com/jasonette/img/munstac-green.png",
+      "name": "Munstac",
+      "url_name": "munstac",
+      "tiny_bio": "Andrea Comparin a.k.a. Munstac, developed an early fascination with music Andrea Comparin a.k.a. Munstac, developed an early fascination with music ",
+      "social_media": {
+        "facebook": "1",
+        "twitter": "2",
+        "soundcloud": "3",
+        "instagram": "4"
+      }
+    },
+    {
+      "pic": "http://gpcodes.com/jasonette/img/major-grave-yellow.png",
+      "name": "Major Grave",
+      "url_name": "major-grave",
+      "tiny_bio": "Andrea Comparin a.k.a. Munstac, developed an early fascination with music Andrea Comparin a.k.a. Munstac, developed an early fascination with music ",
+      "social_media": {
+        "facebook": "1",
+        "twitter": "2",
+        "soundcloud": "3",
+        "instagram": "4"
+      }
+    },
+    {
+      "pic": "http://gpcodes.com/jasonette/img/spatial-red.png",
+      "name": "Spatial",
+      "url_name": "spatial",
+      "tiny_bio": "Andrea Comparin a.k.a. Munstac, developed an early fascination with music Andrea Comparin a.k.a. Munstac, developed an early fascination with music ",
+      "social_media": {
+        "facebook": "1",
+        "twitter": "2",
+        "soundcloud": "3",
+        "instagram": "4"
+      }
+    },
+    {
+      "pic": "http://gpcodes.com/jasonette/img/ak-gon-blue.png",
+      "name": "AK & Gon",
+      "url_name": "ak-and-gon",
+      "tiny_bio": "Andrea Comparin a.k.a. Munstac, developed an early fascination with music Andrea Comparin a.k.a. Munstac, developed an early fascination with music ",
+      "social_media": {
+        "facebook": "1",
+        "twitter": "2",
+        "soundcloud": "3",
+        "instagram": "4"
+      }
+    },
+    {
+      "pic": "http://gpcodes.com/jasonette/img/unknown.png",
+      "name": "Unknown",
+      "url_name": "unknown",
+      "tiny_bio": "Andrea Comparin a.k.a. Munstac, developed an early fascination with music Andrea Comparin a.k.a. Munstac, developed an early fascination with music ",
+      "social_media": {
+        "facebook": "1",
+        "twitter": "2",
+        "soundcloud": "3",
+        "instagram": "4"
+      }
+    }
+  ],
+  "releases": [
+    {
+      "artist": "Munstac",
+      "title": "Sound of Palladio",
+      "catno": "NVR001",
+      "image": "https://f4.bcbits.com/img/a3908056215_16.jpg",
+      "tracklist": {
+        "1": "song number 1",
+        "2": "song 2",
+        "3": "song 3"
+      },
+      "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3"
+    },
+    {
+      "artist": "Major Grave",
+      "title": "Take Charge",
+      "catno": "NVR002",
+      "image": "https://f4.bcbits.com/img/a3908056215_16.jpg",
+      "tracklist": {
+        "1": "song number 1",
+        "2": "song 2",
+        "3": "song 3"
+      },
+      "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3"
+    },
+    {
+      "artist": "Spatial",
+      "title": "Xkimyosis",
+      "catno": "NVR003",
+      "image": "https://f4.bcbits.com/img/a3908056215_16.jpg",
+      "tracklist": {
+        "1": "song number 1",
+        "2": "song 2",
+        "3": "song 3"
+      },
+      "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3"
+    },
+    {
+      "artist": "AK & Gon",
+      "title": "Brutal",
+      "catno": "NVR004",
+      "image": "https://f4.bcbits.com/img/a3908056215_16.jpg",
+      "tracklist": {
+        "1": "song number 1",
+        "2": "song 2",
+        "3": "song 3"
+      },
+      "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3"
+    },
+    {
+      "artist": "Munstac",
+      "title": "La maratona",
+      "catno": "NVR005",
+      "image": "https://f4.bcbits.com/img/a3908056215_16.jpg",
+      "tracklist": {
+        "1": "song number 1",
+        "2": "song 2",
+        "3": "song 3"
+      },
+      "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3"
+    },
+    {
+      "artist": "Major Grave",
+      "title": "Unintended consequences",
+      "catno": "NVR006",
+      "image": "https://f4.bcbits.com/img/a3908056215_16.jpg",
+      "tracklist": {
+        "1": "song number 1",
+        "2": "song 2",
+        "3": "song 3"
+      },
+      "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3"
+    },
+    {
+      "artist": "Tessela",
+      "title": "Codigo",
+      "catno": "NVR007",
+      "image": "https://f4.bcbits.com/img/a3908056215_16.jpg",
+      "tracklist": {
+        "1": "song number 1",
+        "2": "song 2",
+        "3": "song 3"
+      },
+      "snippet": "http://gpcodes.com/jasonette/audio/NVR001_A1_The_Cathedral.mp3"
+    },
+    {
+      "artist": "Walter Ego",
+      "title": "Futura EP",
+      "catno": "NVR008",
+      "image": "https://f4.bcbits.com/img/a3908056215_16.jpg",
+      "tracklist": {
+        "1": "song number 1",
+        "2": "song 2",
+        "3": "song 3"
+      }
+    }
+  ],
+  "nvr_social": [
+    {
+      "social_icon": "http://gpcodes.com/jasonette/img/bandcamp.png",
+      "nvr_social_url": "https://neverready.bandcamp.com"
+    },
+    {
+      "social_icon": "http://gpcodes.com/jasonette/img/twitter.png",
+      "nvr_social_url": "https://twitter.com/nvready"
+    },
+    {
+      "social_icon": "http://gpcodes.com/jasonette/img/facebook.png",
+      "nvr_social_url": "https://www.facebook.com/Never-Ready-Records-1619328534977352/"
+    },
+    {
+      "social_icon": "http://gpcodes.com/jasonette/img/instagram.png",
+      "nvr_social_url": "https://www.instagram.com/nvready/"
+    },
+    {
+      "social_icon": "http://gpcodes.com/jasonette/img/soundcloud.png",
+      "nvr_social_url": "https://soundcloud.com/never-ready-records"
+    },
+    {
+      "social_icon": "http://gpcodes.com/jasonette/img/youtube.png",
+      "nvr_social_url": "https://www.youtube.com/"
+    }
+  ]
+}

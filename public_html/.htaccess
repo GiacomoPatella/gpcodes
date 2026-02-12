@@ -1,0 +1,13 @@
+
+AddHandler application/x-httpd-alt-php56___lsphp .php
+
+# Use PHP5.4 as default
+AddHandler application/x-httpd-php54 .php
+# BEGIN ANSIBLE MANAGED BLOCK
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTP_HOST} addon-gpcodes-com-gridhosted-co-uk.gh-191722.dummy$
+RewriteRule ^(.*)$ "http://gh-191722.dummy/404" [R=301,L]
+</IfModule>
+# END ANSIBLE MANAGED BLOCK
+DirectoryIndex index.html index.php index.htm index.shtm index.shtml default.html

@@ -1,0 +1,60 @@
+{
+    "$jason": {
+        "head": {
+            "title": "Artist profile",
+            "offline": "true",
+            "styles": {
+                "profile_pic": { "width": "100%" },
+                "profile_name": { "font": "AvenirNext-Bold", "size": "32", "color": "#222222" },
+                "profile_country": { "size": "20", "color": "#999999" },
+                "profile_bio": { "size": "16", "padding": "10"  }
+            }
+        },
+        "body": {
+            "header": {
+                "title": { "type": "image", "style": { "width": "240", "height": "30" }, "url": "http://gpcodes.com/jasonette/img/bandcamp-header.png" },
+                "style": { "background": "#000000" }
+            },
+            "sections": [{
+                "items": [
+
+                	{
+	                    "type": "vertical",
+	                    "style": { "padding": "0" },
+	                    "components": [
+	                        { "type": "image", "class": "profile_pic", "url": "http://gpcodes.com/jasonette/img/placeholder-1.png" }
+	                    ]
+	                },
+
+                	{
+	                    "type": "vertical",
+	                    "style": { "padding": "18" },
+	                    "components": [
+	                        { 
+	                        	"type": "vertical", 
+			                    
+	                        	"components": [
+	                        		{ "type": "label", "class": "profile_name", "text": "MUNSTAC", "style": { "border": "#FFFFFF" } },
+			                		{ "type": "label", "class": "profile_country", "text": "Vicenza, Italy", "style": { "border": "#FFFFFF" } }
+		                        ]
+	                        }
+	                    ]
+	                },
+
+                	{ "type": "label", "class": "profile_bio", "text": "Andrea Comparin a.k.a. Munstac, developed an early fascination with music starting with the drums, which he would spend a number of years studying while playing out as a member of several Rock, Alt-Rock and Jazz bands. Around the age of sixteen, electronic music became his true obsession, beginning with ‘Deeohdee’, a collaboration with Jonathan Hamilton which would see them play Exit Festival in 2011. Having since opened for artists as diverse as Oneman, Aucan, Godblesscomputers, Boddika, Populous, Go du Gong, Yakamoto Kotzuga, Miguel Campbell, Jonas Kopp, Dinky, SIS, Fango, Batongo, Spiller, Ninos du Brasil, Danny Daze, Ed Rush & Optical amongst others." },
+
+                	{
+	                    "type": "vertical",
+	                    "style": { "padding": "0" },
+	                    "components": [
+	                        { "type": "image", "class": "profile_pic", "url": "http://gpcodes.com/jasonette/img/placeholder-2.png" }
+	                    ]
+	                },
+
+	               	{ "type": "label", "class": "profile_bio", "text": "Andrea has continued his electronic productions while studying at the Vicenza Conservatory, where his talent for sound design has been put to good use delivering soundtracks for documentaries, short films and visual displays. Now with “Munstac”, a solo project, Andrea’s aural experimentation and sound design pedigree meets caustic technoid rhythms and pulsating dancefloor basslines with a singular mission to get the floor moving." } 
+
+	            ]
+            }]
+        }
+    }
+}
