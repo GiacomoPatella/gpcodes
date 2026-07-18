@@ -1,0 +1,151 @@
+# Content — case study copy and testimonials
+
+Source: `Giacomo_Patella__Portfolio.pdf` (2023). Lightly edited. Use this copy verbatim or
+tightened — never placeholder text.
+
+**Name:** Giacomo Patella (goes by Giacomo — some older testimonials say "Jack", normalise to Giacomo).
+**Title:** Senior Product Designer. **Location:** Florence, Italy.
+**Contact:** gp@gpcodes.com
+
+> **Experience note:** the source PDF claims "8 years experience" as of ~2023. It is now 2026.
+> Do not print a specific number of years — say "over a decade" or omit it.
+
+---
+
+## Selected work
+
+### Passionfruit — current
+**Content not yet available.** Render a clearly-marked placeholder as the most recent project.
+Do not invent copy for it.
+
+### hundo — hundo.xyz
+On-demand learning content platform aimed at Gen Z, launched end of 2022.
+
+Orchestrated the entire design process, resulting in the launch of hundo.xyz — an industry-first
+learning platform with a built-in skills wallet. Mentored junior designers, grew the brand
+identity and marketing assets, and worked closely with founders, developers, QA and product.
+
+The bold palette is an evolution of hundo's original black and yellow brand: secondary colours
+brightened and brought to the front. It grabs attention and conveys energy for a Gen Z audience
+that values creativity and individuality, while making navigation between areas of the web app
+easy to distinguish.
+
+*Tags: product design, design system, brand, mentoring*
+
+### PwC — Consulting Source
+Enabled thousands of PwC employees to sell and deliver work by improving the usability and
+layout of a global knowledge management system hosting methods, frameworks, templates, case
+studies and toolkits.
+
+Worked on: components library, search redesign, advanced search, methodology light, nested navigation.
+
+**2021 stats:** 20K monthly users · 96K unique viewers · 1.23M downloads · 2.3M page views.
+Top contributors: US, UK, India, Canada, Australia, Germany, Saudi Arabia.
+
+*Tags: enterprise UX, design system, search*
+
+### IPC — Ecosystem prototype
+Asked to create a high-fidelity prototype of a complex app to present to a global Tier 1
+investment bank.
+
+Pushed for the full UX process (research, interviews, user journey, IA, wireframes, prototype,
+test); the client wanted a polished-looking app first to convey their product vision. Built a
+clickable prototype in Principle with over 50 screens.
+
+**Outcome: the client's customer invested a six-figure sum to develop it further.**
+
+*Tags: prototyping, enterprise, fintech*
+
+### Okappy — Connections database & UX process
+Reviewed and redesigned features of Okappy's web and mobile apps, presenting concepts to
+stakeholders for discussion and approval.
+
+Work included: rethinking the Connections database layout to better use empty space and direct
+attention with more selective use of the brand orange; exploring the trade-off between more
+connections with less info above the fold versus fewer with more; brainstorming how to encourage
+users to invite their connections; simplifying the employee settings widget; a drip email
+onboarding flow with a deliberately warm, informal tone; a user journey touchpoint map with
+emotional states; and a sign-up flow that let users into the app immediately while verifying
+via an emailed activation link — removing friction without losing verification.
+
+*Tags: UX process, IA, user flows, stakeholder facilitation*
+
+### Octopus Energy — Powerloop
+Helped Octopus Energy launch an innovative, gamified pilot scheme for EV owners to efficiently
+charge their electric car and home systems at night via a smart charging point.
+
+*Delivered via Play Consulting. Fuller description still to be written.*
+
+*Tags: gamification, energy, web app*
+
+### Redington — FRANK-E
+Designed a highly personal digital experience allowing pension managers to quickly understand
+their scheme's key metrics, highlight weak points, and see what to do about them.
+
+This kind of solution wasn't available to pension managers; the aim was to make them more
+confident decision makers, deliver the most value to their members, and reduce costs.
+
+*Tags: data visualisation, fintech, dashboard*
+
+### Play Consulting — client work
+Play is a digital product innovation studio creating playful experiences that inspire. As part
+of the Product team: stakeholder interviews, brainstorming and ideation, user flows, wireframes,
+prototypes, final UIs, and design assets for web and print. Small teams, user-centred design and
+gamification techniques.
+
+---
+
+## Testimonials
+
+> "I have had the pleasure of working with Giac at both Play and hundo. Giac has a talent for
+> distilling complexity into well thought-out and enjoyable to use product design deliverables.
+> Giac was a key player in launching hundo.xyz. He was responsible for the full spectrum of
+> design from user testing and UX to visual design. When I started building a new team at hundo,
+> I didn't think twice about reaching out to Giac."
+> — **Scott Byrne-Fraser**, Technical Co-Founder, hundo
+
+> "Giacomo's UI/UX and Graphic Design work was instrumental in delivering our prototype product
+> which secured funding from a Global Tier 1 Investment Bank for further development and testing.
+> Throughout our early development cycles Giacomo brought clarity and focus to the UI/UX design
+> process and delivered working concepts that introduced an ease of use and customer friendly GUI
+> not often found in enterprise banking software."
+> — **Harel Zanzuri**, VP Risk & Compliance Services, IPC
+
+> "His design and UX abilities speak for themselves but his way of working sets him apart from
+> most others. He has a highly perceptive instinct for design that he uses to interrogate,
+> challenge and fully understand what it is we're trying to achieve — this makes briefing
+> sessions highly productive and enjoyable. We couldn't have done without him."
+> — **Will Kemble-Clarkson**, CEO, Zen Exchange
+
+> "I have had the privilege of working with Giacomo for just over a year. He possesses one of the
+> most outstanding creative minds I have had the opportunity to work with and his ability to
+> translate ideas into fully formed, carefully considered, high quality deliverables is a huge
+> asset to any project. He will always be a much valued member of the team that launched hundo.
+> I cannot recommend him highly enough."
+> — **Esther O'Callaghan OBE**, Founder, hundo
+
+> "He delivered excellent and well thought through changes, considering all of the elements and
+> even creating an internal training document to ensure all parties were clear on usage and
+> requirements. I would be happy to re-employ him as I consider him to have been a valuable
+> member of the team, who consistently achieved excellent results and delivered all expectations."
+> — **Nicola Snell**, Founder & MD, Press Loft
+
+> "Giacomo's work has enabled us to fast track Compliance3's entry to a buoyant and highly
+> competitive market. From brand design to priority applications, everything he has done has been
+> of the highest standard and designed not just for today, but also with the longevity required to
+> underpin our growth."
+> — **Compliance3**
+
+---
+
+## Other work (context — not needed on the homepage)
+
+**Branding:** Compliance3 (logo built from three chain rings of four elements, mirroring the
+"People, Process, Technology" motto), Janet Taylor Consulting.
+**Graphic design:** hundo "Top Trumps" 100-card series for Careercon22, Okappy Google Ads
+campaign, Sensée flyers/posters and a monthly newsletter with a bespoke layout each issue.
+**Code:** Sean Khan musician site (Bootstrap 3, custom CSS, GSAP), IPC EMC2NAS migration
+dashboard (HTML/CSS/Flexbox/PostCSS/React), Twitter timeline replica, pure-CSS skateboard,
+Never Ready Records iOS app built with Jasonette.
+**Early work:** Five Fold Records site redesign (2015), Hot Prop Or Not (2015), Zen Exchange
+agents dashboard (2015).
