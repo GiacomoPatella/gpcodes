@@ -2,19 +2,18 @@
 
 export type WorkRef = {
   id: string;
-  index: string;
   name: string;
   meta: string;
 };
 
 export const WORK_INDEX: WorkRef[] = [
-  { id: "passionfruit", index: "01", name: "Passionfruit", meta: "current — case study in preparation" },
-  { id: "hundo", index: "02", name: "hundo", meta: "learning platform · 2022" },
-  { id: "pwc", index: "03", name: "PwC — Consulting Source", meta: "enterprise knowledge system" },
-  { id: "okappy", index: "04", name: "Okappy", meta: "connections database & UX process" },
-  { id: "octopus", index: "05", name: "Octopus Energy — Powerloop", meta: "gamified EV charging pilot" },
-  { id: "redington", index: "06", name: "Redington — FRANK-E", meta: "pensions dashboard" },
-  { id: "ipc", index: "07", name: "IPC — Ecosystem prototype", meta: "fintech prototype, 50+ screens" },
+  { id: "passionfruit", name: "Passionfruit", meta: "current, case study in preparation" },
+  { id: "hundo", name: "hundo", meta: "learning platform · 2022" },
+  { id: "pwc", name: "PwC, Consulting Source", meta: "enterprise knowledge system" },
+  { id: "okappy", name: "Okappy", meta: "connections database & UX process" },
+  { id: "octopus", name: "Octopus Energy, Powerloop", meta: "gamified EV charging pilot" },
+  { id: "redington", name: "Redington, FRANK-E", meta: "pensions dashboard" },
+  { id: "ipc", name: "IPC, Ecosystem prototype", meta: "fintech prototype, 50+ screens" },
 ];
 
 export type Testimonial = {

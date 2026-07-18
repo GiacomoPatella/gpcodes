@@ -36,7 +36,7 @@ function goTo(hash: string, close: () => void) {
 const ITEMS: Item[] = [
   ...WORK_INDEX.map<Item>((w) => ({
     id: w.id,
-    label: `${w.index} ${w.name}`,
+    label: w.name,
     hint: w.meta,
     group: "work",
     run: ({ close }) => goTo(w.id, close),
@@ -58,6 +58,16 @@ const ITEMS: Item[] = [
     label: "Contact",
     group: "go to",
     run: ({ close }) => goTo("contact", close),
+  },
+  {
+    id: "go-palette",
+    label: "Compare accent palettes",
+    hint: "/palette",
+    group: "go to",
+    run: ({ close }) => {
+      close();
+      window.location.assign("/palette/");
+    },
   },
   {
     id: "copy-prompt",
@@ -101,7 +111,7 @@ const ITEMS: Item[] = [
   },
   {
     id: "email",
-    label: "Email Giacomo",
+    label: "Email me",
     hint: "gp@gpcodes.com",
     group: "actions",
     run: ({ close }) => {

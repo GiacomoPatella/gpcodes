@@ -1,6 +1,7 @@
 import Link from "next/link";
 import CommandPalette from "@/components/CommandPalette";
-import Console from "@/components/Console";
+import CopyPrompt from "@/components/CopyPrompt";
+import Dock from "@/components/Dock";
 import ThemeToggle from "@/components/ThemeToggle";
 import { TESTIMONIALS } from "@/data/site";
 
@@ -35,7 +36,7 @@ export default function Home() {
       </header>
 
       <main id="main" className="flex-1">
-        {/* ============ 01 · HERO ============ */}
+        {/* ============ HERO ============ */}
         <section className="hero" aria-labelledby="hero-title">
           <div className="container">
             <p className="mono-label">
@@ -45,10 +46,9 @@ export default function Home() {
               Complex systems, made precise and legible.
             </h1>
             <p className="dek">
-              Over a decade designing digital products end to end — research,
-              interface, design system — and{" "}
-              <strong>building the front-end</strong> when it counts. Based in
-              Florence, Italy.
+              I design digital products end to end: research, interface, design
+              system. And <strong>I build the front-end</strong> when it
+              counts. Over a decade in, currently at Passionfruit.
             </p>
 
             <dl className="field-grid">
@@ -80,27 +80,21 @@ export default function Home() {
               </div>
             </dl>
 
-            <Console />
+            <CopyPrompt />
           </div>
         </section>
 
-        {/* ============ 02 · SELECTED WORK ============ */}
+        {/* ============ SELECTED WORK ============ */}
         <section className="section" id="work" aria-labelledby="work-title">
           <div className="container">
             <div className="sec-head">
-              <span className="sec-index" aria-hidden="true">
-                02
-              </span>
               <h2 id="work-title">Selected work</h2>
-              <span className="sec-meta">7 entries · 2015 → now</span>
+              <span className="sec-meta">7 projects · 2015 → now</span>
             </div>
 
-            {/* 01 · Passionfruit — placeholder, content not yet available */}
+            {/* Passionfruit — placeholder, content not yet available */}
             <article className="entry reveal" id="passionfruit">
               <div className="entry-head">
-                <span className="entry-index" aria-hidden="true">
-                  01
-                </span>
                 <h3 className="entry-title">Passionfruit</h3>
                 <span className="entry-org">current work</span>
                 <span className="entry-year">2026</span>
@@ -108,19 +102,16 @@ export default function Home() {
               <div className="placeholder-slot">
                 <span className="mono-label">case study in preparation</span>
                 <p>
-                  Giacomo&rsquo;s current role. Notes are being written up;
-                  content is not yet available. This slot is reserved — nothing
-                  here is placeholder copy pretending otherwise.
+                  I&rsquo;m currently at Passionfruit and still writing this
+                  one up. The slot is reserved rather than filled with
+                  placeholder copy pretending otherwise.
                 </p>
               </div>
             </article>
 
-            {/* 02 · hundo */}
+            {/* hundo */}
             <article className="entry reveal" id="hundo">
               <div className="entry-head">
-                <span className="entry-index" aria-hidden="true">
-                  02
-                </span>
                 <h3 className="entry-title">hundo</h3>
                 <span className="entry-org">hundo.xyz</span>
                 <span className="entry-year">2022</span>
@@ -128,20 +119,20 @@ export default function Home() {
               <div className="entry-body">
                 <div className="entry-copy">
                   <p>
-                    On-demand learning content platform aimed at Gen&nbsp;Z,
-                    launched end of 2022. Orchestrated the entire design
-                    process, resulting in the launch of hundo.xyz — an
-                    industry-first learning platform with a built-in skills
-                    wallet. Mentored junior designers, grew the brand identity
-                    and marketing assets, and worked closely with founders,
-                    developers, QA and product.
+                    On-demand learning platform aimed at Gen&nbsp;Z, launched
+                    at the end of 2022. I orchestrated the entire design
+                    process behind hundo.xyz, an industry-first learning
+                    platform with a built-in skills wallet. I mentored junior
+                    designers, grew the brand identity and marketing assets,
+                    and worked closely with founders, developers, QA and
+                    product.
                   </p>
                   <p>
-                    The bold palette is an evolution of hundo&rsquo;s original
-                    black and yellow brand: secondary colours brightened and
-                    brought to the front, conveying energy for an audience that
-                    values creativity — while making navigation between areas
-                    of the web app easy to distinguish.
+                    The bold palette evolves hundo&rsquo;s original black and
+                    yellow brand: I brightened the secondary colours and
+                    brought them to the front, conveying energy for an
+                    audience that values creativity while keeping navigation
+                    between areas of the web app easy to distinguish.
                   </p>
                   <ul className="chip-row" aria-label="Disciplines">
                     <li className="chip">product design</li>
@@ -203,12 +194,9 @@ export default function Home() {
               </div>
             </article>
 
-            {/* 03 · PwC */}
+            {/* PwC */}
             <article className="entry reveal" id="pwc">
               <div className="entry-head">
-                <span className="entry-index" aria-hidden="true">
-                  03
-                </span>
                 <h3 className="entry-title">Consulting Source</h3>
                 <span className="entry-org">PwC</span>
                 <span className="entry-year">2021</span>
@@ -216,14 +204,14 @@ export default function Home() {
               <div className="entry-body">
                 <div className="entry-copy">
                   <p>
-                    Enabled thousands of PwC employees to sell and deliver work
-                    by improving the usability and layout of a global knowledge
+                    I improved the usability and layout of a global knowledge
                     management system hosting methods, frameworks, templates,
-                    case studies and toolkits.
+                    case studies and toolkits, enabling thousands of PwC
+                    employees to sell and deliver work.
                   </p>
                   <p>
-                    Worked on the components library, search redesign, advanced
-                    search, methodology light, and nested navigation.
+                    I worked on the components library, the search redesign,
+                    advanced search, methodology light and nested navigation.
                   </p>
                   <ul className="chip-row" aria-label="Disciplines">
                     <li className="chip">enterprise UX</li>
@@ -232,23 +220,26 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
+                  <figure className="fig">
+                    <div
+                      className="fig-frame"
+                      style={{ aspectRatio: "16 / 10" }}
+                    >
+                      <img
+                        src="/work/pwc-consulting-source/search-desktop.jpg"
+                        alt="Consulting Source search results page, cropped to the results list and filter rail"
+                        loading="lazy"
+                        style={{ objectPosition: "top" }}
+                      />
+                    </div>
+                    <figcaption>
+                      <span>Search redesign, cropped to detail*</span>
+                      <span className="path">
+                        work/pwc-consulting-source/search-desktop.jpg
+                      </span>
+                    </figcaption>
+                  </figure>
                   <div className="fig-pair">
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "4 / 5" }}
-                      >
-                        <img
-                          src="/work/pwc-consulting-source/search-desktop.jpg"
-                          alt="Consulting Source search results page, cropped to the results list and filter rail"
-                          loading="lazy"
-                          style={{ objectPosition: "top" }}
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Search redesign</span>
-                      </figcaption>
-                    </figure>
                     <figure className="fig">
                       <div
                         className="fig-frame"
@@ -263,7 +254,22 @@ export default function Home() {
                       </div>
                       <figcaption>
                         <span>Advanced filters</span>
-                        <span className="path">design-system artefacts*</span>
+                      </figcaption>
+                    </figure>
+                    <figure className="fig">
+                      <div
+                        className="fig-frame"
+                        style={{ aspectRatio: "4 / 5" }}
+                      >
+                        <img
+                          src="/work/pwc-consulting-source/search-mobile.jpg"
+                          alt="Consulting Source search on mobile, cropped to the results list"
+                          loading="lazy"
+                          style={{ objectPosition: "top" }}
+                        />
+                      </div>
+                      <figcaption>
+                        <span>Mobile search</span>
                       </figcaption>
                     </figure>
                   </div>
@@ -288,41 +294,39 @@ export default function Home() {
                       </div>
                     </dl>
                     <p className="stats-caption">
-                      2021 telemetry · top contributors: US · UK · IN · CA · AU
-                      · DE · SA — *frames shown carry placeholder copy; cropped
-                      to interaction detail
+                      2021 telemetry · top contributors: US, UK, IN, CA, AU,
+                      DE, SA. *The frames above carry placeholder copy, so I
+                      crop them to interaction detail.
                     </p>
                   </div>
                 </div>
               </div>
             </article>
 
-            {/* 04 · Okappy */}
+            {/* Okappy */}
             <article className="entry reveal" id="okappy">
               <div className="entry-head">
-                <span className="entry-index" aria-hidden="true">
-                  04
-                </span>
                 <h3 className="entry-title">Connections database</h3>
                 <span className="entry-org">Okappy</span>
               </div>
               <div className="entry-body">
                 <div className="entry-copy">
                   <p>
-                    Reviewed and redesigned features of Okappy&rsquo;s web and
-                    mobile apps, presenting concepts to stakeholders for
-                    discussion and approval. Rethought the Connections database
-                    layout to better use empty space and direct attention with
-                    more selective use of the brand orange — weighing more
-                    connections with less info above the fold against fewer
-                    with more.
+                    I reviewed and redesigned features of Okappy&rsquo;s web
+                    and mobile apps, presenting concepts to stakeholders for
+                    discussion and approval. I rethought the Connections
+                    database layout to make better use of empty space and
+                    direct attention with a more selective use of the brand
+                    orange, weighing more connections above the fold against
+                    fewer with richer detail.
                   </p>
                   <p>
-                    Also: a drip email onboarding flow with a deliberately warm
-                    tone, a user journey touchpoint map with emotional states,
-                    and a sign-up flow that let users straight into the app
-                    while verifying via an emailed activation link — removing
-                    friction without losing verification.
+                    I also designed a drip email onboarding flow with a
+                    deliberately warm tone, mapped the user journey with
+                    emotional states at each touchpoint, and reworked sign-up
+                    so users get straight into the app while an emailed
+                    activation link verifies them in the background: less
+                    friction, same verification.
                   </p>
                   <ul className="chip-row" aria-label="Disciplines">
                     <li className="chip">UX process</li>
@@ -332,61 +336,73 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
-                  <figure
-                    className="fig fig-stack"
-                    tabIndex={0}
-                    role="group"
-                    aria-label="Connections database list. Hover or focus to preview the row hover state; press to preview the click state."
-                  >
-                    <div className="fig-frame">
+                  <figure className="fig">
+                    <div
+                      className="fig-frame"
+                      style={{ aspectRatio: "2400 / 1706" }}
+                    >
                       <img
                         src="/work/okappy/db-list.jpg"
-                        alt="Okappy connections database: list layout at rest"
-                        loading="lazy"
-                      />
-                      <img
-                        className="state state-hover"
-                        src="/work/okappy/db-list-hover.jpg"
-                        alt=""
-                        aria-hidden="true"
-                        loading="lazy"
-                      />
-                      <img
-                        className="state state-active"
-                        src="/work/okappy/db-list-click.jpg"
-                        alt=""
-                        aria-hidden="true"
+                        alt="Okappy connections database: redesigned list layout"
                         loading="lazy"
                       />
                     </div>
                     <figcaption>
-                      <span>
-                        <span className="hint-dot" aria-hidden="true" /> hover
-                        to preview the designed hover state · press for click
-                      </span>
-                      <span className="path">work/okappy/db-list*.jpg</span>
+                      <span>Connections database, list layout</span>
+                      <span className="path">work/okappy/db-list.jpg</span>
                     </figcaption>
                   </figure>
+                  <div className="fig-pair">
+                    <figure className="fig">
+                      <div
+                        className="fig-frame"
+                        style={{ aspectRatio: "2400 / 1706" }}
+                      >
+                        <img
+                          src="/work/okappy/db-concept-1.jpg"
+                          alt="Early layout concept for the connections database"
+                          loading="lazy"
+                        />
+                      </div>
+                      <figcaption>
+                        <span>Layout concept</span>
+                      </figcaption>
+                    </figure>
+                    <figure className="fig">
+                      <div
+                        className="fig-frame"
+                        style={{ aspectRatio: "2400 / 1706" }}
+                      >
+                        <img
+                          src="/work/okappy/connections-notes.jpg"
+                          alt="Connection record with notes panel open"
+                          loading="lazy"
+                          style={{ objectPosition: "top" }}
+                        />
+                      </div>
+                      <figcaption>
+                        <span>Notes on a connection</span>
+                      </figcaption>
+                    </figure>
+                  </div>
                 </div>
               </div>
             </article>
 
-            {/* 05 · Octopus Energy */}
+            {/* Octopus Energy */}
             <article className="entry reveal" id="octopus">
               <div className="entry-head">
-                <span className="entry-index" aria-hidden="true">
-                  05
-                </span>
                 <h3 className="entry-title">Powerloop</h3>
                 <span className="entry-org">Octopus Energy · via Play</span>
               </div>
               <div className="entry-body">
                 <div className="entry-copy">
                   <p>
-                    Helped Octopus Energy launch an innovative, gamified pilot
-                    scheme for EV owners to efficiently charge their electric
-                    car and home systems at night via a smart charging point.
-                    Delivered as part of the product team at Play Consulting.
+                    I helped Octopus Energy launch an innovative, gamified
+                    pilot scheme for EV owners to efficiently charge their
+                    electric car and home systems at night via a smart
+                    charging point. Delivered as part of the product team at
+                    Play Consulting.
                   </p>
                   <ul className="chip-row" aria-label="Disciplines">
                     <li className="chip">gamification</li>
@@ -413,32 +429,62 @@ export default function Home() {
                       </span>
                     </figcaption>
                   </figure>
+                  <div className="fig-pair">
+                    <figure className="fig">
+                      <div
+                        className="fig-frame"
+                        style={{ aspectRatio: "3 / 4" }}
+                      >
+                        <img
+                          src="/work/octopus-powerloop/dashboard-cycles.jpg"
+                          alt="Powerloop mobile dashboard showing charge cycles"
+                          loading="lazy"
+                          style={{ objectPosition: "top" }}
+                        />
+                      </div>
+                      <figcaption>
+                        <span>Charge cycles</span>
+                      </figcaption>
+                    </figure>
+                    <figure className="fig">
+                      <div
+                        className="fig-frame"
+                        style={{ aspectRatio: "3 / 4" }}
+                      >
+                        <img
+                          src="/work/octopus-powerloop/history.jpg"
+                          alt="Powerloop charging history with completed night cycles"
+                          loading="lazy"
+                          style={{ objectPosition: "top" }}
+                        />
+                      </div>
+                      <figcaption>
+                        <span>Charging history</span>
+                      </figcaption>
+                    </figure>
+                  </div>
                 </div>
               </div>
             </article>
 
-            {/* 06 · Redington */}
+            {/* Redington */}
             <article className="entry reveal" id="redington">
               <div className="entry-head">
-                <span className="entry-index" aria-hidden="true">
-                  06
-                </span>
                 <h3 className="entry-title">FRANK-E</h3>
                 <span className="entry-org">Redington</span>
               </div>
               <div className="entry-body">
                 <div className="entry-copy">
                   <p>
-                    Designed a highly personal digital experience allowing
-                    pension managers to quickly understand their scheme&rsquo;s
-                    key metrics, highlight weak points, and see what to do
-                    about them.
+                    I designed a highly personal digital experience that lets
+                    pension managers quickly understand their scheme&rsquo;s
+                    key metrics, spot weak points, and see what to do about
+                    them.
                   </p>
                   <p>
-                    This kind of solution wasn&rsquo;t available to pension
-                    managers; the aim was to make them more confident decision
-                    makers, deliver the most value to their members, and reduce
-                    costs.
+                    Nothing like it was available to pension managers at the
+                    time. The aim: more confident decision makers, more value
+                    delivered to members, lower costs.
                   </p>
                   <ul className="chip-row" aria-label="Disciplines">
                     <li className="chip">data visualisation</li>
@@ -466,29 +512,60 @@ export default function Home() {
                       </span>
                     </figcaption>
                   </figure>
+                  <div className="fig-pair">
+                    <figure className="fig">
+                      <div
+                        className="fig-frame"
+                        style={{ aspectRatio: "3 / 4" }}
+                      >
+                        <img
+                          src="/work/redington-frank-e/company-stats.jpg"
+                          alt="FRANK-E company statistics view"
+                          loading="lazy"
+                          style={{ objectPosition: "top" }}
+                        />
+                      </div>
+                      <figcaption>
+                        <span>Company stats</span>
+                      </figcaption>
+                    </figure>
+                    <figure className="fig">
+                      <div
+                        className="fig-frame"
+                        style={{ aspectRatio: "3 / 4" }}
+                      >
+                        <img
+                          src="/work/redington-frank-e/governance.jpg"
+                          alt="FRANK-E governance view"
+                          loading="lazy"
+                          style={{ objectPosition: "top" }}
+                        />
+                      </div>
+                      <figcaption>
+                        <span>Governance</span>
+                      </figcaption>
+                    </figure>
+                  </div>
                 </div>
               </div>
             </article>
 
-            {/* 07 · IPC */}
+            {/* IPC */}
             <article className="entry reveal" id="ipc">
               <div className="entry-head">
-                <span className="entry-index" aria-hidden="true">
-                  07
-                </span>
                 <h3 className="entry-title">Ecosystem prototype</h3>
                 <span className="entry-org">IPC</span>
               </div>
               <div className="entry-body">
                 <div className="entry-copy">
                   <p>
-                    Asked to create a high-fidelity prototype of a complex app
-                    to present to a global Tier&nbsp;1 investment bank. Pushed
-                    for the full UX process — research, interviews, user
-                    journey, IA, wireframes, prototype, test — while the client
-                    wanted a polished app first to convey their product vision.
-                    Built a clickable prototype in Principle with over
-                    50&nbsp;screens.
+                    IPC asked me for a high-fidelity prototype of a complex
+                    app to present to a global Tier&nbsp;1 investment bank. I
+                    pushed for the full UX process (research, interviews, user
+                    journey, IA, wireframes, prototype, test) while the client
+                    wanted a polished app first to convey their product
+                    vision. I built a clickable prototype in Principle with
+                    over 50&nbsp;screens.
                   </p>
                   <div className="outcome">
                     <span className="mono-label">outcome</span>
@@ -520,13 +597,45 @@ export default function Home() {
                       <span className="path">work/ipc-ecosystem/table.jpg</span>
                     </figcaption>
                   </figure>
+                  <div className="fig-pair">
+                    <figure className="fig">
+                      <div
+                        className="fig-frame"
+                        style={{ aspectRatio: "2400 / 1500" }}
+                      >
+                        <img
+                          src="/work/ipc-ecosystem/menu.jpg"
+                          alt="IPC prototype navigation menu"
+                          loading="lazy"
+                        />
+                      </div>
+                      <figcaption>
+                        <span>Navigation</span>
+                      </figcaption>
+                    </figure>
+                    <figure className="fig">
+                      <div
+                        className="fig-frame"
+                        style={{ aspectRatio: "2400 / 1500" }}
+                      >
+                        <img
+                          src="/work/ipc-ecosystem/modal.jpg"
+                          alt="IPC prototype modal dialog"
+                          loading="lazy"
+                        />
+                      </div>
+                      <figcaption>
+                        <span>Modal detail</span>
+                      </figcaption>
+                    </figure>
+                  </div>
                 </div>
               </div>
             </article>
           </div>
         </section>
 
-        {/* ============ 03 · TESTIMONIALS ============ */}
+        {/* ============ TESTIMONIALS ============ */}
         <section
           className="section"
           id="testimonials"
@@ -534,9 +643,6 @@ export default function Home() {
         >
           <div className="container">
             <div className="sec-head">
-              <span className="sec-index" aria-hidden="true">
-                03
-              </span>
               <h2 id="testimonials-title">Testimonials</h2>
               <span className="sec-meta">6 records</span>
             </div>
@@ -560,11 +666,11 @@ export default function Home() {
         </section>
       </main>
 
-      {/* ============ 04 · FOOTER ============ */}
+      {/* ============ FOOTER ============ */}
       <footer className="site-footer" id="contact">
         <div className="container">
           <p className="mono-label" style={{ marginBottom: "var(--sp-3)" }}>
-            04 · contact
+            contact
           </p>
           <a className="footer-email u-link" href="mailto:gp@gpcodes.com">
             gp<span className="at">@</span>gpcodes.com
@@ -574,17 +680,17 @@ export default function Home() {
             <div className="footer-col">
               <dt>field notes</dt>
               <dd>
-                Senior product designer, Florence.
+                I&rsquo;m a senior product designer in Florence.
                 <br />
-                Designs end to end, builds when it counts.
+                I design end to end and build when it counts.
               </dd>
             </div>
             <div className="footer-col">
               <dt>machine</dt>
               <dd>
-                <a href="/index.md">/index.md</a> — markdown twin
+                <a href="/index.md">/index.md</a>, the markdown twin
                 <br />
-                <a href="/llms.txt">/llms.txt</a> — model-readable index
+                <a href="/llms.txt">/llms.txt</a>, model-readable index
               </dd>
             </div>
             <div className="footer-col">
@@ -601,12 +707,14 @@ export default function Home() {
           <div className="colophon">
             <span>© 2026 Giacomo Patella · Florence, Italy</span>
             <span>
-              Geist &amp; Geist Mono, self-hosted · Next.js static export ·
+              Figtree &amp; Geist Mono, self-hosted · Next.js static export ·
               CSS-only motion
             </span>
           </div>
         </div>
       </footer>
+
+      <Dock current="/" />
     </>
   );
 }

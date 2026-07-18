@@ -6,11 +6,11 @@
  */
 
 export const PROMPT_PREAMBLE = [
-  "You are reading the portfolio of Giacomo Patella, a senior product",
+  "You're reading my portfolio. I'm Giacomo Patella, a senior product",
   "designer based in Florence, Italy (gpcodes.com · gp@gpcodes.com).",
-  "The Markdown below is the full content of his homepage. Use it to",
-  "answer questions about his work, judge fit for a role or project,",
-  "or draft an intro email to him.",
+  "The Markdown below is the full content of my homepage. Use it to",
+  "answer questions about my work, judge fit for a role or project,",
+  "or draft an intro email to me.",
 ].join(" ");
 
 export async function buildPrompt(): Promise<string> {

@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 /* ============================================================
-   B — INSTRUMENT
-   Mono-led, light, precise. Laboratory notebook, not hacker den.
-   One type scale. One spacing grid. Motion = transform/opacity.
+   B2 — INSTRUMENT, revised
+   Mono-labelled, light, precise. Cool neutral ground, one sharp
+   accent. One type scale. One spacing grid. Motion = transform
+   and opacity only.
    ============================================================ */
 
 :root {
@@ -32,44 +33,86 @@
   --radius: 3px;
   --header-h: 3.5rem;
 
-  /* ---- light (default) ---- */
-  --bg: #fafaf7;
+  /* ============================================================
+     ACCENT — swap the site's accent by changing this ONE line.
+     Everything else (text-safe shade, dark-mode variant, washes)
+     is derived from it below.
+     ============================================================ */
+  --accent: #2b4cff;   /* electric blue */
+  /* --accent: #00c07f;   acid green  */
+  /* --accent: #6b2bff;   deep violet */
+
+  /* ---- cool neutrals, light (default) ---- */
+  --bg: #fbfbfc;
   --surface: #ffffff;
-  --wash: #f1f1ea;
-  --ink: #1b1b16;
-  --muted: #5d5d55;
-  --line: #e4e4db;
-  --line-strong: #c8c8bd;
-  --accent: #bf400b;
-  --accent-wash: rgba(191, 64, 11, 0.07);
-  --shadow: 0 1px 2px rgba(27, 27, 22, 0.05), 0 8px 32px rgba(27, 27, 22, 0.07);
+  --wash: #f2f3f5;
+  --ink: #0e0f11;
+  --muted: #6b6f76;
+  --line: #e3e5e8;
+  --line-strong: #c9ccd2;
+  --shadow: 0 1px 2px rgba(14, 15, 17, 0.05), 0 8px 32px rgba(14, 15, 17, 0.07);
+}
+
+/* Derived accent tokens — do not edit these when swapping the accent.
+   --accent-ink is the accent as actually used on text and graphics:
+   clamped dark enough in light mode (≥4.5:1 on --bg and --surface for
+   all three candidates), lifted in dark mode. Declared on both :root
+   and .accent-scope so a locally-overridden --accent (the /palette
+   comparison route) re-derives — inherited custom properties resolve
+   var() where they are declared, not where they are used. */
+:root,
+.accent-scope {
+  --accent-ink: var(--accent);
+  --accent-wash: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+@supports (color: oklch(from red l c h)) {
+  :root,
+  .accent-scope {
+    --accent-ink: oklch(from var(--accent) min(l, 0.5) c h);
+  }
 }
 
 [data-theme="dark"] {
-  --bg: #141412;
-  --surface: #1c1c19;
-  --wash: #232320;
-  --ink: #e9e9e1;
-  --muted: #a6a69a;
-  --line: #2b2b26;
-  --line-strong: #3d3d35;
-  --accent: #ff8352;
-  --accent-wash: rgba(255, 131, 82, 0.09);
+  --bg: #0e0f11;
+  --surface: #16171a;
+  --wash: #1c1e22;
+  --ink: #e9eaec;
+  --muted: #9aa0a8;
+  --line: #24262b;
+  --line-strong: #3a3d44;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+[data-theme="dark"],
+[data-theme="dark"] .accent-scope {
+  --accent-wash: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+@supports (color: oklch(from red l c h)) {
+  [data-theme="dark"],
+  [data-theme="dark"] .accent-scope {
+    --accent-ink: oklch(from var(--accent) max(l, 0.75) calc(c * 0.8) h);
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #141412;
-    --surface: #1c1c19;
-    --wash: #232320;
-    --ink: #e9e9e1;
-    --muted: #a6a69a;
-    --line: #2b2b26;
-    --line-strong: #3d3d35;
-    --accent: #ff8352;
-    --accent-wash: rgba(255, 131, 82, 0.09);
+    --bg: #0e0f11;
+    --surface: #16171a;
+    --wash: #1c1e22;
+    --ink: #e9eaec;
+    --muted: #9aa0a8;
+    --line: #24262b;
+    --line-strong: #3a3d44;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 32px rgba(0, 0, 0, 0.45);
+  }
+  :root:not([data-theme="light"]),
+  :root:not([data-theme="light"]) .accent-scope {
+    --accent-wash: color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+  @supports (color: oklch(from red l c h)) {
+    :root:not([data-theme="light"]),
+    :root:not([data-theme="light"]) .accent-scope {
+      --accent-ink: oklch(from var(--accent) max(l, 0.75) calc(c * 0.8) h);
+    }
   }
 }
 
@@ -100,12 +143,12 @@ body {
 }
 
 ::selection {
-  background: var(--accent);
+  background: var(--accent-ink);
   color: var(--bg);
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-ink);
   outline-offset: 2px;
   border-radius: 1px;
 }
@@ -213,9 +256,9 @@ kbd {
   transform: scaleX(1);
 }
 
-/* Accent link: always underlined with hairline, thickens via second layer */
+/* Accent link: always underlined with hairline. */
 .a-link {
-  color: var(--accent);
+  color: var(--accent-ink);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
@@ -260,7 +303,7 @@ kbd {
   color: var(--bg);
 }
 .btn-primary::after {
-  background: var(--accent);
+  background: var(--accent-ink);
 }
 @media (prefers-reduced-motion: reduce) {
   .btn:active {
@@ -369,7 +412,7 @@ kbd {
   font-size: var(--text-2xl);
   font-weight: 600;
   letter-spacing: -0.025em;
-  line-height: 1.02;
+  line-height: 1.04;
   text-wrap: balance;
 }
 .hero .dek {
@@ -425,89 +468,62 @@ kbd {
   text-underline-offset: 0.2em;
 }
 .field dd a:hover {
-  text-decoration-color: var(--accent);
-  color: var(--accent);
+  text-decoration-color: var(--accent-ink);
+  color: var(--accent-ink);
 }
 
-/* ---- console (the AI-ready panel) ---- */
+/* ---- copy-as-prompt row (the demoted machine-readable control) ---- */
 
-.console {
-  margin-top: var(--sp-7);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-.console-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--sp-3);
-  padding: var(--sp-2) var(--sp-4);
-  border-bottom: 1px solid var(--line);
-  background: var(--wash);
-}
-.console-title {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-2);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: var(--muted);
-}
-.console-dot {
-  width: 0.4375rem;
-  height: 0.4375rem;
-  border-radius: 50%;
-  background: var(--accent);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .console-dot {
-    animation: pulse 2.4s ease-in-out infinite;
-  }
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
-.console-body {
-  padding: var(--sp-4);
-  overflow-x: auto;
-}
-.console-body pre {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  line-height: 1.75;
-  color: var(--muted);
-}
-.console-body .cmd {
-  color: var(--ink);
-}
-.console-body .prompt-char {
-  color: var(--accent);
-  user-select: none;
-}
-.console-actions {
+.copy-row {
+  margin-top: var(--sp-4);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--sp-2);
-  padding: var(--sp-3) var(--sp-4);
-  border-top: 1px solid var(--line);
-}
-.console-note {
-  margin-left: auto;
+  gap: var(--sp-2) var(--sp-3);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--muted);
 }
-@media (max-width: 40rem) {
-  .console-note {
-    margin-left: 0;
-    flex-basis: 100%;
+.copy-row-label {
+  letter-spacing: 0.02em;
+}
+.ai-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.ai-btn:hover {
+  border-color: var(--accent-ink);
+  color: var(--accent-ink);
+}
+.ai-btn:active {
+  transform: translateY(1px);
+}
+.ai-btn svg {
+  display: block;
+}
+.copy-row-links a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 0.2em;
+}
+.copy-row-links a:hover {
+  color: var(--accent-ink);
+  text-decoration-color: var(--accent-ink);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-btn:active {
+    transform: none;
   }
 }
 
@@ -522,11 +538,6 @@ kbd {
   align-items: baseline;
   gap: var(--sp-4);
   margin-bottom: var(--sp-8);
-}
-.sec-index {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--accent);
 }
 .sec-head h2 {
   font-size: var(--text-xl);
@@ -558,11 +569,6 @@ kbd {
   align-items: baseline;
   gap: var(--sp-2) var(--sp-4);
   margin-bottom: var(--sp-5);
-}
-.entry-index {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--accent);
 }
 .entry-title {
   font-size: var(--text-lg);
@@ -606,13 +612,13 @@ kbd {
 .outcome {
   margin-top: var(--sp-5);
   padding: var(--sp-3) var(--sp-4);
-  border-left: 2px solid var(--accent);
+  border-left: 2px solid var(--accent-ink);
   background: var(--accent-wash);
   border-radius: 0 var(--radius) var(--radius) 0;
 }
 .outcome .mono-label {
   display: block;
-  color: var(--accent);
+  color: var(--accent-ink);
   margin-bottom: var(--sp-1);
 }
 .outcome p {
@@ -620,7 +626,7 @@ kbd {
   line-height: 1.55;
 }
 
-/* ---- figures ---- */
+/* ---- figures: one featured image, a couple of thumbnails ---- */
 
 .fig {
   margin: 0;
@@ -659,48 +665,6 @@ kbd {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--sp-4);
-}
-
-/* stacked interaction-state figure (Okappy): hover/focus reveals the
-   recorded hover state, press reveals the click state. Opacity only. */
-.fig-stack .fig-frame {
-  aspect-ratio: 2400 / 1706;
-}
-.fig-stack .state {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.18s ease;
-}
-.fig-stack:hover .state-hover,
-.fig-stack:focus-visible .state-hover,
-.fig-stack:focus-within .state-hover {
-  opacity: 1;
-}
-.fig-stack:active .state-hover {
-  opacity: 0;
-}
-.fig-stack:active .state-active {
-  opacity: 1;
-}
-.fig-stack .hint-dot {
-  display: inline-block;
-  width: 0.4375rem;
-  height: 0.4375rem;
-  border-radius: 50%;
-  background: var(--line-strong);
-  transition: opacity 0.18s ease;
-}
-.fig-stack:hover .hint-dot,
-.fig-stack:focus-within .hint-dot {
-  background: var(--accent);
-}
-@media (prefers-reduced-motion: reduce) {
-  .fig-stack .state,
-  .console-dot {
-    transition: none;
-    animation: none;
-  }
 }
 
 /* ---- stats (PwC) ---- */
@@ -765,10 +729,6 @@ kbd {
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
-.stat-num sup {
-  font-size: var(--text-sm);
-  color: var(--muted);
-}
 .stat-label {
   display: block;
   margin-top: var(--sp-1);
@@ -812,9 +772,9 @@ kbd {
   display: inline-block;
   margin-bottom: var(--sp-2);
   padding: 0.125rem var(--sp-2);
-  border: 1px solid var(--accent);
+  border: 1px solid var(--accent-ink);
   border-radius: var(--radius);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 /* ---- testimonials ---- */
@@ -874,7 +834,7 @@ kbd {
 /* ---- footer ---- */
 
 .site-footer {
-  padding-block: var(--sp-9);
+  padding-block: var(--sp-9) calc(var(--sp-9) + 3.5rem);
 }
 .footer-email {
   font-family: var(--font-mono);
@@ -886,7 +846,7 @@ kbd {
 }
 .footer-email:hover .at,
 .footer-email:focus-visible .at {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 .footer-email .at {
   color: var(--muted);
@@ -924,8 +884,8 @@ kbd {
   text-underline-offset: 0.2em;
 }
 .footer-col dd a:hover {
-  color: var(--accent);
-  text-decoration-color: var(--accent);
+  color: var(--accent-ink);
+  text-decoration-color: var(--accent-ink);
 }
 .colophon {
   margin-top: var(--sp-8);
@@ -938,6 +898,97 @@ kbd {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--muted);
+}
+
+/* ---- floating dock: signposts the planned IA ---- */
+
+.dock {
+  position: fixed;
+  bottom: calc(var(--sp-4) + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 0;
+  max-width: calc(100vw - 2rem);
+}
+.dock-link {
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--muted);
+}
+.dock-link[aria-current="page"] {
+  color: var(--accent-ink);
+  background: var(--accent-wash);
+}
+.dock-link:hover {
+  color: var(--ink);
+}
+.dock-rule {
+  width: 1px;
+  height: 1rem;
+  background: var(--line);
+  margin-inline: var(--sp-1);
+}
+.dock-soon-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.dock-soon {
+  padding: var(--sp-1) var(--sp-2);
+  border: none;
+  border-radius: 999px;
+  background: none;
+  font: inherit;
+  color: var(--muted);
+  opacity: 0.55;
+  cursor: default;
+}
+.dock-tip {
+  position: absolute;
+  bottom: calc(100% + 0.625rem);
+  left: 50%;
+  padding: var(--sp-1) var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--muted);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.dock-soon-wrap:hover .dock-tip,
+.dock-soon:focus-visible + .dock-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .dock-tip {
+    transition: none;
+  }
+}
+@media print {
+  .dock {
+    display: none;
+  }
 }
 
 /* ---- command palette ---- */
@@ -953,7 +1004,7 @@ kbd {
   box-shadow: var(--shadow);
 }
 .palette::backdrop {
-  background: color-mix(in srgb, var(--bg, #fafaf7) 55%, transparent);
+  background: color-mix(in srgb, var(--bg, #fbfbfc) 55%, transparent);
   backdrop-filter: blur(2px);
 }
 .palette[open] {
@@ -983,7 +1034,7 @@ kbd {
 }
 .palette-input-row .prompt-char {
   font-family: var(--font-mono);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 .palette-input {
   flex: 1;
@@ -1032,7 +1083,7 @@ kbd {
 }
 .palette-item[aria-selected="true"] {
   background: var(--wash);
-  box-shadow: inset 2px 0 0 var(--accent);
+  box-shadow: inset 2px 0 0 var(--accent-ink);
 }
 .palette-empty {
   padding: var(--sp-5);
@@ -1050,6 +1101,79 @@ kbd {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--muted);
+}
+
+/* ---- /palette accent-comparison route (dev aid) ---- */
+
+.swatch-page {
+  padding-block: var(--sp-8) var(--sp-10);
+}
+.swatch-page > h1 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.swatch-page > .lede {
+  margin-top: var(--sp-3);
+  max-width: 44rem;
+  color: var(--muted);
+}
+.swatch-page > .lede code,
+.swatch-section code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 0.0625rem 0.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--wash);
+}
+.swatch-section {
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--line);
+}
+.swatch-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-3);
+}
+.swatch-head h2 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+.swatch-chip {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background: var(--accent-ink);
+  align-self: center;
+}
+.swatch-samples {
+  margin-top: var(--sp-5);
+  display: grid;
+  gap: var(--sp-5);
+}
+@media (min-width: 56rem) {
+  .swatch-samples {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.swatch-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.swatch-derived {
+  margin-top: var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted);
+  line-height: 1.9;
 }
 
 /* ---- scroll reveal — progressive enhancement, transform/opacity only ---- */

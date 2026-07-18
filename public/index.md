@@ -2,8 +2,8 @@
 
 Florence, Italy · gp@gpcodes.com · https://gpcodes.com
 
-Senior product designer with over a decade of experience designing digital
-products end to end — research, interface, design system — and building the
+I'm a senior product designer with over a decade of experience designing
+digital products end to end: research, interface, design system. I build the
 front-end when it counts.
 
 - Role: Senior Product Designer
@@ -16,27 +16,27 @@ front-end when it counts.
 
 ### Passionfruit (current, 2026)
 
-Case study in preparation — content not yet available.
+My current role. Case study in preparation, content not yet available.
 
 ### hundo — hundo.xyz (2022)
 
-On-demand learning content platform aimed at Gen Z, launched end of 2022.
-Orchestrated the entire design process, resulting in the launch of hundo.xyz —
-an industry-first learning platform with a built-in skills wallet. Mentored
-junior designers, grew the brand identity and marketing assets, and worked
-closely with founders, developers, QA and product. The bold palette is an
-evolution of hundo's original black and yellow brand: secondary colours
-brightened and brought to the front.
+On-demand learning platform aimed at Gen Z, launched at the end of 2022.
+I orchestrated the entire design process behind hundo.xyz, an industry-first
+learning platform with a built-in skills wallet. I mentored junior designers,
+grew the brand identity and marketing assets, and worked closely with
+founders, developers, QA and product. The bold palette evolves hundo's
+original black and yellow brand: I brightened the secondary colours and
+brought them to the front.
 
 Tags: product design, design system, brand, mentoring
 
 ### PwC — Consulting Source (2021)
 
-Enabled thousands of PwC employees to sell and deliver work by improving the
-usability and layout of a global knowledge management system hosting methods,
-frameworks, templates, case studies and toolkits. Worked on: components
-library, search redesign, advanced search, methodology light, nested
-navigation.
+I improved the usability and layout of a global knowledge management system
+hosting methods, frameworks, templates, case studies and toolkits, enabling
+thousands of PwC employees to sell and deliver work. I worked on the
+components library, the search redesign, advanced search, methodology light
+and nested navigation.
 
 2021 stats: 20K monthly users · 96K unique viewers · 1.23M downloads ·
 2.3M page views. Top contributors: US, UK, India, Canada, Australia, Germany,
@@ -46,19 +46,20 @@ Tags: enterprise UX, design system, search
 
 ### Okappy — Connections database & UX process
 
-Reviewed and redesigned features of Okappy's web and mobile apps, presenting
-concepts to stakeholders. Work included: rethinking the Connections database
-layout to better use empty space and direct attention with more selective use
-of the brand orange; a drip email onboarding flow with a deliberately warm,
-informal tone; a user journey touchpoint map with emotional states; and a
-sign-up flow that let users into the app immediately while verifying via an
-emailed activation link — removing friction without losing verification.
+I reviewed and redesigned features of Okappy's web and mobile apps,
+presenting concepts to stakeholders. I rethought the Connections database
+layout to make better use of empty space and direct attention with a more
+selective use of the brand orange. I also designed a drip email onboarding
+flow with a deliberately warm, informal tone, mapped the user journey with
+emotional states at each touchpoint, and reworked sign-up so users get
+straight into the app while an emailed activation link verifies them in the
+background: less friction, same verification.
 
 Tags: UX process, IA, user flows, stakeholder facilitation
 
 ### Octopus Energy — Powerloop
 
-Helped Octopus Energy launch an innovative, gamified pilot scheme for EV
+I helped Octopus Energy launch an innovative, gamified pilot scheme for EV
 owners to efficiently charge their electric car and home systems at night via
 a smart charging point. Delivered via Play Consulting.
 
@@ -66,19 +67,19 @@ Tags: gamification, energy, web app
 
 ### Redington — FRANK-E
 
-Designed a highly personal digital experience allowing pension managers to
-quickly understand their scheme's key metrics, highlight weak points, and see
-what to do about them. The aim: more confident decision makers, most value to
-members, reduced costs.
+I designed a highly personal digital experience that lets pension managers
+quickly understand their scheme's key metrics, spot weak points, and see what
+to do about them. The aim: more confident decision makers, more value
+delivered to members, lower costs.
 
 Tags: data visualisation, fintech, dashboard
 
 ### IPC — Ecosystem prototype
 
-High-fidelity prototype of a complex app presented to a global Tier 1
-investment bank. Pushed for the full UX process (research, interviews, user
-journey, IA, wireframes, prototype, test); built a clickable prototype in
-Principle with over 50 screens.
+IPC asked me for a high-fidelity prototype of a complex app to present to a
+global Tier 1 investment bank. I pushed for the full UX process (research,
+interviews, user journey, IA, wireframes, prototype, test) and built a
+clickable prototype in Principle with over 50 screens.
 
 Outcome: the client's customer invested a six-figure sum to develop it further.
 
@@ -116,6 +117,6 @@ Tags: prototyping, enterprise, fintech
 
 ## Contact
 
-Email: gp@gpcodes.com
+Email me: gp@gpcodes.com
 Site: https://gpcodes.com
 Machine-readable: https://gpcodes.com/llms.txt · https://gpcodes.com/index.md
