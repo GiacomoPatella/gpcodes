@@ -1,0 +1,24 @@
+# Giacomo Patella
+
+> Senior product designer in Florence, Italy. Over a decade designing digital
+> products end to end — research, interface, design system — and building the
+> front-end when it counts. Contact: gp@gpcodes.com
+
+## Work
+
+- [Passionfruit](https://gpcodes.com/#passionfruit): current role — case study in preparation
+- [hundo](https://gpcodes.com/#hundo): Gen Z learning platform with a built-in skills wallet, launched 2022; led the entire design process
+- [PwC — Consulting Source](https://gpcodes.com/#pwc): global knowledge management system; search redesign and components library; 20K monthly users, 1.23M downloads, 2.3M page views (2021)
+- [Okappy](https://gpcodes.com/#okappy): connections database redesign and full UX process work
+- [Octopus Energy — Powerloop](https://gpcodes.com/#octopus): gamified EV night-charging pilot, via Play Consulting
+- [Redington — FRANK-E](https://gpcodes.com/#redington): pensions dashboard making scheme metrics legible to decision makers
+- [IPC — Ecosystem prototype](https://gpcodes.com/#ipc): 50+ screen fintech prototype; the client's customer invested a six-figure sum to develop it further
+
+## Docs
+
+- [index.md](https://gpcodes.com/index.md): full Markdown version of the homepage, including testimonials
+
+## Contact
+
+- Email: gp@gpcodes.com
+- Site: https://gpcodes.com
