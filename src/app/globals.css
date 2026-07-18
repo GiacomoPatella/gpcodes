@@ -1209,3 +1209,23 @@ kbd {
     }
   }
 }
+
+/* ---- byline avatar ----
+   Small portrait beside the hero eyebrow. Sized in em so it tracks the
+   mono-label type step rather than being pinned to a pixel value. */
+.byline {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.byline-avatar {
+  width: 2.4em;
+  height: 2.4em;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  /* The portrait is cool-toned greyscale; a touch of the accent keeps it
+     from reading as a stock headshot dropped onto the page. */
+  filter: grayscale(1) contrast(1.02);
+}

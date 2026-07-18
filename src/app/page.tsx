@@ -39,7 +39,18 @@ export default function Home() {
         {/* ============ HERO ============ */}
         <section className="hero" aria-labelledby="hero-title">
           <div className="container">
-            <p className="mono-label">
+            <p className="mono-label byline">
+              {/* Plain img: static export runs images.unoptimized, so next/image
+                  would add a wrapper without adding anything. */}
+              <img
+                className="byline-avatar"
+                src="/avatar-192.jpg"
+                srcSet="/avatar-96.jpg 1x, /avatar-192.jpg 2x, /avatar-384.jpg 4x"
+                width={96}
+                height={96}
+                alt="Giacomo Patella"
+                decoding="async"
+              />
               Giacomo Patella · senior product designer
             </p>
             <h1 id="hero-title" style={{ marginTop: "var(--sp-4)" }}>
