@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
+import AccentPicker from "@/components/AccentPicker";
 
 export const metadata: Metadata = {
   title: "Accent comparison — gpcodes",
@@ -132,6 +133,8 @@ export default function PalettePage() {
           Each section below overrides that property locally, so what you see
           is exactly what the swap ships. Toggle the theme to check dark mode.
         </p>
+
+        <AccentPicker />
 
         {ACCENTS.map((a) => (
           <section

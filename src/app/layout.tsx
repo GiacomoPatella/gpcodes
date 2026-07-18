@@ -35,8 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-/* Applies a stored theme override before first paint to avoid flashing. */
-const themeInit = `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`;
+/* Applies a stored theme override and a stored accent before first paint to
+   avoid flashing. The accent is a trial setting written by /palette; every
+   other accent token derives from it in CSS. */
+const themeInit = `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);var a=localStorage.getItem("accent");if(a&&/^#[0-9a-f]{6}$/i.test(a))document.documentElement.style.setProperty("--accent",a)}catch(e){}})()`;
 
 export default function RootLayout({
   children,
