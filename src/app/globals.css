@@ -30,7 +30,11 @@
   --sp-10: 8rem;
 
   --container: 72rem;
-  --radius: 3px;
+  /* Softer than the original 3px — the page was reading as too angular.
+     Everything scales off --radius so the whole surface stays consistent. */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-lg: 16px;
   --header-h: 3.5rem;
 
   /* ============================================================
@@ -38,9 +42,10 @@
      Everything else (text-safe shade, dark-mode variant, washes)
      is derived from it below.
      ============================================================ */
-  --accent: #2b4cff;   /* electric blue */
-  /* --accent: #00c07f;   acid green  */
-  /* --accent: #6b2bff;   deep violet */
+  --accent: #2c4a56;   /* deep petrol */
+  /* --accent: #2f3a4a;   graphite blue */
+  /* --accent: #2b4f47;   pine          */
+  /* --accent: #2b4cff;   electric blue */
 
   /* ---- cool neutrals, light (default) ---- */
   --bg: #fbfbfc;
@@ -50,6 +55,10 @@
   --muted: #6b6f76;
   --line: #e3e5e8;
   --line-strong: #c9ccd2;
+  /* Ground gradient: --bg settling into a light slate toward the foot of the
+     page. Very low contrast on purpose — it should read as depth, not as a
+     coloured background. */
+  --bg-far: #eef1f4;
   --shadow: 0 1px 2px rgba(14, 15, 17, 0.05), 0 8px 32px rgba(14, 15, 17, 0.07);
 }
 
@@ -74,6 +83,7 @@
 
 [data-theme="dark"] {
   --bg: #0e0f11;
+  --bg-far: #15181c;
   --surface: #16171a;
   --wash: #1c1e22;
   --ink: #e9eaec;
@@ -96,6 +106,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0e0f11;
+    --bg-far: #15181c;
     --surface: #16171a;
     --wash: #1c1e22;
     --ink: #e9eaec;
@@ -133,7 +144,8 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg) 30%, var(--bg-far) 100%);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: var(--text-base);
@@ -150,7 +162,7 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent-ink);
   outline-offset: 2px;
-  border-radius: 1px;
+  border-radius: var(--radius-sm);
 }
 
 [id] {
@@ -203,7 +215,7 @@ body {
   display: inline-block;
   padding: 0.125rem var(--sp-2);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   letter-spacing: 0.02em;
@@ -224,7 +236,7 @@ kbd {
   padding: 0.0625rem 0.3125rem;
   border: 1px solid var(--line-strong);
   border-bottom-width: 2px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   background: var(--surface);
   font-family: var(--font-mono);
   font-size: var(--text-xs);

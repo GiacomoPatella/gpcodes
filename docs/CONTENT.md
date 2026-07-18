@@ -15,8 +15,53 @@ tightened — never placeholder text.
 ## Selected work
 
 ### Passionfruit — current
-**Content not yet available.** Render a clearly-marked placeholder as the most recent project.
-Do not invent copy for it.
+**Product Designer.**
+
+Passionfruit is a marketing platform that evolved from a vetted freelance talent marketplace
+into an AI-powered workspace for enterprise marketing teams.
+
+I led product design across this evolution, working closely with product, engineering,
+commercial teams and customers to turn complex workflows into intuitive digital experiences.
+
+**The marketplace.** Passionfruit initially connected companies with a curated network of vetted
+marketing specialists across disciplines such as growth, paid media, SEO, CRM, content and
+product marketing. I designed experiences across both sides of the marketplace: client
+onboarding, project creation, specialist discovery and matching, proposals, collaboration and
+project management.
+
+**PIP — AI for marketing teams.** As the company evolved, I helped shape PIP, Passionfruit's AI
+platform for medium and large marketing teams. PIP connects company knowledge and marketing data
+from sources such as analytics platforms, advertising accounts, CRMs, spreadsheets and internal
+databases. Teams can then use an AI assistant to analyse their data, uncover insights, create
+reports and artefacts, and automate recurring work through workflows.
+
+My work included defining the product's information architecture and designing core experiences
+across AI chat, integrations, files and knowledge, workflows, analytics and AI-generated
+outputs — with a strong focus on making complex AI capabilities feel clear, trustworthy and
+easy to use.
+
+**Highlights**
+- Led end-to-end product design across the transition from a two-sided talent marketplace to an
+  enterprise AI product.
+- Designed marketplace experiences spanning onboarding, matching, proposals, collaboration and
+  project management.
+- Helped define the product strategy, UX architecture and interaction patterns for PIP.
+- Designed AI experiences connecting chat with proprietary company data, marketing platforms,
+  files and internal knowledge.
+- Created scalable UX patterns for integrations, automated workflows, AI-generated artefacts
+  and analytics.
+- Worked in a fast-moving startup environment, balancing customer needs, business strategy,
+  technical constraints and emerging AI capabilities.
+
+*Tags: product design, AI, enterprise, design system, IA*
+
+**Assets:** `public/work/passionfruit/` — `pip-welcome`, `agents-leads`, `onboarding-goals`.
+
+> ⚠️ **Placeholder images, to be replaced.** Two open issues before these can ship:
+> 1. They are branded **Quotient**, not Passionfruit, while the copy calls PIP "Passionfruit's AI
+>    platform". Naming needs reconciling before publication.
+> 2. Confirm clearance to show pre-release enterprise product UI publicly.
+> Until both are resolved, treat the imagery as internal-only.
 
 ### hundo — hundo.xyz
 On-demand learning content platform aimed at Gen Z, launched end of 2022.
