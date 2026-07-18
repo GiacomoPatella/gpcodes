@@ -1,0 +1,420 @@
+{
+  "nodes": [
+    {
+      "id": "next",
+      "label": "next",
+      "kind": "external",
+      "loc": 0,
+      "imports": 0,
+      "importedBy": 4
+    },
+    {
+      "id": "next/dynamic",
+      "label": "next/dynamic",
+      "kind": "external",
+      "loc": 0,
+      "imports": 0,
+      "importedBy": 1
+    },
+    {
+      "id": "next/font/google",
+      "label": "next/font/google",
+      "kind": "external",
+      "loc": 0,
+      "imports": 0,
+      "importedBy": 1
+    },
+    {
+      "id": "next/link",
+      "label": "next/link",
+      "kind": "external",
+      "loc": 0,
+      "imports": 0,
+      "importedBy": 5
+    },
+    {
+      "id": "node:fs",
+      "label": "node:fs",
+      "kind": "external",
+      "loc": 0,
+      "imports": 0,
+      "importedBy": 1
+    },
+    {
+      "id": "node:path",
+      "label": "node:path",
+      "kind": "external",
+      "loc": 0,
+      "imports": 0,
+      "importedBy": 1
+    },
+    {
+      "id": "node:url",
+      "label": "node:url",
+      "kind": "external",
+      "loc": 0,
+      "imports": 0,
+      "importedBy": 1
+    },
+    {
+      "id": "p5",
+      "label": "p5",
+      "kind": "external",
+      "loc": 0,
+      "imports": 0,
+      "importedBy": 1
+    },
+    {
+      "id": "react",
+      "label": "react",
+      "kind": "external",
+      "loc": 0,
+      "imports": 0,
+      "importedBy": 6
+    },
+    {
+      "id": "scripts/graph.mjs",
+      "label": "graph.mjs",
+      "kind": "script",
+      "loc": 207,
+      "imports": 3,
+      "importedBy": 0
+    },
+    {
+      "id": "src/app/globals.css",
+      "label": "globals.css",
+      "kind": "style",
+      "loc": 1503,
+      "imports": 1,
+      "importedBy": 1
+    },
+    {
+      "id": "src/app/lab/architecture/page.tsx",
+      "label": "architecture/page.tsx",
+      "kind": "route",
+      "loc": 160,
+      "imports": 8,
+      "importedBy": 0
+    },
+    {
+      "id": "src/app/lab/page.tsx",
+      "label": "lab/page.tsx",
+      "kind": "route",
+      "loc": 63,
+      "imports": 5,
+      "importedBy": 0
+    },
+    {
+      "id": "src/app/layout.tsx",
+      "label": "app/layout.tsx",
+      "kind": "route",
+      "loc": 60,
+      "imports": 3,
+      "importedBy": 0
+    },
+    {
+      "id": "src/app/page.tsx",
+      "label": "app/page.tsx",
+      "kind": "route",
+      "loc": 731,
+      "imports": 6,
+      "importedBy": 0
+    },
+    {
+      "id": "src/app/palette/page.tsx",
+      "label": "palette/page.tsx",
+      "kind": "route",
+      "loc": 163,
+      "imports": 5,
+      "importedBy": 0
+    },
+    {
+      "id": "src/components/AccentPicker.tsx",
+      "label": "AccentPicker.tsx",
+      "kind": "component",
+      "loc": 291,
+      "imports": 1,
+      "importedBy": 1
+    },
+    {
+      "id": "src/components/CommandPalette.tsx",
+      "label": "CommandPalette.tsx",
+      "kind": "component",
+      "loc": 313,
+      "imports": 3,
+      "importedBy": 3
+    },
+    {
+      "id": "src/components/CopyPrompt.tsx",
+      "label": "CopyPrompt.tsx",
+      "kind": "component",
+      "loc": 71,
+      "imports": 2,
+      "importedBy": 1
+    },
+    {
+      "id": "src/components/Dock.tsx",
+      "label": "Dock.tsx",
+      "kind": "component",
+      "loc": 53,
+      "imports": 2,
+      "importedBy": 3
+    },
+    {
+      "id": "src/components/lab/ArchCanvas.tsx",
+      "label": "ArchCanvas.tsx",
+      "kind": "component",
+      "loc": 625,
+      "imports": 3,
+      "importedBy": 1
+    },
+    {
+      "id": "src/components/lab/ArchMap.tsx",
+      "label": "ArchMap.tsx",
+      "kind": "component",
+      "loc": 34,
+      "imports": 3,
+      "importedBy": 1
+    },
+    {
+      "id": "src/components/ThemeToggle.tsx",
+      "label": "ThemeToggle.tsx",
+      "kind": "component",
+      "loc": 17,
+      "imports": 1,
+      "importedBy": 4
+    },
+    {
+      "id": "src/data/site.ts",
+      "label": "site.ts",
+      "kind": "lib",
+      "loc": 65,
+      "imports": 0,
+      "importedBy": 2
+    },
+    {
+      "id": "src/lib/graph-types.ts",
+      "label": "graph-types.ts",
+      "kind": "lib",
+      "loc": 40,
+      "imports": 0,
+      "importedBy": 3
+    },
+    {
+      "id": "src/lib/graph.json",
+      "label": "graph.json",
+      "kind": "lib",
+      "loc": 420,
+      "imports": 0,
+      "importedBy": 1
+    },
+    {
+      "id": "src/lib/machine.ts",
+      "label": "machine.ts",
+      "kind": "lib",
+      "loc": 45,
+      "imports": 0,
+      "importedBy": 3
+    },
+    {
+      "id": "tailwindcss",
+      "label": "tailwindcss",
+      "kind": "external",
+      "loc": 0,
+      "imports": 0,
+      "importedBy": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "scripts/graph.mjs",
+      "to": "node:fs"
+    },
+    {
+      "from": "scripts/graph.mjs",
+      "to": "node:path"
+    },
+    {
+      "from": "scripts/graph.mjs",
+      "to": "node:url"
+    },
+    {
+      "from": "src/app/globals.css",
+      "to": "tailwindcss"
+    },
+    {
+      "from": "src/app/lab/architecture/page.tsx",
+      "to": "next"
+    },
+    {
+      "from": "src/app/lab/architecture/page.tsx",
+      "to": "next/link"
+    },
+    {
+      "from": "src/app/lab/architecture/page.tsx",
+      "to": "src/components/CommandPalette.tsx"
+    },
+    {
+      "from": "src/app/lab/architecture/page.tsx",
+      "to": "src/components/Dock.tsx"
+    },
+    {
+      "from": "src/app/lab/architecture/page.tsx",
+      "to": "src/components/lab/ArchMap.tsx"
+    },
+    {
+      "from": "src/app/lab/architecture/page.tsx",
+      "to": "src/components/ThemeToggle.tsx"
+    },
+    {
+      "from": "src/app/lab/architecture/page.tsx",
+      "to": "src/lib/graph-types.ts"
+    },
+    {
+      "from": "src/app/lab/architecture/page.tsx",
+      "to": "src/lib/graph.json"
+    },
+    {
+      "from": "src/app/lab/page.tsx",
+      "to": "next"
+    },
+    {
+      "from": "src/app/lab/page.tsx",
+      "to": "next/link"
+    },
+    {
+      "from": "src/app/lab/page.tsx",
+      "to": "src/components/CommandPalette.tsx"
+    },
+    {
+      "from": "src/app/lab/page.tsx",
+      "to": "src/components/Dock.tsx"
+    },
+    {
+      "from": "src/app/lab/page.tsx",
+      "to": "src/components/ThemeToggle.tsx"
+    },
+    {
+      "from": "src/app/layout.tsx",
+      "to": "next"
+    },
+    {
+      "from": "src/app/layout.tsx",
+      "to": "next/font/google"
+    },
+    {
+      "from": "src/app/layout.tsx",
+      "to": "src/app/globals.css"
+    },
+    {
+      "from": "src/app/page.tsx",
+      "to": "next/link"
+    },
+    {
+      "from": "src/app/page.tsx",
+      "to": "src/components/CommandPalette.tsx"
+    },
+    {
+      "from": "src/app/page.tsx",
+      "to": "src/components/CopyPrompt.tsx"
+    },
+    {
+      "from": "src/app/page.tsx",
+      "to": "src/components/Dock.tsx"
+    },
+    {
+      "from": "src/app/page.tsx",
+      "to": "src/components/ThemeToggle.tsx"
+    },
+    {
+      "from": "src/app/page.tsx",
+      "to": "src/data/site.ts"
+    },
+    {
+      "from": "src/app/palette/page.tsx",
+      "to": "next"
+    },
+    {
+      "from": "src/app/palette/page.tsx",
+      "to": "next/link"
+    },
+    {
+      "from": "src/app/palette/page.tsx",
+      "to": "react"
+    },
+    {
+      "from": "src/app/palette/page.tsx",
+      "to": "src/components/AccentPicker.tsx"
+    },
+    {
+      "from": "src/app/palette/page.tsx",
+      "to": "src/components/ThemeToggle.tsx"
+    },
+    {
+      "from": "src/components/AccentPicker.tsx",
+      "to": "react"
+    },
+    {
+      "from": "src/components/CommandPalette.tsx",
+      "to": "react"
+    },
+    {
+      "from": "src/components/CommandPalette.tsx",
+      "to": "src/data/site.ts"
+    },
+    {
+      "from": "src/components/CommandPalette.tsx",
+      "to": "src/lib/machine.ts"
+    },
+    {
+      "from": "src/components/CopyPrompt.tsx",
+      "to": "react"
+    },
+    {
+      "from": "src/components/CopyPrompt.tsx",
+      "to": "src/lib/machine.ts"
+    },
+    {
+      "from": "src/components/Dock.tsx",
+      "to": "next/link"
+    },
+    {
+      "from": "src/components/Dock.tsx",
+      "to": "react"
+    },
+    {
+      "from": "src/components/lab/ArchCanvas.tsx",
+      "to": "p5"
+    },
+    {
+      "from": "src/components/lab/ArchCanvas.tsx",
+      "to": "react"
+    },
+    {
+      "from": "src/components/lab/ArchCanvas.tsx",
+      "to": "src/lib/graph-types.ts"
+    },
+    {
+      "from": "src/components/lab/ArchMap.tsx",
+      "to": "next/dynamic"
+    },
+    {
+      "from": "src/components/lab/ArchMap.tsx",
+      "to": "src/components/lab/ArchCanvas.tsx"
+    },
+    {
+      "from": "src/components/lab/ArchMap.tsx",
+      "to": "src/lib/graph-types.ts"
+    },
+    {
+      "from": "src/components/ThemeToggle.tsx",
+      "to": "src/lib/machine.ts"
+    }
+  ],
+  "stats": {
+    "files": 18,
+    "edges": 46,
+    "loc": 4861,
+    "externals": 10
+  }
+}

@@ -16,7 +16,9 @@ function goTo(hash: string, close: () => void) {
   close();
   const el = document.getElementById(hash);
   if (!el) {
-    window.location.hash = hash;
+    // Not on the homepage (the palette also lives on /lab and /palette) —
+    // navigate there and let the browser handle the fragment.
+    window.location.assign(`/#${hash}`);
     return;
   }
   // Closing the dialog restores focus to the trigger, which cancels any
@@ -58,6 +60,26 @@ const ITEMS: Item[] = [
     label: "Contact",
     group: "go to",
     run: ({ close }) => goTo("contact", close),
+  },
+  {
+    id: "go-lab",
+    label: "Lab",
+    hint: "/lab",
+    group: "go to",
+    run: ({ close }) => {
+      close();
+      window.location.assign("/lab/");
+    },
+  },
+  {
+    id: "go-architecture",
+    label: "Architecture map",
+    hint: "/lab/architecture",
+    group: "go to",
+    run: ({ close }) => {
+      close();
+      window.location.assign("/lab/architecture/");
+    },
   },
   {
     id: "go-palette",

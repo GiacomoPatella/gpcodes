@@ -4,18 +4,22 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "graph": "node scripts/graph.mjs",
+    "prebuild": "node scripts/graph.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "next": "16.2.10",
+    "p5": "^2.3.0",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/p5": "^1.7.7",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
