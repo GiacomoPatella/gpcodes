@@ -92,7 +92,7 @@
       "id": "src/app/globals.css",
       "label": "globals.css",
       "kind": "style",
-      "loc": 1628,
+      "loc": 1666,
       "imports": 1,
       "importedBy": 1
     },
@@ -164,7 +164,7 @@
       "id": "src/components/Fig.tsx",
       "label": "Fig.tsx",
       "kind": "component",
-      "loc": 103,
+      "loc": 100,
       "imports": 1,
       "importedBy": 1
     },
@@ -188,7 +188,7 @@
       "id": "src/components/Lightbox.tsx",
       "label": "Lightbox.tsx",
       "kind": "component",
-      "loc": 138,
+      "loc": 201,
       "imports": 1,
       "importedBy": 1
     },
@@ -236,7 +236,7 @@
       "id": "src/lib/images.json",
       "label": "images.json",
       "kind": "lib",
-      "loc": 245,
+      "loc": 241,
       "imports": 0,
       "importedBy": 1
     },
@@ -446,7 +446,7 @@
   "stats": {
     "files": 22,
     "edges": 46,
-    "loc": 5809,
+    "loc": 5903,
     "externals": 10
   }
 }

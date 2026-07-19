@@ -88,8 +88,8 @@ const MANIFEST = [
   { out: "hundo/trump-cards.jpg", src: "hundo-trump-cards.png", cap: FEATURED },
   { out: "hundo/mobile-1.jpg", src: "hundo-1.png", cap: FEATURED },
   { out: "hundo/mobile-2.jpg", src: "hundo-2.png", cap: FEATURED },
-  // 450x685 source. The honest ceiling is far below the slot it sits in.
-  { out: "hundo/learn-tablet.jpg", src: "learn2-tablet.png", cap: FEATURED },
+  // learn-tablet is deliberately absent: its only source is 450x685, far below
+  // the slot it would sit in. Giacomo's call, leave it out.
 
   // --- IPC -----------------------------------------------------------------
   { out: "ipc-ecosystem/licensing.jpg", src: "IPC - eco-license.png", cap: FEATURED },

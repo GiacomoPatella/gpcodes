@@ -1535,23 +1535,33 @@ button.fig-frame:hover {
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: blur(6px);
 }
+.lb-scroll {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* The scroll surface is also the dismiss surface. */
+  cursor: zoom-out;
+}
 .lb-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: var(--sp-3);
-  width: 100%;
-  height: 100%;
+  /* margin:auto, not justify-content:center. Flex centring clips the top of
+     an overflowing child in every browser; auto margins do not, so a tall
+     phone screenshot stays fully reachable by scrolling. */
+  margin: auto;
   padding: var(--sp-6) var(--sp-4);
-  /* The box is the dismiss surface; only the image and caption are not. */
-  cursor: zoom-out;
+  min-height: 100%;
+  box-sizing: border-box;
 }
 .lb-img {
   /* max-width is set inline, per image, to its true pixel width: the point of
-     the whole pipeline is that nothing gets scaled past its real resolution. */
-  max-height: calc(100dvh - 8rem);
-  width: auto;
+     the whole pipeline is that nothing gets scaled past its real resolution.
+     Deliberately no max-height. A phone screen cropped to a short window on
+     the page is the one you most want to read end to end here, so it renders
+     at a legible width and the dialog scrolls instead of shrinking it to fit. */
   height: auto;
   object-fit: contain;
   border: 1px solid var(--line);
@@ -1559,24 +1569,6 @@ button.fig-frame:hover {
   background: var(--wash);
   cursor: default;
 }
-/* A figure that crops on purpose keeps that crop in the lightbox: the frame
-   holds the chosen ratio and the image fills it, exactly as on the page. */
-.lb-crop {
-  width: 100%;
-  max-height: calc(100dvh - 8rem);
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--wash);
-  cursor: default;
-}
-.lb-crop img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .lb-cap {
   display: flex;
   gap: var(--sp-3);
@@ -1589,6 +1581,52 @@ button.fig-frame:hover {
 .lb-dim {
   opacity: 0.7;
 }
+.lb-count {
+  padding-left: var(--sp-3);
+  border-left: 1px solid var(--line);
+  color: var(--ink);
+}
+
+/* Paging controls. Fixed, so they stay put while a tall image scrolls. */
+.lb-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: var(--text-md);
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.lb-nav:hover {
+  color: var(--ink);
+  border-color: var(--muted);
+}
+.lb-prev {
+  left: var(--sp-4);
+}
+.lb-next {
+  right: var(--sp-4);
+}
+@media (max-width: 30rem) {
+  .lb-nav {
+    top: auto;
+    bottom: var(--sp-4);
+    transform: none;
+  }
+  .lb-prev {
+    left: calc(50% - 3.25rem);
+  }
+  .lb-next {
+    right: calc(50% - 3.25rem);
+  }
+}
+
 .lb-close {
   position: fixed;
   top: var(--sp-4);

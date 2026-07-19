@@ -87,15 +87,22 @@ Native `<dialog>`, no library, no new dependencies. How it is put together:
 - Page weight is unchanged: zoom variants are only fetched on open. `public/work` is 15MB on
   disk, of which the initial payload is still the 10MB display set.
 
-**Deliberate crops survive into the lightbox.** Nine figures crop on purpose: they carry a
-`ratio` override plus `objectPosition`, because their frames deliberately disagree with the real
-file. The PwC screens are the clearest case, cut to interaction detail because the frames carry
-Lorem ipsum, with a footnote that says so. Zooming those to the full image opened on a page of
-"Lorem ipsum dolor sit amet" at full size, which undid the editorial decision and was the worst
-looking thing on the site. The lightbox now keeps the crop and simply shows it larger: PwC
-search-desktop goes from about 640px on the page to 1131px, so the interaction detail is
-inspectable and the placeholder copy stays off screen. Uncropped figures still open the full
-zoom variant.
+**A crop is a layout decision only.** Nine figures crop on purpose via a `ratio` override plus
+`objectPosition`, because their frames deliberately disagree with the real file. That crop shapes
+the frame on the page and stops there: **the lightbox always opens the whole image.** Giacomo's
+call, 19 Jul, and it is the right one. A phone screen shown as a short window in the layout is
+exactly the one you most want to read end to end when you open it. Tall shots therefore render at
+their true width and the dialog scrolls rather than shrinking them to fit: Powerloop's charge
+cycles screen opens at its real 640x2260 instead of being squashed to viewport height.
+
+Consequence to know about: the PwC frames are cropped because they carry Lorem ipsum, and opening
+them now shows that placeholder copy full size. The footnote under them already discloses it, and
+Giacomo plans to re-edit and re-crop those assets, so this is accepted rather than worked around.
+
+**Galleries page by group.** Opening an image opens its set: arrow keys or the on-screen
+controls move through it, wrapping at both ends. The group is whatever `[data-gallery]` the
+trigger sits in, falling back to the enclosing `<article>`, so each work entry is its own gallery
+and the graphic design contact sheet is one set of 11 with nothing wired per image.
 
 **Trap worth remembering:** the dialog `close` event does not bubble, so React's `onClose` never
 fires, and it proved unreliable to observe even with a direct listener. The symptom was the

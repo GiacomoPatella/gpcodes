@@ -62,11 +62,10 @@ export default function Fig({
   const zoomSrc = meta.zoom ? src.replace(/\.jpg$/, "-zoom.jpg") : src;
   const zoom = meta.zoom ?? { w: meta.w, h: meta.h };
 
-  // A deliberate crop travels with the image into the lightbox. Zooming past it
-  // would undo the editorial decision: the PwC frames would open on the full
-  // page of placeholder copy that the crop, and the footnote beneath them,
-  // exist to keep off the page. Zoom still gets you closer, it just does not
-  // re-frame the shot.
+  // A crop is a layout decision only: it shapes the frame on the page and
+  // stops there. The lightbox always opens the whole image, because a phone
+  // screen shown as a short window here is exactly the one you want to read
+  // end to end there.
 
   return (
     <figure className={className ? `fig ${className}` : "fig"}>
@@ -79,8 +78,6 @@ export default function Fig({
         data-zoom-h={zoom.h}
         data-zoom-alt={alt}
         data-zoom-caption={caption}
-        {...(ratio ? { "data-zoom-ratio": ratio } : {})}
-        {...(objectPosition ? { "data-zoom-position": objectPosition } : {})}
         aria-label={`Enlarge: ${caption}`}
       >
         <img
