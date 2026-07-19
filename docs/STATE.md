@@ -17,6 +17,9 @@ The Notion doc "Portfolio" (under "Build") holds the decision history.
 5. **No new dependencies** without a stated justification.
 6. Check every output against: would a person with taste have chosen this, or is it the first
    thing a model reaches for? This project has repeatedly caught generic output.
+7. **Model choice: do not use Fable for portfolio work.** Giacomo's call, 19 Jul. Pick whatever
+   fits the task: judgement-heavy design, copy and review work stays with the main model;
+   mechanical bulk passes can go to a cheaper tier. Fable is reserved for the `/lab` to-do app.
 
 ---
 
@@ -76,15 +79,45 @@ Every image on the site should be zoomable so viewers can inspect UI detail.
     human works against the copy. Giacomo has not decided.
   - Reduced motion renders the settled state immediately.
 
-### Group 4: possible `/lab` interaction study
+### Group 4: `/lab` interaction study, the to-do app
 
-A small to-do app, framed as an **interaction study** rather than a to-do app. The craft is the
+**Confirmed. Fable builds this one**, and only this one.
+
+A small to-do app framed as an **interaction study** rather than a to-do app. The craft is the
 subject: what happens when a row is added, completed, reordered, killed. Reference rows.gg
 ("kill row, add new row"). Use the `emil-design-eng`, `make-interfaces-feel-better` and
 `transitions-dev` skills. Static export, no dependencies, localStorage persistence.
 
 Risk to manage: a to-do app is the most clichéd demo there is. It only earns a place on a senior
 designer's portfolio if the interaction craft is explicitly the point.
+
+**Build it in two stages, not one.**
+
+*Stage 1: fundamentals.* The app working, with restrained but genuinely well-judged motion.
+Add, complete, reorder, delete, edit, empty state. Correct easing, no layout shift, keyboard
+operable, reduced-motion path. Nothing decorative yet. Verify visually before going further.
+
+*Stage 2: the special touches.* Giacomo's brief, in his words: "start adding actual special
+touches for every action and reaction. Crumble up and throw in a bin for deleting, throwing a
+seed and growing for a new task, I don't know, stuff like that."
+
+Notes on that, to weigh rather than obey:
+
+- **A true paper-crumple is expensive.** Doing it properly needs a canvas or WebGL simulation or
+  a pre-rendered frame sequence, which fights the no-dependencies rule. A CSS-achievable cousin
+  gets most of the feeling: the row folds along a couple of axes, rotates, shrinks and falls
+  into the bin with gravity easing rather than a linear curve. Try that before reaching for
+  anything heavier.
+- **Seed to sprout works well in CSS/SVG**: a small mark drops in, springs, and an SVG stem
+  draws via `stroke-dashoffset` as the row expands to full height.
+- **Do not give every action a metaphor.** If everything is a small story the thing becomes a
+  toy and slows down. Pick two or three signature moments and let the rest be quietly excellent.
+  Emil's principle applies: restraint is what makes the flourishes land.
+- **Delight must survive repetition.** An elaborate delete is charming once and irritating by
+  the tenth. Keep signature animations under roughly 400ms, and make sure rapid repeated actions
+  interrupt gracefully rather than queueing.
+- Being showier here than on the rest of the site is fine. It is `/lab`, and experimentation is
+  the stated point of the page.
 
 ---
 
