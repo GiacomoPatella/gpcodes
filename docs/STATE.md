@@ -119,9 +119,18 @@ which is preventable). Do not reintroduce a dependency on `close`.
     `position: sticky` and `fixed` for descendants**. The floating menu is sticky, so it must
     live outside the scaled wrapper.
   - Needs `animation-timeline: view()` progressive enhancement plus a reduced-motion path.
-- **Particle formation effect** (rows.gg logo): particles converge to form a shape.
-  - Raw Canvas 2D, roughly 5KB. Do not reintroduce p5.
-  - There is no logo, only the `gpcodes.com` wordmark, so that is the honest target.
+- **Particle formation effect: BUILT**, 19 Jul. `src/components/ParticleWordmark.tsx`, in the
+  footer. Raw Canvas 2D, no p5, no dependencies. The wordmark is sampled by rendering it to an
+  offscreen canvas and walking the alpha channel, so the particles trace the real letterforms.
+  - **It settles and stops.** Verified: zero animation frames scheduled once the last particle
+    lands. A permanently running RAF at the foot of every page is exactly how "not laggy" gets
+    broken. It replays only on re-entry into view.
+  - Build is gated on `document.fonts.ready` and a ResizeObserver. Sampling before the webfont
+    lands would trace the fallback face, and the first layout pass can report zero width, which
+    silently produced no particles at all.
+  - The plain-text wordmark underneath is the no-JS fallback. A canvas is transparent and cannot
+    cover it, so the component sets `data-ready` once it has particles and the text steps aside.
+  - Accent colour is resolved once per settle, not per frame, and repaints on theme change.
   - **RESOLVED: the footer.** Giacomo's call, 19 Jul. Combined with the end-of-page reveal as
     one signature moment. The reasoning that decided it: the rewritten hero copy is deliberately
     warm ("whether I can become one"), and a particle spectacle directly above it fights that

@@ -1664,3 +1664,39 @@ button.fig-frame:hover {
     transition: none;
   }
 }
+
+/* ============================================================
+   FOOTER PARTICLE WORDMARK
+   ============================================================ */
+
+.pw {
+  position: relative;
+  width: 100%;
+  margin-bottom: var(--sp-6);
+  /* Reserve the height the canvas will take, so nothing shifts when it
+     mounts. Matches the clamp in the component. */
+  min-height: clamp(4rem, 14vw, 8.75rem);
+}
+.pw canvas {
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+/* The real text is what the canvas is a picture of, and what remains without
+   JS. A canvas is transparent, so it cannot hide this by being on top: the
+   component sets data-ready once it has particles and the text steps aside.
+   visibility, not display, so the box keeps reserving its height. */
+.pw[data-ready] .pw-text {
+  visibility: hidden;
+}
+.pw-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: clamp(1.5rem, 5.5vw, 3.25rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--accent-ink);
+}

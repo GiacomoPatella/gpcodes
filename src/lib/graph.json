@@ -70,7 +70,7 @@
       "kind": "external",
       "loc": 0,
       "imports": 0,
-      "importedBy": 6
+      "importedBy": 7
     },
     {
       "id": "scripts/graph.mjs",
@@ -92,7 +92,7 @@
       "id": "src/app/globals.css",
       "label": "globals.css",
       "kind": "style",
-      "loc": 1666,
+      "loc": 1702,
       "imports": 1,
       "importedBy": 1
     },
@@ -124,8 +124,8 @@
       "id": "src/app/page.tsx",
       "label": "app/page.tsx",
       "kind": "route",
-      "loc": 676,
-      "imports": 4,
+      "loc": 678,
+      "imports": 5,
       "importedBy": 0
     },
     {
@@ -201,6 +201,14 @@
       "importedBy": 4
     },
     {
+      "id": "src/components/ParticleWordmark.tsx",
+      "label": "ParticleWordmark.tsx",
+      "kind": "component",
+      "loc": 303,
+      "imports": 1,
+      "importedBy": 1
+    },
+    {
       "id": "src/components/ThemeToggle.tsx",
       "label": "ThemeToggle.tsx",
       "kind": "component",
@@ -228,7 +236,7 @@
       "id": "src/lib/graph.json",
       "label": "graph.json",
       "kind": "lib",
-      "loc": 452,
+      "loc": 468,
       "imports": 0,
       "importedBy": 1
     },
@@ -352,6 +360,10 @@
     },
     {
       "from": "src/app/page.tsx",
+      "to": "src/components/ParticleWordmark.tsx"
+    },
+    {
+      "from": "src/app/page.tsx",
       "to": "src/data/site.ts"
     },
     {
@@ -439,14 +451,18 @@
       "to": "src/components/ThemeToggle.tsx"
     },
     {
+      "from": "src/components/ParticleWordmark.tsx",
+      "to": "react"
+    },
+    {
       "from": "src/components/ThemeToggle.tsx",
       "to": "src/lib/machine.ts"
     }
   ],
   "stats": {
-    "files": 22,
-    "edges": 46,
-    "loc": 5903,
+    "files": 23,
+    "edges": 48,
+    "loc": 6260,
     "externals": 10
   }
 }

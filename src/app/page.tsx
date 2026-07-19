@@ -1,5 +1,6 @@
 import CopyPrompt from "@/components/CopyPrompt";
 import Fig from "@/components/Fig";
+import ParticleWordmark from "@/components/ParticleWordmark";
 import Menu from "@/components/Menu";
 import { TESTIMONIALS } from "@/data/site";
 
@@ -627,6 +628,7 @@ export default function Home() {
       {/* ============ FOOTER ============ */}
       <footer className="site-footer" id="contact">
         <div className="container">
+          <ParticleWordmark />
           <p className="mono-label" style={{ marginBottom: "var(--sp-3)" }}>
             contact
           </p>
@@ -640,7 +642,7 @@ export default function Home() {
               <dd>
                 I&rsquo;m a senior product designer in Florence.
                 <br />
-                I design end to end and build when it counts.
+                Lately: AI tooling, and what a design engineer actually is.
               </dd>
             </div>
             <div className="footer-col">

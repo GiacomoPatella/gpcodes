@@ -85,8 +85,11 @@ export default function Lightbox() {
   }, []);
 
   // Kept in a ref so the key handler binds once instead of per navigation.
+  // Written in an effect, not during render: refs are not render-time state.
   const groupLenRef = useRef(0);
-  groupLenRef.current = group.length;
+  useEffect(() => {
+    groupLenRef.current = group.length;
+  }, [group.length]);
 
   const step = useCallback((delta: number) => {
     // Wraps, so paging past the end returns to the start rather than
