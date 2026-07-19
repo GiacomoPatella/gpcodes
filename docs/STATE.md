@@ -6,6 +6,84 @@ The Notion doc "Portfolio" (under "Build") holds the decision history.
 
 ---
 
+## IN FLIGHT, 19 Jul ~20:45. Read this first, it expires.
+
+**A second Claude session is editing this worktree right now.** Do not run `git add -A`,
+`git commit`, `git restore` or `git clean` here until it has stopped. Check first:
+
+```
+stat -f "%Sm %N" -t "%H:%M:%S" src/components/lab/RowsStudy.tsx src/app/globals.css
+```
+
+If those timestamps are within a few minutes of now, it is still writing.
+
+### What happened
+
+The to-do app was briefed into the wrong place. My prompt said "Repo: `~/code/gpcodes-b2`" and
+"build a to-do app for the /lab section of my portfolio", so it was built **inside** the site at
+`/lab/rows`, inheriting the portfolio's design system. Giacomo always intended it as a **separate
+entity with its own branding**, in `~/code/todo-app`, that `/lab` merely links out to. My
+briefing error.
+
+### Uncommitted changes here, all belonging to that session
+
+```
+ M src/app/globals.css          (a large appended block, its stylesheet)
+ M src/app/lab/page.tsx         (lab index entry)
+ M src/components/CommandPalette.tsx
+ M src/lib/graph.json           (regenerated build artefact)
+?? src/app/lab/rows/            (route)
+?? src/components/lab/RowsStudy.tsx
+```
+
+**None of this should be committed to `direction/b2`.** The portfolio branch is otherwise clean
+at `36d1938`.
+
+### The transfer, and why it is stale
+
+`~/code/todo-app` exists, builds, runs and is committed (`ccb05cd`). It was verified working:
+adding a row fires the readout, FLIP reordering works, localStorage persists.
+
+**But it is a snapshot taken at 20:18 and that session kept working.** By 20:41 the component had
+gone 33,765 to 45,437 bytes and the CSS block 576 to 856 lines. **The transfer must be re-synced
+before the cleanup.**
+
+### The re-sync method, which is mechanical and repeatable
+
+1. `cp src/components/lab/RowsStudy.tsx ~/code/todo-app/src/components/RowsStudy.tsx`
+   (it moves verbatim: no portfolio imports, no Tailwind, only its own `rows-*` classes)
+2. Extract its stylesheet, which is one contiguous block appended to `globals.css`:
+   `git diff -U0 src/app/globals.css | grep '^+' | grep -v '^+++' | sed 's/^+//'`
+3. Replace everything after the `/lab/rows` banner comment in
+   `~/code/todo-app/src/app/globals.css` with that block, keeping the token header above it.
+4. Check for tokens the new block consumes that are not yet declared in todo-app's `:root`.
+   The 20:18 version needed 22. A newer version may need more.
+5. `npm run build` in todo-app, then drive it in a browser. Do not trust the build alone.
+
+### Only after that, clean this worktree
+
+```
+git restore src/app/globals.css src/app/lab/page.tsx \
+            src/components/CommandPalette.tsx src/lib/graph.json
+rm -rf src/app/lab/rows src/components/lab/RowsStudy.tsx
+npm run graph            # regenerate graph.json cleanly
+```
+
+### Open with that session
+
+It was sent an amendment lifting the no-dependencies rule for the to-do app (the rule was
+inherited from this portfolio's brief and does not apply to a standalone motion study). It was
+asked to choose CSS or Motion, justify it, and decide **before** Stage 2, because Motion's
+`layout` animations would replace its hand-rolled FLIP. **Its answer is not back yet.** If it
+adopts Motion, the re-synced todo-app will need `motion` added to its dependencies.
+
+### Still to do in the portfolio once the above is settled
+
+`/lab` needs an entry linking **out** to the to-do app as an external project, with a short
+description and its URL. It must not be re-embedded in the site.
+
+---
+
 ## Standing rules
 
 1. **No em-dashes anywhere.** Not in page copy, `index.md`, `llms.txt`, docs or commit messages.
@@ -245,3 +323,30 @@ Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc
 - Dev server: `cd ~/code/gpcodes-b2 && npm run dev -- -p 3004`
 - Source archive: `~/Downloads/Portfolio.zip` (950MB, extracted subset in the session scratchpad
   which will not survive a clear, re-extract as needed)
+- **`~/code/todo-app`**: the interaction study, its own repo, its own branding. Not part of this
+  site. `/lab` will link out to it.
+
+### Deploying a preview, decided 19 Jul
+
+**Stay in the `gpcodes` repo.** A separate repo was considered and rejected: it would mean either
+migrating the custom domain off GitHub Pages later (DNS propagation, possible cert re-issue,
+downtime) or keeping two remotes in sync forever. The existing locked decision holds, launch is
+still just a merge into `main`.
+
+- The remote is `github.com/GiacomoPatella/gpcodes`, and it is **public**. Only `main` has ever
+  been pushed; every direction branch is local-only, including `direction/b2`.
+- **Use Vercel**, pointed at the repo with `direction/b2` as the production branch. Push updates
+  the preview. It cannot touch `main`, DNS, or the live site, which is the point.
+- Keep `output: "export"`. Vercel serves the static output fine, and GitHub Pages is still the
+  real target: diverging the build config means previewing something other than what ships.
+- `public/CNAME` is inert on Vercel, just a static file. It does not affect routing and Vercel
+  will not claim the domain unless it is added in project settings.
+- **Serving it at `gpcodes.com/some/path` was investigated and rejected.** GitHub Pages serves
+  one source per repo, so a subpath cannot map to another branch. The only route is committing
+  build output into the branch that serves the live site, which needs `basePath` plus
+  `assetPrefix` (and note `basePath` does **not** rewrite raw `<img src="/...">`, which is what
+  this site uses), and puts preview artefacts in the branch serving gpcodes.com. Not worth it
+  during iteration. At launch, a GitHub Action building both sites into one Pages deploy is the
+  clean version.
+- Turn on Vercel Deployment Protection while iterating if it should not be crawlable.
+- Not yet pushed: awaiting Giacomo's go-ahead, since the repo is public and history is permanent.
