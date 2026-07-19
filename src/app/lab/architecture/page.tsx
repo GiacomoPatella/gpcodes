@@ -6,7 +6,7 @@ import graphJson from "@/lib/graph.json";
 import type { Graph } from "@/lib/graph-types";
 
 export const metadata: Metadata = {
-  title: "Architecture map — gpcodes lab",
+  title: "Architecture map · gpcodes lab",
   description:
     "The real module graph of gpcodes.com, generated from its own source at build time and drawn as an interactive force-directed map.",
 };
@@ -33,13 +33,13 @@ export default function ArchitecturePage() {
         <p className="lede">
           This is the real module graph of the site you&rsquo;re reading. At
           build time a small Node script walks the source, reads every static
-          import, and writes the result to a JSON file — which this page then
+          import, and writes the result to a JSON file, which this page then
           draws. Nothing here is illustrative: the script, the data file and
           this page all appear in the graph, because they are part of the site
           they describe.
         </p>
         <p className="lede">
-          It&rsquo;s a small graph, and that&rsquo;s honest — the whole site
+          It&rsquo;s a small graph, and that&rsquo;s honest: the whole site
           is {`${graph.stats.files} files`}. I&rsquo;d rather show you a sparse truth
           than a padded diagram. What it does show: almost everything hangs off
           two heavy files, and the pages share a very thin set of primitives.
@@ -67,7 +67,7 @@ export default function ArchitecturePage() {
           .
         </p>
 
-        {/* The same data as the canvas, in honest HTML — for screen readers,
+        {/* The same data as the canvas, in honest HTML: for screen readers,
             for no-JS, and for anyone who prefers a table to a picture. */}
         <section className="graph-data" aria-labelledby="graph-table-title">
           <h2 id="graph-table-title">The same data as a table</h2>
@@ -130,8 +130,8 @@ export default function ArchitecturePage() {
           <p>
             What it doesn&rsquo;t handle: <code>require()</code>, computed
             import specifiers, imports quoted inside strings, and
-            package-exports resolution. None of those occur in this codebase —
-            if they ever do, the map will quietly miss them, and this paragraph
+            package-exports resolution. None of those occur in this codebase. If
+            they ever do, the map will quietly miss them, and this paragraph
             is the confession.
           </p>
         </section>

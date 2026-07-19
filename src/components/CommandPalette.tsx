@@ -16,13 +16,13 @@ function goTo(hash: string, close: () => void) {
   close();
   const el = document.getElementById(hash);
   if (!el) {
-    // Not on the homepage (the palette also lives on /lab and /palette) —
+    // Not on the homepage (the palette also lives on /lab and /palette), so
     // navigate there and let the browser handle the fragment.
     window.location.assign(`/#${hash}`);
     return;
   }
   // Closing the dialog restores focus to the trigger, which cancels any
-  // in-flight smooth scroll — so wait two frames for the top layer to be
+  // in-flight smooth scroll, so wait two frames for the top layer to be
   // fully torn down, then jump precisely and instantly, mirroring the CSS
   // scroll-margin-top (header + 2rem).
   requestAnimationFrame(() =>
@@ -98,7 +98,7 @@ const ITEMS: Item[] = [
     group: "actions",
     run: ({ close, status }) => {
       void copyPageAsPrompt().then((ok) => {
-        status(ok ? "prompt copied to clipboard" : "copy failed — open /index.md");
+        status(ok ? "prompt copied to clipboard" : "copy failed, open /index.md");
         setTimeout(close, 900);
       });
     },

@@ -3,10 +3,10 @@
 /**
  * The canvas for /lab/architecture, drawn with the raw Canvas 2D API.
  * (This used to be p5. p5 2.x's pointer events never fired here, so the DOM
- * already owned all interaction — p5 was doing only the render loop, for a
+ * already owned all interaction; p5 was doing only the render loop, for a
  * 1.3 MB route chunk. The 2D context does the same job for free, so the
  * drawing below is a direct port: same simulation, same marks, same frames.)
- * Everything it draws comes from graph.json — no decoration that isn't data.
+ * Everything it draws comes from graph.json: no decoration that isn't data.
  *
  * Visual language: hairline edges in the site's line colour, node marks in
  * ink, mono labels in muted. The accent appears only under interaction
@@ -41,8 +41,8 @@ type SimNode = {
 
 type Focus = { node: GraphNode; pinned: boolean } | null;
 
-/* Deterministic per-node seeding so the initial arrangement — and therefore
-   the settled one — is the same on every load. */
+/* Deterministic per-node seeding so the initial arrangement (and therefore
+   the settled one) is the same on every load. */
 function hash(s: string): number {
   let h = 5381;
   for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
@@ -70,7 +70,7 @@ function radiusOf(n: GraphNode): number {
 }
 
 /* Resolve CSS custom properties to concrete rgb triplets by computing them on
-   a probe element, then normalising through a 1×1 canvas — computed colours
+   a probe element, then normalising through a 1×1 canvas, because computed colours
    can come back as rgb(), color(srgb …) or oklch() depending on the token. */
 function readTokens(host: HTMLElement): Tokens {
   const probe = document.createElement("span");
@@ -90,7 +90,7 @@ function readTokens(host: HTMLElement): Tokens {
     return [d[0], d[1], d[2]];
   };
   probe.style.fontFamily = "var(--font-mono)";
-  /* The computed stack is already concrete family names — usable verbatim
+  /* The computed stack is already concrete family names, usable verbatim
      in a canvas font string. */
   const mono = getComputedStyle(probe).fontFamily;
   const tokens: Tokens = {
@@ -189,7 +189,7 @@ export default function ArchCanvas({
         y: H * (0.18 + 0.64 * rand()),
       };
     });
-    /* Half-width of each node's label at ~10px mono (≈6.2px per glyph) —
+    /* Half-width of each node's label at ~10px mono (≈6.2px per glyph),
        used to keep side-by-side labels from colliding. */
     const labelHalf = sim.map((s) => (s.n.label.length * 6.2) / 2);
 
@@ -371,8 +371,8 @@ export default function ArchCanvas({
       const focusIdx = pinned ?? hovered;
       const near = focusIdx !== null ? neighbors[focusIdx] : null;
 
-      /* Edges: hairlines at rest. Accent — and an import-direction
-         arrowhead — only for the focused node's direct edges. */
+      /* Edges: hairlines at rest. Accent (and an import-direction
+         arrowhead) only for the focused node's direct edges. */
       ctx.lineWidth = 1;
       for (const [a, b] of links) {
         if (focusIdx !== null && (a === focusIdx || b === focusIdx)) continue;
@@ -473,7 +473,7 @@ export default function ArchCanvas({
       loop();
     }
 
-    /* ---- interaction: hover, pin, cursor — DOM pointer events ---- */
+    /* ---- interaction: hover, pin, cursor: DOM pointer events ---- */
     function hitAt(x: number, y: number): number | null {
       if (x < 0 || y < 0 || x > W || y > H) return null;
       let best: number | null = null;
@@ -531,7 +531,7 @@ export default function ArchCanvas({
       host.removeEventListener("pointerdown", onDown);
     });
 
-    /* Follow the theme toggle, system scheme and the /palette accent — all
+    /* Follow the theme toggle, system scheme and the /palette accent. All of these
        land as attribute/style changes or events on the document. */
     const refresh = () => {
       tokens.current = readTokens(host);
@@ -552,7 +552,7 @@ export default function ArchCanvas({
       window.removeEventListener("accentchange", refresh);
       window.removeEventListener("storage", refresh);
     });
-    /* Mono webfont may finish loading after first paint — repaint labels. */
+    /* Mono webfont may finish loading after first paint, so repaint labels. */
     document.fonts?.ready.then(refresh).catch(() => {});
 
     /* Idle when the canvas is off-screen or the tab is hidden. */
@@ -642,7 +642,7 @@ export default function ArchCanvas({
           </>
         ) : (
           <span className="map-status-idle">
-            hover a node for its readout — click to pin it. Full data in the
+            hover a node for its readout; click to pin it. Full data in the
             table below.
           </span>
         )}

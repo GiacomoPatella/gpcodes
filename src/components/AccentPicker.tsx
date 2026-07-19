@@ -8,7 +8,7 @@ import {
   useSyncExternalStore,
 } from "react";
 
-/* Muted, deep candidates — deliberately low-chroma alternatives to the bright
+/* Muted, deep candidates: deliberately low-chroma alternatives to the bright
    trio. None are in the warm beige/orange family the original palette fell into. */
 const PRESETS: { hex: string; name: string }[] = [
   { hex: "#2f3a4a", name: "graphite blue" },
@@ -48,7 +48,7 @@ function resolve(probe: HTMLElement, value: string): number[] | null {
   return m && m.length >= 3 ? m.slice(0, 3).map(Number) : null;
 }
 
-/* The applied accent lives outside React — it's written to localStorage and
+/* The applied accent lives outside React: it's written to localStorage and
    onto the document element by the pre-paint script in layout.tsx. Reading it
    through useSyncExternalStore keeps hydration correct without setting state
    from an effect. */
@@ -87,7 +87,7 @@ export default function AccentPicker() {
     try {
       localStorage.setItem("accent", hex);
     } catch {
-      /* private mode — the trial still works for this page view */
+      /* private mode: the trial still works for this page view */
     }
     window.dispatchEvent(new Event(EVENT));
   }, []);
@@ -103,7 +103,7 @@ export default function AccentPicker() {
     window.dispatchEvent(new Event(EVENT));
   }, []);
 
-  /* Measure the *derived* text ink, not the raw accent — that's what actually
+  /* Measure the *derived* text ink, not the raw accent, which is what actually
      lands on text, and it's clamped in CSS. Re-measure on theme change too. */
   useEffect(() => {
     const probe = probeRef.current;
@@ -234,7 +234,7 @@ export default function AccentPicker() {
       </div>
 
       {/* Live preview. Deliberately NOT inside .accent-scope so it inherits the
-          root --accent the picker is setting — the sections below this card
+          root --accent the picker is setting. The sections below this card
           override the accent locally and so can't show the current choice. */}
       <div className="mt-5">
         <p className="font-mono text-xs uppercase tracking-wider text-[var(--muted)]">

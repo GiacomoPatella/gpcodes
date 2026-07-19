@@ -33,12 +33,20 @@
       "importedBy": 4
     },
     {
+      "id": "node:child_process",
+      "label": "node:child_process",
+      "kind": "external",
+      "loc": 0,
+      "imports": 0,
+      "importedBy": 1
+    },
+    {
       "id": "node:fs",
       "label": "node:fs",
       "kind": "external",
       "loc": 0,
       "imports": 0,
-      "importedBy": 1
+      "importedBy": 2
     },
     {
       "id": "node:path",
@@ -46,7 +54,7 @@
       "kind": "external",
       "loc": 0,
       "imports": 0,
-      "importedBy": 1
+      "importedBy": 2
     },
     {
       "id": "node:url",
@@ -73,10 +81,18 @@
       "importedBy": 0
     },
     {
+      "id": "scripts/images.mjs",
+      "label": "images.mjs",
+      "kind": "script",
+      "loc": 253,
+      "imports": 3,
+      "importedBy": 0
+    },
+    {
       "id": "src/app/globals.css",
       "label": "globals.css",
       "kind": "style",
-      "loc": 1500,
+      "loc": 1502,
       "imports": 1,
       "importedBy": 1
     },
@@ -108,7 +124,7 @@
       "id": "src/app/page.tsx",
       "label": "app/page.tsx",
       "kind": "route",
-      "loc": 920,
+      "loc": 898,
       "imports": 3,
       "importedBy": 0
     },
@@ -164,7 +180,7 @@
       "id": "src/components/Menu.tsx",
       "label": "Menu.tsx",
       "kind": "component",
-      "loc": 92,
+      "loc": 99,
       "imports": 3,
       "importedBy": 4
     },
@@ -196,7 +212,7 @@
       "id": "src/lib/graph.json",
       "label": "graph.json",
       "kind": "lib",
-      "loc": 384,
+      "loc": 412,
       "imports": 0,
       "importedBy": 1
     },
@@ -229,6 +245,18 @@
     {
       "from": "scripts/graph.mjs",
       "to": "node:url"
+    },
+    {
+      "from": "scripts/images.mjs",
+      "to": "node:child_process"
+    },
+    {
+      "from": "scripts/images.mjs",
+      "to": "node:fs"
+    },
+    {
+      "from": "scripts/images.mjs",
+      "to": "node:path"
     },
     {
       "from": "src/app/globals.css",
@@ -376,9 +404,9 @@
     }
   ],
   "stats": {
-    "files": 18,
-    "edges": 39,
-    "loc": 5032,
-    "externals": 9
+    "files": 19,
+    "edges": 42,
+    "loc": 5300,
+    "externals": 10
   }
 }

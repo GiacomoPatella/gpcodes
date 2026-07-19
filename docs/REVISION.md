@@ -1,7 +1,7 @@
-# B2 — revision brief
+# B2: revision brief
 
 This branch revises Direction B after Giacomo reviewed all three directions live.
-Read `docs/BRIEF.md` and `docs/CONTENT.md` first — they still apply. This file overrides them
+Read `docs/BRIEF.md` and `docs/CONTENT.md` first; they still apply. This file overrides them
 where they conflict.
 
 **B was chosen as the base.** A (editorial) was rejected. C (tactile) contributes its typeface.
@@ -24,7 +24,7 @@ On C: *"I like Figtree."*
 
 ## Required changes
 
-### 1. Palette — this is the most important change
+### 1. Palette: this is the most important change
 
 Three independent agents produced near-identical palettes: warm off-white grounds
 (`#f7f5f0` / `#fafaf7` / `#faf6f0`) with burnt-orange accents (`#9c4227` / `#bf400b` / `#d9552b`).
@@ -56,24 +56,24 @@ export) that renders the page's key components under each accent so Giacomo can 
 Also purge the other AI-default tells: no drop caps, no asterism dividers, no `№` folios, no
 Roman numerals, no numbered list in the work section.
 
-### 2. Voice — first person
+### 2. Voice: first person
 
 Rewrite ALL copy in first person. "I designed…", "I led…", "I'm currently at Passionfruit."
 No third-person self-reference anywhere, including meta description, `llms.txt` and `index.md`.
-Keep testimonials in their original third person — they're quotes from other people.
+Keep testimonials in their original third person; they're quotes from other people.
 
-### 3. Machine-readable block — demote to icon buttons
+### 3. Machine-readable block: demote to icon buttons
 
 The concept stays, the panel goes. Replace the full-width MACHINE-READABLE console with a
 compact control: **a "Copy for Claude" and a "Copy for ChatGPT" button**, icon-led, sitting
-unobtrusively (near the hero contact line or in the footer — your judgement, but it must not
+unobtrusively (near the hero contact line or in the footer; your judgement, but it must not
 dominate). Keep `/llms.txt`, `/index.md`, the `alternates` metadata, and the guarantee that the
 copied prompt is derived from the published markdown twin so they cannot drift.
 
 ### 4. Work presentation
 
 Per Giacomo: **one beautiful featured image per project, plus a couple of smaller thumbnails.**
-Nothing hover-to-reveal — imagery is visible at rest. Clean, generous, not a card grid.
+Nothing hover-to-reveal: imagery is visible at rest. Clean, generous, not a card grid.
 
 Keep the strong data treatment: PwC's tabular stats, IPC's six-figure outcome callout.
 Keep the PwC Lorem-ipsum handling (tight crops, honest caption).
@@ -81,18 +81,18 @@ Keep the PwC Lorem-ipsum handling (tight crops, honest caption).
 ### 5. Typeface
 
 **Figtree** for reading copy and display (Giacomo liked it in C). Keep a mono for labels,
-metadata and tabular figures. Both self-hosted via `next/font` — no runtime CDN calls.
+metadata and tabular figures. Both self-hosted via `next/font`, with no runtime CDN calls.
 
 ### 6. Floating menu + IA signposting
 
 Add a **floating menu** (persistent, unobtrusive). It must signpost the planned IA even where
 pages don't exist yet: `/work`, `/lab`, `/photography`, `/about`. Non-existent routes should be
-clearly marked as coming rather than 404ing — a disabled state with a tooltip, or stub pages
+clearly marked as coming rather than 404ing: a disabled state with a tooltip, or stub pages
 with a short honest placeholder. Your call, but no broken links.
 
 ### 7. Keep
 
-⌘K command palette exactly as it is — Giacomo called it out as the thing he loves.
+⌘K command palette exactly as it is; Giacomo called it out as the thing he loves.
 The structured field table in the hero.
 Light-first with real dark mode, `prefers-reduced-motion`, transform/opacity-only motion,
 static export, zero new dependencies unless justified.
@@ -101,10 +101,10 @@ static export, zero new dependencies unless justified.
 
 ## Explicitly NOT in this pass
 
-Do not build these — they need decisions Giacomo hasn't made yet:
+Do not build these; they need decisions Giacomo hasn't made yet:
 
 - **Web Audio interaction sounds** (agreed in principle: synthesized, off by default, visible
-  toggle, initialised on first user gesture — but not this pass)
+  toggle, initialised on first user gesture, but not this pass)
 - **The music player** (content source unresolved; copyright constraints under discussion)
 - **The `/work` gallery** (planned, after the homepage settles)
 - Case study pages, `/lab` and `/photography` content
@@ -119,4 +119,4 @@ Leave clean seams where these will go. Do not stub them with fake content.
 
 Report: what changed, the final palette values, how the accent swap works, where the
 Claude/ChatGPT buttons ended up and why, and anything you think is now weaker than in B.
-Be honest about weaknesses — Giacomo reviews this live and has a sharp eye for generic output.
+Be honest about weaknesses. Giacomo reviews this live and has a sharp eye for generic output.

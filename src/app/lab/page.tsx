@@ -3,7 +3,7 @@ import Link from "next/link";
 import Menu from "@/components/Menu";
 
 export const metadata: Metadata = {
-  title: "Lab — gpcodes",
+  title: "Lab · gpcodes",
   description:
     "Small built things: instruments, experiments, side pieces. One entry so far.",
 };
@@ -22,7 +22,7 @@ export default function LabPage() {
         <h1>Small built things</h1>
         <p className="lede">
           Design is my job; building is how I check my own thinking. This is
-          where the built pieces go. There&rsquo;s one entry so far — this
+          where the built pieces go. There&rsquo;s one entry so far; this
           section is new, and I&rsquo;d rather open with a single real piece
           than pad the list.
         </p>
@@ -35,7 +35,7 @@ export default function LabPage() {
                 <span className="lab-entry-meta">canvas 2d · force-directed</span>
               </div>
               <p>
-                This site&rsquo;s real module graph — every file and import,
+                This site&rsquo;s real module graph: every file and import,
                 generated from the source at build time and drawn as an
                 interactive map. The page is itself a node in the graph it
                 draws.

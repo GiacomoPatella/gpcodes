@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Figtree, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-/* Self-hosted at build time via next/font — no runtime font CDN calls. */
+/* Self-hosted at build time via next/font, so no runtime font CDN calls. */
 const sans = Figtree({
   variable: "--font-sans-src",
   subsets: ["latin"],
@@ -15,9 +15,9 @@ const mono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gpcodes.com"),
-  title: "Giacomo Patella — Senior Product Designer",
+  title: "Giacomo Patella · Senior Product Designer",
   description:
-    "I'm a senior product designer in Florence, Italy. Over a decade turning complex systems into precise, legible products: hundo, PwC, Octopus Energy, Redington, IPC, Okappy.",
+    "I'm a senior product designer in Florence, Italy. Over a decade making complicated products easier to live with: Passionfruit, hundo, PwC, Octopus Energy, Redington, IPC, Okappy.",
   alternates: {
     canonical: "/",
     types: {
@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Giacomo Patella — Senior Product Designer",
+    title: "Giacomo Patella · Senior Product Designer",
     description:
-      "I'm a senior product designer in Florence, Italy. I design end to end and build when it counts.",
+      "I'm a senior product designer in Florence, Italy. Over a decade making complicated products easier to live with, lately deep in AI tooling.",
     url: "https://gpcodes.com",
     siteName: "gpcodes",
     type: "website",

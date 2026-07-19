@@ -1,4 +1,4 @@
-# Portfolio redesign — design direction brief
+# Portfolio redesign: design direction brief
 
 Giacomo Patella, Senior Product Designer, Florence. Personal site at **gpcodes.com**.
 
@@ -24,13 +24,13 @@ reference sites feel expensive. Decoration spread evenly across a page reads as 
 
 ## Reference sites
 
-Fetch these and study the actual craft — do not work from these descriptions alone.
+Fetch these and study the actual craft; do not work from these descriptions alone.
 
 | Site | What Giacomo values |
 |---|---|
 | https://www.kyh.io/ | Aesthetics; the Claude/ChatGPT-ready prompts; the `.md` version of the site. *He notes it is "too minimal"* |
 | https://www.carmen-elena.space/ | Music listening display, tools-used list, terminal-like callout box, stats |
-| https://www.radbar.studio/ | Animated asset treatment (view-only — we have no such assets) |
+| https://www.radbar.studio/ | Animated asset treatment (view-only, we have no such assets) |
 | https://www.designjoy.co/ | Simplicity, typography, dynamism |
 | https://emilkowal.ski/ | Simplicity and minimalism |
 | https://www.userinterface.wiki/ | Section icons |
@@ -48,10 +48,10 @@ Fetch these and study the actual craft — do not work from these descriptions a
 - **`prefers-reduced-motion`** respected on every animated element.
 - **Light-first**, with a real dark mode via `prefers-color-scheme` + a `data-theme` override.
 - **No layout-shifting animation.** Animate `transform` and `opacity` only.
-- **p5.js**, if used, is *fine generative marginalia* — hairline rules, plot marks, small
+- **p5.js**, if used, is *fine generative marginalia*: hairline rules, plot marks, small
   data-driven ornament. Never a background spectacle. Lazy-loaded, paused when off-screen.
 - **Accessible**: real focus states, semantic landmarks, alt text, ≥4.5:1 body contrast.
-- Static export compatible — no server components doing runtime work, no API routes.
+- Static export compatible: no server components doing runtime work, no API routes.
 
 ---
 
@@ -86,7 +86,7 @@ by its outcome line, not a visual showpiece.
 
 ## Content
 
-Full case study copy is in `docs/CONTENT.md`. Use the real copy — no Lorem ipsum anywhere.
+Full case study copy is in `docs/CONTENT.md`. Use the real copy. No Lorem ipsum anywhere.
 
 Passionfruit is Giacomo's current work; **content is not yet available.** Leave a clearly
 marked placeholder slot for it as the most recent project.
@@ -100,11 +100,11 @@ layout, nav, footer). Not the case study pages, not `/lab`, not `/photography`.
 
 The homepage must contain:
 
-1. **Hero** — who he is, what he does, where. One signature moment lives here.
-2. **Selected work** — hundo, PwC, Okappy, Octopus, Redington, IPC + the Passionfruit
+1. **Hero**: who he is, what he does, where. One signature moment lives here.
+2. **Selected work**: hundo, PwC, Okappy, Octopus, Redington, IPC + the Passionfruit
    placeholder. This is the core of the page; give it the most thought.
-3. **Testimonials** — six are available, and they are unusually strong. Do not bury them.
-4. **Footer** — contact, `gp@gpcodes.com`.
+3. **Testimonials**: six are available, and they are unusually strong. Do not bury them.
+4. **Footer**: contact, `gp@gpcodes.com`.
 
 Planned IA for context (not to be built now): `/`, `/work`, `/work/[slug]`, `/lab`,
 `/photography`, `/about`.
@@ -116,7 +116,7 @@ Planned IA for context (not to be built now): `/`, `/work`, `/work/[slug]`, `/la
 Working code in your worktree, on your branch. Then a summary containing:
 
 1. The direction in **two sentences**.
-2. Type scale, palette, spacing system — the actual values.
+2. Type scale, palette, spacing system: the actual values.
 3. Where the two or three "virtuosity" moments are, and why those.
 4. Anything you deliberately rejected.
 5. Any dependency you added, and its justification.

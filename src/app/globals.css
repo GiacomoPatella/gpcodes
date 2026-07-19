@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ============================================================
-   B2 — INSTRUMENT, revised
+   B2 · INSTRUMENT, revised
    Mono-labelled, light, precise. Cool neutral ground, one sharp
    accent. One type scale. One spacing grid. Motion = transform
    and opacity only.
@@ -9,12 +9,12 @@
 
 :root {
   /* ---- the type scale. Nothing outside these seven steps. ---- */
-  --text-xs: 0.6875rem;  /* 11px — micro labels, kbd     */
-  --text-sm: 0.8125rem;  /* 13px — metadata, captions    */
-  --text-md: 0.9375rem;  /* 15px — mono body, chips, nav */
-  --text-base: 1.0625rem;/* 17px — reading copy          */
-  --text-lg: 1.375rem;   /* 22px — entry titles          */
-  --text-xl: 1.75rem;    /* 28px — section titles, stats */
+  --text-xs: 0.6875rem;  /* 11px: micro labels, kbd     */
+  --text-sm: 0.8125rem;  /* 13px: metadata, captions    */
+  --text-md: 0.9375rem;  /* 15px: mono body, chips, nav */
+  --text-base: 1.0625rem;/* 17px: reading copy          */
+  --text-lg: 1.375rem;   /* 22px: entry titles          */
+  --text-xl: 1.75rem;    /* 28px: section titles, stats */
   --text-2xl: clamp(2.5rem, 1.55rem + 3.6vw, 4rem); /* hero */
 
   /* ---- spacing, 4px grid ---- */
@@ -30,7 +30,7 @@
   --sp-10: 8rem;
 
   --container: 72rem;
-  /* Softer than the original 3px — the page was reading as too angular.
+  /* Softer than the original 3px; the page was reading as too angular.
      Everything scales off --radius so the whole surface stays consistent. */
   --radius: 10px;
   --radius-sm: 6px;
@@ -38,7 +38,7 @@
   --header-h: 3.5rem;
 
   /* ============================================================
-     ACCENT — swap the site's accent by changing this ONE line.
+     ACCENT: swap the site's accent by changing this ONE line.
      Everything else (text-safe shade, dark-mode variant, washes)
      is derived from it below.
      ============================================================ */
@@ -56,18 +56,18 @@
   --line: #e3e5e8;
   --line-strong: #c9ccd2;
   /* Ground gradient: --bg settling into a light slate toward the foot of the
-     page. Very low contrast on purpose — it should read as depth, not as a
+     page. Very low contrast on purpose: it should read as depth, not as a
      coloured background. */
   --bg-far: #eef1f4;
   --shadow: 0 1px 2px rgba(14, 15, 17, 0.05), 0 8px 32px rgba(14, 15, 17, 0.07);
 }
 
-/* Derived accent tokens — do not edit these when swapping the accent.
+/* Derived accent tokens: do not edit these when swapping the accent.
    --accent-ink is the accent as actually used on text and graphics:
    clamped dark enough in light mode (≥4.5:1 on --bg and --surface for
    all three candidates), lifted in dark mode. Declared on both :root
    and .accent-scope so a locally-overridden --accent (the /palette
-   comparison route) re-derives — inherited custom properties resolve
+   comparison route) re-derives, because inherited custom properties resolve
    var() where they are declared, not where they are used. */
 :root,
 .accent-scope {
@@ -245,7 +245,7 @@ kbd {
   color: var(--muted);
 }
 
-/* Animated underline — transform only, no layout shift. */
+/* Animated underline: transform only, no layout shift. */
 .u-link {
   position: relative;
   text-decoration: none;
@@ -351,7 +351,7 @@ kbd {
   position: sticky;
   top: 0;
   z-index: 60;
-  /* Shrink-wrapped and centred — a compact floating menu, not a full-width
+  /* Shrink-wrapped and centred: a compact floating menu, not a full-width
      header with rounded corners. */
   width: fit-content;
   max-width: calc(100vw - var(--sp-4));
@@ -469,7 +469,7 @@ kbd {
   background: var(--line);
 }
 /* Degradation, widest first: planned routes drop out (they are signposts,
-   not function — ⌘K still lists everything), then the trigger's text label.
+   not function; ⌘K still lists everything), then the trigger's text label.
    The live IA, palette and theme toggle survive to the narrowest viewport. */
 @media (max-width: 44rem) {
   .fmenu-soon-wrap {
@@ -640,6 +640,7 @@ kbd {
   font-size: var(--text-xl);
   font-weight: 600;
   letter-spacing: -0.015em;
+  text-wrap: balance;
 }
 .sec-meta {
   margin-left: auto;
@@ -671,6 +672,7 @@ kbd {
   font-size: var(--text-lg);
   font-weight: 600;
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 .entry-org {
   font-family: var(--font-mono);
@@ -705,7 +707,7 @@ kbd {
   margin-top: var(--sp-5);
 }
 
-/* outcome callout — the IPC six-figure line and friends */
+/* outcome callout: the IPC six-figure line and friends */
 .outcome {
   margin-top: var(--sp-5);
   padding: var(--sp-3) var(--sp-4);
@@ -846,7 +848,7 @@ kbd {
 
 /* ---- gallery strip (graphic design entry) ----
    A contact sheet, not a masonry grid: one row, uniform height, each piece
-   at its own aspect ratio, horizontal scroll with snap. Pure CSS — works
+   at its own aspect ratio, horizontal scroll with snap. Pure CSS, works
    without JavaScript, keyboard-scrollable via tabindex on the strip.
    This is the pattern the future /work gallery inherits. */
 
@@ -1204,7 +1206,7 @@ kbd {
   line-height: 1.9;
 }
 
-/* ---- scroll reveal — progressive enhancement, transform/opacity only ---- */
+/* ---- scroll reveal: progressive enhancement, transform/opacity only ---- */
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -1226,7 +1228,7 @@ kbd {
   }
 }
 
-/* ---- /lab — index and architecture map ----
+/* ---- /lab: index and architecture map ----
    Same instrument language as the rest of the site: hairlines, mono labels,
    surface panels. The canvas frame is header strip / canvas / status bar,
    like a reading off a bench instrument. */

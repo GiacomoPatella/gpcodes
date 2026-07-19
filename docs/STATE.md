@@ -25,30 +25,43 @@ The Notion doc "Portfolio" (under "Build") holds the decision history.
 
 ## Sequenced plan (Giacomo confirmed: do it in sequences)
 
-### Group 1: corrections
+### Group 1: corrections. DONE, 19 Jul 2026
 
-- **Fix the asset pipeline.** `sips -Z` resamples in both directions, so it upscaled anything
-  smaller than the target. Eight of fourteen graphic design assets were blown up past their
-  real resolution. Worst: the Compliance3 business card, source **238x156**, shipped at 2000px.
-  Re-export only downscaling, and re-check the 34 product screenshots in `public/work/` for the
-  same fault.
-- **Re-render Compliance3 from vector.** The archive has
-  `Desktop PDFs/Assets/Old/C3_bizcard_front_NO_BLEED.eps` and `C3.pdf`. Rendering those gives a
-  crisp card at any size. Archive: `~/Downloads/Portfolio.zip`.
-- **Remove from the graphic design sheet:** Custodia (both, cover alignment) and the Sensée
-  infographic (unshowable at row height). `CUSTODIA_brochure.pdf` exists if ever wanted properly.
-- **Rewrite the hero copy.** Friendlier and human, not a tech pitch. Two corrections of fact:
-  he does **not** build front-end any more, that was years ago on static sites, so
-  "I build the front-end when it counts" must go. He is experimenting with AI and working
-  toward becoming a design engineer. Draft he reacted to, refine rather than adopt verbatim:
-  > I'm Giacomo, a product designer in Florence. For over a decade I've been making complicated
-  > products easier to live with, most recently the AI workspace at Passionfruit. Lately I'm deep
-  > in AI tooling, working out what a design engineer actually is and whether I can become one.
-- **Sweep em-dashes** from all copy and docs.
-- **Apply the widow rule.**
-- **Fix `/work`.** It is marked "coming soon" in the menu because an earlier brief of mine
-  treated it as a future route. A `#work` section exists on the homepage, so it should link to
-  `/#work` now, and become a real gallery page later. This was my briefing error.
+All seven items shipped. What the work turned up that the plan did not predict:
+
+- **The upscaling was roughly three times wider than believed.** The estimate was 8 of 14
+  graphic design assets. The true figure is 8 of 14 *plus* **24 of 37 product screenshots**.
+  IPC, Okappy, FRANK-E and Powerloop were all 1440px-class sources shipped at 2400px.
+- **`scripts/images.mjs` replaces the old script.** It resolves sources by basename against an
+  extracted archive and computes `scale = min(capW/srcW, capH/srcH, 1)`. The `1` is what makes
+  upscaling structurally impossible rather than merely avoided. Caps bound both axes, because a
+  width-only cap would have scaled the 2880x9334 employers screenshot to 1600x5185.
+- **Caps are derived from real display size**, not taste: the container is 72rem and a featured
+  figure takes 7 of 12 columns, so it renders at about 640 CSS px. 1600 is a comfortable 2x, and
+  the old 2400px files were both partly fake and wasteful. `public/work` went 19MB to 10MB with
+  every image now at or below its true source resolution, which also dents the JS-and-assets
+  weight logged under technical debt.
+- **The Compliance3 `.eps` is unusable**: Apple dropped EPS rendering, and `sips` reports success
+  while writing nothing. `C3.pdf` is the real fix. It is a fully vector portfolio page carrying
+  the logo and both card faces; the shipped asset is the right-hand face, rendered at 900dpi and
+  cropped just inside its hairline frame (`crop` in the manifest). Genuinely sharp now.
+- **`okappy/connections-notes.jpg` is misnamed.** Its pixels are `OKAPPY-connex-1.jpg`, the
+  perspective mockup of the *card grid*. `OKAPPY-connex-2.jpg` is the *list and notes* layout
+  that the filename actually describes. Left as-is rather than silently swapped: decide which
+  was intended.
+- **Hero copy landed as** headline "I make complicated products easier to live with." plus a dek
+  that repeats neither the name and role (already in the eyebrow) nor Florence (already in
+  hero-meta). `layout.tsx` metadata carried the same stale "build when it counts" line and was
+  updated to match.
+- **Em-dashes: zero remain** across `src/`, `public/` and `docs/`.
+
+Two assets still need Giacomo:
+
+- **Passionfruit's three screens have no source in the archive** (it ends Nov 2023). Their true
+  resolution cannot be established, so they are deliberately excluded from the manifest rather
+  than re-exported from the shipped guess. They need a fresh export from the live design file.
+- **`hundo/learn-tablet` has a 450x685 source**, far below the slot it occupies. Shrink its
+  presentation, drop it, or re-export from Figma.
 
 ### Group 2: image zoom, default everywhere
 
@@ -124,9 +137,9 @@ Notes on that, to weigh rather than obey:
 ## References to fetch (agents should read the real sites, not summaries)
 
 New this round, not yet in earlier briefs:
-- https://rows.gg/ — interactions, kill row / add new row, particle logo formation
-- https://zeviarnovitz.com/ — interactions, transitions, hover effects
-- https://amicro.vercel.app/ — interactions, transitions, hover effects
+- https://rows.gg/: interactions, kill row / add new row, particle logo formation
+- https://zeviarnovitz.com/: interactions, transitions, hover effects
+- https://amicro.vercel.app/: interactions, transitions, hover effects
 
 Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc.
 
@@ -163,10 +176,10 @@ Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc
 
 ## Repo
 
-- `main` — old site, still live on gpcodes.com, untouched
-- `redesign` — Next scaffold baseline, old site in `legacy/`, CNAME in `public/`
-- `direction/a-editorial`, `direction/b-instrument`, `direction/c-tactile` — the explorations
-- `direction/b2` — **the working branch**
+- `main`: old site, still live on gpcodes.com, untouched
+- `redesign`: Next scaffold baseline, old site in `legacy/`, CNAME in `public/`
+- `direction/a-editorial`, `direction/b-instrument`, `direction/c-tactile`: the explorations
+- `direction/b2`: **the working branch**
 - Worktrees at `~/code/gpcodes-{a-editorial,b-instrument,c-tactile,b2}`
 - Dev server: `cd ~/code/gpcodes-b2 && npm run dev -- -p 3004`
 - Source archive: `~/Downloads/Portfolio.zip` (950MB, extracted subset in the session scratchpad

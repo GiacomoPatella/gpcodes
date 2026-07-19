@@ -5,7 +5,7 @@ import Menu from "@/components/Menu";
 import AccentPicker from "@/components/AccentPicker";
 
 export const metadata: Metadata = {
-  title: "Accent comparison — gpcodes",
+  title: "Accent comparison · gpcodes",
   robots: { index: false },
 };
 

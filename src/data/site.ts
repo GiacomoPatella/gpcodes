@@ -27,7 +27,7 @@ export type Testimonial = {
 export const TESTIMONIALS: Testimonial[] = [
   {
     quote:
-      "His design and UX abilities speak for themselves but his way of working sets him apart from most others. He has a highly perceptive instinct for design that he uses to interrogate, challenge and fully understand what it is we're trying to achieve — this makes briefing sessions highly productive and enjoyable. We couldn't have done without him.",
+      "His design and UX abilities speak for themselves but his way of working sets him apart from most others. He has a highly perceptive instinct for design that he uses to interrogate, challenge and fully understand what it is we're trying to achieve; this makes briefing sessions highly productive and enjoyable. We couldn't have done without him.",
     name: "Will Kemble-Clarkson",
     role: "CEO, Zen Exchange",
     lead: true,

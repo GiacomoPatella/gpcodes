@@ -2,11 +2,18 @@ import Link from "next/link";
 import CommandPalette from "@/components/CommandPalette";
 import ThemeToggle from "@/components/ThemeToggle";
 
+/**
+ * `work` has no route of its own yet, but the homepage carries a full #work
+ * section, so it points there rather than sitting inactive behind a "coming
+ * soon" tooltip. When it becomes a real gallery page only `href` changes.
+ * `route: false` keeps it out of the aria-current test, which compares
+ * pathnames and would never match a fragment.
+ */
 const IA = [
-  { slug: "work", live: false },
-  { slug: "lab", live: true },
-  { slug: "photography", live: false },
-  { slug: "about", live: false },
+  { slug: "work", href: "/#work", live: true, route: false },
+  { slug: "lab", href: "/lab/", live: true, route: true },
+  { slug: "photography", href: null, live: false, route: true },
+  { slug: "about", href: null, live: false, route: true },
 ] as const;
 
 const norm = (s: string) => (s === "/" ? "/" : s.replace(/\/+$/, ""));
@@ -14,8 +21,8 @@ const norm = (s: string) => (s === "/" ? "/" : s.replace(/\/+$/, ""));
 /**
  * The one navigation surface: a floating bar that replaces both the old
  * sticky header and the bottom dock. It carries the avatar + wordmark (home),
- * the site IA — live routes as real links, planned ones visibly inactive
- * with a tooltip instead of a 404 — and the ⌘K + theme controls.
+ * the site IA (live routes as real links, planned ones visibly inactive
+ * with a tooltip instead of a 404) and the ⌘K + theme controls.
  *
  * Sticky rather than fixed, so by construction it can never overlap page
  * content (the old dock sat on top of the architecture canvas). On narrow
@@ -48,13 +55,13 @@ export default function Menu({ current = "/" }: { current?: string }) {
 
         <div className="fmenu-links">
           {IA.map((item) =>
-            item.live ? (
+            item.live && item.href ? (
               <Link
                 key={item.slug}
                 className="fmenu-link"
-                href={`/${item.slug}/`}
+                href={item.href}
                 aria-current={
-                  norm(current).startsWith(`/${item.slug}`)
+                  item.route && norm(current).startsWith(`/${item.slug}`)
                     ? "page"
                     : undefined
                 }

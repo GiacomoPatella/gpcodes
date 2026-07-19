@@ -1,19 +1,21 @@
 # Giacomo Patella
 
 > I'm a senior product designer in Florence, Italy. I've spent over a decade
-> designing digital products end to end (research, interface, design system)
-> and I build the front-end when it counts. Contact me: gp@gpcodes.com
+> making complicated products easier to live with, most recently the AI
+> workspace at Passionfruit. Lately I'm deep in AI tooling, working out what a
+> design engineer actually is and whether I can become one.
+> Contact me: gp@gpcodes.com
 
 ## Work
 
 - [Passionfruit](https://gpcodes.com/#passionfruit): my current role; I led design from a two-sided talent marketplace through to PIP, an AI platform connecting marketing data to an assistant with agents and workflows
 - [hundo](https://gpcodes.com/#hundo): Gen Z learning platform with a built-in skills wallet, launched 2022; I led the entire design process
-- [PwC — Consulting Source](https://gpcodes.com/#pwc): global knowledge management system; I redesigned search and built the components library; 20K monthly users, 1.23M downloads, 2.3M page views (2021)
+- [PwC, Consulting Source](https://gpcodes.com/#pwc): global knowledge management system; I redesigned search and built the components library; 20K monthly users, 1.23M downloads, 2.3M page views (2021)
 - [Okappy](https://gpcodes.com/#okappy): I redesigned the connections database and ran full UX process work
-- [Octopus Energy — Powerloop](https://gpcodes.com/#octopus): gamified EV night-charging pilot I worked on via Play Consulting
-- [Redington — FRANK-E](https://gpcodes.com/#redington): pensions dashboard I designed to make scheme metrics legible to decision makers
-- [IPC — Ecosystem prototype](https://gpcodes.com/#ipc): 50+ screen fintech prototype I built; the client's customer invested a six-figure sum to develop it further
-- [Graphic design & branding](https://gpcodes.com/#graphic-design): identities for Compliance3 and Janet Taylor Consulting, hundo's 100 Top Trumps cards, Sensée's campaign and newsletters, Okappy's ad banners, Custodia's brochure
+- [Octopus Energy, Powerloop](https://gpcodes.com/#octopus): gamified EV night-charging pilot I worked on via Play Consulting
+- [Redington, FRANK-E](https://gpcodes.com/#redington): pensions dashboard I designed to make scheme metrics legible to decision makers
+- [IPC, Ecosystem prototype](https://gpcodes.com/#ipc): 50+ screen fintech prototype I built; the client's customer invested a six-figure sum to develop it further
+- [Graphic design & branding](https://gpcodes.com/#graphic-design): identities for Compliance3 and Janet Taylor Consulting, hundo's 100 Top Trumps cards, Sensée's campaign and newsletters, Okappy's ad banners
 
 ## Docs
 

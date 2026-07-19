@@ -4,14 +4,12 @@ import { TESTIMONIALS } from "@/data/site";
 
 /* The graphic design contact sheet. Aspect ratios are the real pixel
    dimensions of each file, so the strip lays out before a single image
-   loads. The Sensée infographic is a 147×2000 strip — shown as a top-crop
-   detail (and captioned as such) because no honest full view fits a row. */
+   loads. Eleven pieces across five clients. */
 const SHEET: {
   file: string;
   ratio: string;
   caption: string;
   alt: string;
-  crop?: boolean;
 }[] = [
   {
     file: "compliance3-stationery",
@@ -21,7 +19,7 @@ const SHEET: {
   },
   {
     file: "compliance3-bizcard",
-    ratio: "2000 / 1311",
+    ratio: "1200 / 786",
     caption: "Compliance3 · card",
     alt: "Compliance3 business card, the three chain rings running across the top edge",
   },
@@ -74,29 +72,10 @@ const SHEET: {
     alt: "Newsletter page: Diary of a Sensée Home Agent, magenta panels over a desk photo",
   },
   {
-    file: "sensee-infographic",
-    ratio: "3 / 4",
-    caption: "Sensée · infographic, detail",
-    alt: "Top of a very tall Sensée and Aviva year-one infographic",
-    crop: true,
-  },
-  {
     file: "okappy-adwords",
     ratio: "2000 / 1220",
     caption: "Okappy · Google Ads",
     alt: "The Okappy banner set at every ad size, each one keeping Simplify and the green CTA legible",
-  },
-  {
-    file: "custodia-front",
-    ratio: "1426 / 2000",
-    caption: "Custodia · brochure",
-    alt: "Custodia Technology sales brochure cover in navy with cyan diagonals",
-  },
-  {
-    file: "custodia-back",
-    ratio: "1426 / 2000",
-    caption: "Custodia · brochure, back",
-    alt: "Brochure services page: audit, design, delivery and support offerings with line icons",
   },
 ];
 
@@ -117,16 +96,20 @@ export default function Home() {
               Giacomo Patella · senior product designer
             </p>
             <h1 id="hero-title" style={{ marginTop: "var(--sp-4)" }}>
-              Complex systems, made precise and legible.
+              I make complicated products easier to live&nbsp;with.
             </h1>
+            {/* The eyebrow already carries name and role, and hero-meta carries
+                Florence, so the dek says neither. What is left is the part
+                nothing else on the page says: how long, where now, where next. */}
             <p className="dek">
-              I design digital products end to end: research, interface, design
-              system. And <strong>I build the front-end</strong> when it
-              counts. Over a decade in, currently at Passionfruit.
+              Over a decade of that now, most recently the AI workspace at{" "}
+              <strong>Passionfruit</strong>. Lately I&rsquo;m deep in AI
+              tooling, working out what a design engineer actually is and
+              whether I can become&nbsp;one.
             </p>
 
             {/* Everything the prose already says (role, tenure, Passionfruit)
-                is gone — what's left is only what it doesn't: where, exactly,
+                is gone. What's left is only what it doesn't: where, exactly,
                 and how to reach me. */}
             <div className="hero-meta">
               <p className="hero-meta-line">
@@ -159,20 +142,21 @@ export default function Home() {
                     Passionfruit is a marketing platform that grew from a
                     vetted freelance talent marketplace into an AI-powered
                     workspace for enterprise marketing teams. I lead product
-                    design across that whole evolution — on the marketplace,
-                    both sides of it: client onboarding, project creation,
-                    specialist matching, proposals and collaboration.
+                    design across that whole evolution. On the marketplace
+                    that meant both sides of it: client onboarding, project
+                    creation, specialist matching, proposals and
+                    collaboration.
                   </p>
                   <p>
                     The centre of it now is PIP, Passionfruit&rsquo;s AI
                     platform for marketing teams. PIP connects company
-                    knowledge and marketing data — analytics, ad accounts,
-                    CRMs, spreadsheets — to an assistant that analyses,
-                    reports and automates recurring work. I define the
-                    information architecture and design the core experiences:
-                    chat, agents, integrations, files and knowledge,
-                    workflows, AI-generated artefacts — making complex AI
-                    capabilities feel clear and trustworthy.
+                    knowledge and marketing data (analytics, ad accounts,
+                    CRMs, spreadsheets) to an assistant that analyses, reports
+                    and automates recurring work. I define the information
+                    architecture and design the core experiences: chat,
+                    agents, integrations, files and knowledge, workflows,
+                    AI-generated artefacts. The goal throughout is making
+                    complex AI capabilities feel clear and&nbsp;trustworthy.
                   </p>
                   <ul className="chip-row" aria-label="Disciplines">
                     <li className="chip">product design</li>
@@ -761,34 +745,33 @@ export default function Home() {
               </div>
             </article>
 
-            {/* Graphic design & branding — one consolidated entry.
-                Six clients as one body of work: together they read as range;
-                as six entries they'd dilute the product work. */}
+            {/* Graphic design & branding, one consolidated entry.
+                Five clients as one body of work: together they read as range;
+                as five entries they'd dilute the product work. */}
             <article className="entry reveal" id="graphic-design">
               <div className="entry-head">
                 <h3 className="entry-title">Graphic design &amp; branding</h3>
-                <span className="entry-org">six clients</span>
+                <span className="entry-org">five clients</span>
                 <span className="entry-year">2015 → 2022</span>
               </div>
               <div className="entry-copy gallery-copy">
                 <p>
                   Product is the day job; this is the rest of the practice.
-                  For Compliance3 — PCI compliance for contact centres, motto
+                  Compliance3 does PCI compliance for contact centres, motto
                   &ldquo;People, Process, Technology&rdquo;, four steps to
-                  each — I drew the logo as three chain rings of four elements
-                  each. For Janet Taylor, an organisational psychologist
-                  consulting to large engineering firms, a clean geometric
-                  monogram: creative, but academic.
+                  each, so I drew the logo as three chain rings of four
+                  elements each. For Janet Taylor, an organisational
+                  psychologist consulting to large engineering firms, a clean
+                  geometric monogram: creative, but academic.
                 </p>
                 <p>
                   Then the range: 100 Top Trumps cards for hundo, one revealed
                   a day in the run-up to Careercon22; Sensée&rsquo;s
                   recruitment campaign and a monthly newsletter for hundreds
-                  of remote agents — re-designed every issue to fit the
-                  content, held together by a strict pink palette; 20 Google
+                  of remote agents, re-designed every issue to fit the content
+                  and held together by a strict pink palette; and 20 Google
                   Ads banners for Okappy that keep &ldquo;Simplify&rdquo;
-                  legible at every size; and a sales brochure for Custodia
-                  Technology.
+                  legible at every&nbsp;size.
                 </p>
                 <ul className="chip-row" aria-label="Disciplines">
                   <li className="chip">branding</li>
@@ -801,7 +784,7 @@ export default function Home() {
                 <ul
                   className="gallery-strip"
                   tabIndex={0}
-                  aria-label="Graphic design contact sheet: 14 pieces, scrolls sideways"
+                  aria-label="Graphic design contact sheet: 11 pieces, scrolls sideways"
                 >
                   {SHEET.map((piece) => (
                     <li key={piece.file}>
@@ -814,11 +797,6 @@ export default function Home() {
                             src={`/work/graphic-design/${piece.file}.jpg`}
                             alt={piece.alt}
                             loading="lazy"
-                            style={
-                              piece.crop
-                                ? { objectPosition: "top" }
-                                : undefined
-                            }
                           />
                         </div>
                         <figcaption>
@@ -829,7 +807,7 @@ export default function Home() {
                   ))}
                 </ul>
                 <p className="gallery-note">
-                  <span>14 pieces · 6 clients</span>
+                  <span>11 pieces · 5 clients</span>
                   <span aria-hidden="true">scroll →</span>
                 </p>
               </div>

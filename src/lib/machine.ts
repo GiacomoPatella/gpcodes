@@ -40,6 +40,6 @@ export function toggleTheme(): void {
   try {
     localStorage.setItem("theme", next);
   } catch {
-    /* private mode — theme still applies for this page view */
+    /* private mode: theme still applies for this page view */
   }
 }
