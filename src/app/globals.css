@@ -1500,3 +1500,129 @@ kbd {
   text-wrap: pretty;
 }
 
+
+/* ============================================================
+   LIGHTBOX
+   One dialog for the page, opened from any Fig frame.
+   ============================================================ */
+
+/* The frame is a button now, so it has to be stripped back to looking like the
+   div it replaced, then given the affordances a button should have. */
+button.fig-frame {
+  display: block;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: zoom-in;
+  transition: border-color 160ms ease;
+}
+button.fig-frame:hover {
+  border-color: var(--muted);
+}
+
+.lb {
+  max-width: 100vw;
+  max-height: 100dvh;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+}
+.lb::backdrop {
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(6px);
+}
+.lb-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  width: 100%;
+  height: 100%;
+  padding: var(--sp-6) var(--sp-4);
+  /* The box is the dismiss surface; only the image and caption are not. */
+  cursor: zoom-out;
+}
+.lb-img {
+  /* max-width is set inline, per image, to its true pixel width: the point of
+     the whole pipeline is that nothing gets scaled past its real resolution. */
+  max-height: calc(100dvh - 8rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--wash);
+  cursor: default;
+}
+/* A figure that crops on purpose keeps that crop in the lightbox: the frame
+   holds the chosen ratio and the image fills it, exactly as on the page. */
+.lb-crop {
+  width: 100%;
+  max-height: calc(100dvh - 8rem);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--wash);
+  cursor: default;
+}
+.lb-crop img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lb-cap {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted);
+  cursor: default;
+}
+.lb-dim {
+  opacity: 0.7;
+}
+.lb-close {
+  position: fixed;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  padding: 0.35rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.lb-close:hover {
+  color: var(--ink);
+  border-color: var(--muted);
+}
+
+/* Opening animation. Transform and opacity only, and the dialog is not a
+   sticky ancestor of anything, so no containing-block trap here. */
+@keyframes lb-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+.lb[open] .lb-box {
+  animation: lb-in 180ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lb[open] .lb-box {
+    animation: none;
+  }
+  button.fig-frame {
+    transition: none;
+  }
+}

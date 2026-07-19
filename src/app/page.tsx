@@ -1,79 +1,69 @@
 import CopyPrompt from "@/components/CopyPrompt";
+import Fig from "@/components/Fig";
 import Menu from "@/components/Menu";
 import { TESTIMONIALS } from "@/data/site";
 
-/* The graphic design contact sheet. Aspect ratios are the real pixel
-   dimensions of each file, so the strip lays out before a single image
-   loads. Eleven pieces across five clients. */
+/* The graphic design contact sheet, eleven pieces across five clients.
+   Aspect ratios are no longer written here: Fig reads the real dimensions from
+   the generated manifest, so the strip still lays out before a single image
+   loads but the numbers cannot drift from the files. */
 const SHEET: {
   file: string;
-  ratio: string;
   caption: string;
   alt: string;
 }[] = [
   {
     file: "compliance3-stationery",
-    ratio: "2000 / 1500",
     caption: "Compliance3 · identity",
     alt: "Compliance3 stationery set: letterhead, envelope, cards and mugs carrying a chain-ring logo in three blues",
   },
   {
     file: "compliance3-bizcard",
-    ratio: "1200 / 786",
     caption: "Compliance3 · card",
     alt: "Compliance3 business card, the three chain rings running across the top edge",
   },
   {
     file: "janet-taylor-stationery",
-    ratio: "2000 / 1500",
     caption: "Janet Taylor · identity",
     alt: "Janet Taylor Consulting letterhead, envelope and cards with a circular JT monogram",
   },
   {
     file: "janet-taylor-bizcard",
-    ratio: "2000 / 1445",
     caption: "Janet Taylor · card",
     alt: "Stacks of Janet Taylor Consulting business cards, geometric monogram in teal",
   },
   {
     file: "hundo-top-trumps",
-    ratio: "2000 / 1125",
     caption: "hundo · Top Trumps",
     alt: "Six of hundo's 100 Top Trumps cards, black with teal and gold variants",
   },
   {
     file: "hundo-trump-card-single",
-    ratio: "1312 / 2000",
     caption: "hundo · one of 100",
     alt: "A single hundo Top Trump card with pixel-drawn stat counters",
   },
   {
     file: "sensee-flyer-front",
-    ratio: "2000 / 1433",
     caption: "Sensée · flyer",
     alt: "Sensée recruitment flyer: THIS COULD BE YOU beside a teal duotone photo of a father and son",
   },
   {
     file: "sensee-flyer-back",
-    ratio: "2000 / 1433",
     caption: "Sensée · flyer, back",
     alt: "Flyer reverse: apply now for a home-based job, benefits set in bold condensed type",
   },
   {
     file: "sensee-newsletter-1",
-    ratio: "2000 / 1453",
     caption: "Sensée · newsletter",
     alt: "Newsletter spread: a speech-bubble cover page and a home-agent diary page in the pink palette",
   },
   {
     file: "sensee-newsletter-2",
-    ratio: "1413 / 2000",
     caption: "Sensée · newsletter",
     alt: "Newsletter page: Diary of a Sensée Home Agent, magenta panels over a desk photo",
   },
   {
     file: "okappy-adwords",
-    ratio: "2000 / 1220",
     caption: "Okappy · Google Ads",
     alt: "The Okappy banner set at every ad size, each one keeping Simplify and the green CTA legible",
   },
@@ -167,55 +157,24 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
-                  <figure className="fig">
-                    <div
-                      className="fig-frame"
-                      style={{ aspectRatio: "2400 / 1400" }}
-                    >
-                      <img
-                        src="/work/passionfruit/pip-welcome.jpg"
-                        alt="PIP's chat home: an AI marketing co-pilot greeting the user, with agents, workflows, files, artefacts and integrations in the sidebar"
-                        loading="lazy"
-                      />
-                    </div>
-                    <figcaption>
-                      <span>PIP, the AI marketing co-pilot</span>
-                      <span className="path">
-                        work/passionfruit/pip-welcome.jpg
-                      </span>
-                    </figcaption>
-                  </figure>
+                  <Fig
+                    src="/work/passionfruit/pip-welcome.jpg"
+                    alt="PIP's chat home: an AI marketing co-pilot greeting the user, with agents, workflows, files, artefacts and integrations in the sidebar"
+                    caption="PIP, the AI marketing co-pilot"
+                    showPath
+                    priority
+                  />
                   <div className="fig-pair">
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "2400 / 1466" }}
-                      >
-                        <img
-                          src="/work/passionfruit/agents-leads.jpg"
-                          alt="An outreach agent's campaign view: leads found, contacted, replies and reply rate above a lead table"
-                          loading="lazy"
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Outreach agent, campaign view</span>
-                      </figcaption>
-                    </figure>
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "2400 / 1466" }}
-                      >
-                        <img
-                          src="/work/passionfruit/onboarding-goals.jpg"
-                          alt="Onboarding step asking what goal the team is chasing, answered with selectable goal chips"
-                          loading="lazy"
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Onboarding, goals</span>
-                      </figcaption>
-                    </figure>
+                    <Fig
+                      src="/work/passionfruit/agents-leads.jpg"
+                      alt="An outreach agent's campaign view: leads found, contacted, replies and reply rate above a lead table"
+                      caption="Outreach agent, campaign view"
+                    />
+                    <Fig
+                      src="/work/passionfruit/onboarding-goals.jpg"
+                      alt="Onboarding step asking what goal the team is chasing, answered with selectable goal chips"
+                      caption="Onboarding, goals"
+                    />
                   </div>
                 </div>
               </div>
@@ -254,53 +213,23 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
-                  <figure className="fig">
-                    <div
-                      className="fig-frame"
-                      style={{ aspectRatio: "2400 / 1350" }}
-                    >
-                      <img
-                        src="/work/hundo/desktop-1.jpg"
-                        alt="hundo.xyz learn area on desktop: dark interface with bright yellow and violet accents"
-                        loading="lazy"
-                      />
-                    </div>
-                    <figcaption>
-                      <span>Learn area, launch build</span>
-                      <span className="path">work/hundo/desktop-1.jpg</span>
-                    </figcaption>
-                  </figure>
+                  <Fig
+                    src="/work/hundo/desktop-1.jpg"
+                    alt="hundo.xyz learn area on desktop: dark interface with bright yellow and violet accents"
+                    caption="Learn area, launch build"
+                    showPath
+                  />
                   <div className="fig-pair">
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "2400 / 1350" }}
-                      >
-                        <img
-                          src="/work/hundo/mobile-1.jpg"
-                          alt="hundo mobile screens with the brightened secondary palette"
-                          loading="lazy"
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Mobile</span>
-                      </figcaption>
-                    </figure>
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "2400 / 1350" }}
-                      >
-                        <img
-                          src="/work/hundo/trump-cards.jpg"
-                          alt="hundo Top Trumps card series designed for Careercon22"
-                          loading="lazy"
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Top Trumps, Careercon22</span>
-                      </figcaption>
-                    </figure>
+                    <Fig
+                      src="/work/hundo/mobile-1.jpg"
+                      alt="hundo mobile screens with the brightened secondary palette"
+                      caption="Mobile"
+                    />
+                    <Fig
+                      src="/work/hundo/trump-cards.jpg"
+                      alt="hundo Top Trumps card series designed for Careercon22"
+                      caption="Top Trumps, Careercon22"
+                    />
                   </div>
                 </div>
               </div>
@@ -332,58 +261,33 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
-                  <figure className="fig">
-                    <div
-                      className="fig-frame"
-                      style={{ aspectRatio: "16 / 10" }}
-                    >
-                      <img
-                        src="/work/pwc-consulting-source/search-desktop.jpg"
-                        alt="Consulting Source search results page, cropped to the results list and filter rail"
-                        loading="lazy"
-                        style={{ objectPosition: "top" }}
-                      />
-                    </div>
-                    <figcaption>
-                      <span>Search redesign, cropped to detail*</span>
-                      <span className="path">
-                        work/pwc-consulting-source/search-desktop.jpg
-                      </span>
-                    </figcaption>
-                  </figure>
+                  {/* These three crop on purpose: the frames carry Lorem
+                      ipsum, so they are cut to interaction detail and the
+                      footnote below says so. The ratio override is what keeps
+                      that crop; the manifest's true ratio would undo it. */}
+                  <Fig
+                    src="/work/pwc-consulting-source/search-desktop.jpg"
+                    alt="Consulting Source search results page, cropped to the results list and filter rail"
+                    caption="Search redesign, cropped to detail*"
+                    showPath
+                    ratio="16 / 10"
+                    objectPosition="top"
+                  />
                   <div className="fig-pair">
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "4 / 5" }}
-                      >
-                        <img
-                          src="/work/pwc-consulting-source/search-filters.jpg"
-                          alt="Advanced search filter panel, cropped to the filter controls"
-                          loading="lazy"
-                          style={{ objectPosition: "top" }}
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Advanced filters</span>
-                      </figcaption>
-                    </figure>
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "4 / 5" }}
-                      >
-                        <img
-                          src="/work/pwc-consulting-source/search-mobile.jpg"
-                          alt="Consulting Source search on mobile, cropped to the results list"
-                          loading="lazy"
-                          style={{ objectPosition: "top" }}
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Mobile search</span>
-                      </figcaption>
-                    </figure>
+                    <Fig
+                      src="/work/pwc-consulting-source/search-filters.jpg"
+                      alt="Advanced search filter panel, cropped to the filter controls"
+                      caption="Advanced filters"
+                      ratio="4 / 5"
+                      objectPosition="top"
+                    />
+                    <Fig
+                      src="/work/pwc-consulting-source/search-mobile.jpg"
+                      alt="Consulting Source search on mobile, cropped to the results list"
+                      caption="Mobile search"
+                      ratio="4 / 5"
+                      objectPosition="top"
+                    />
                   </div>
                   <div className="stats">
                     <div className="stats-ruler" aria-hidden="true" />
@@ -448,54 +352,25 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
-                  <figure className="fig">
-                    <div
-                      className="fig-frame"
-                      style={{ aspectRatio: "2400 / 1706" }}
-                    >
-                      <img
-                        src="/work/okappy/db-list.jpg"
-                        alt="Okappy connections database: redesigned list layout"
-                        loading="lazy"
-                      />
-                    </div>
-                    <figcaption>
-                      <span>Connections database, list layout</span>
-                      <span className="path">work/okappy/db-list.jpg</span>
-                    </figcaption>
-                  </figure>
+                  <Fig
+                    src="/work/okappy/db-list.jpg"
+                    alt="Okappy connections database: redesigned list layout"
+                    caption="Connections database, list layout"
+                    showPath
+                  />
                   <div className="fig-pair">
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "2400 / 1706" }}
-                      >
-                        <img
-                          src="/work/okappy/db-concept-1.jpg"
-                          alt="Early layout concept for the connections database"
-                          loading="lazy"
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Layout concept</span>
-                      </figcaption>
-                    </figure>
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "2400 / 1706" }}
-                      >
-                        <img
-                          src="/work/okappy/connections-notes.jpg"
-                          alt="Connection record with notes panel open"
-                          loading="lazy"
-                          style={{ objectPosition: "top" }}
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Notes on a connection</span>
-                      </figcaption>
-                    </figure>
+                    <Fig
+                      src="/work/okappy/db-concept-1.jpg"
+                      alt="Early layout concept for the connections database"
+                      caption="Layout concept"
+                    />
+                    <Fig
+                      src="/work/okappy/connections-notes.jpg"
+                      alt="Connection record with notes panel open"
+                      caption="Notes on a connection"
+                      ratio="2400 / 1706"
+                      objectPosition="top"
+                    />
                   </div>
                 </div>
               </div>
@@ -523,57 +398,29 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
-                  <figure className="fig">
-                    <div
-                      className="fig-frame"
-                      style={{ aspectRatio: "2400 / 1800" }}
-                    >
-                      <img
-                        src="/work/octopus-powerloop/desktop.jpg"
-                        alt="Powerloop web app on desktop: gamified night-charging schedule for EV owners"
-                        loading="lazy"
-                      />
-                    </div>
-                    <figcaption>
-                      <span>Charging dashboard</span>
-                      <span className="path">
-                        work/octopus-powerloop/desktop.jpg
-                      </span>
-                    </figcaption>
-                  </figure>
+                  <Fig
+                    src="/work/octopus-powerloop/desktop.jpg"
+                    alt="Powerloop web app on desktop: gamified night-charging schedule for EV owners"
+                    caption="Charging dashboard"
+                    showPath
+                  />
                   <div className="fig-pair">
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "3 / 4" }}
-                      >
-                        <img
-                          src="/work/octopus-powerloop/dashboard-cycles.jpg"
-                          alt="Powerloop mobile dashboard showing charge cycles"
-                          loading="lazy"
-                          style={{ objectPosition: "top" }}
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Charge cycles</span>
-                      </figcaption>
-                    </figure>
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "3 / 4" }}
-                      >
-                        <img
-                          src="/work/octopus-powerloop/history.jpg"
-                          alt="Powerloop charging history with completed night cycles"
-                          loading="lazy"
-                          style={{ objectPosition: "top" }}
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Charging history</span>
-                      </figcaption>
-                    </figure>
+                    {/* Tall phone screens cut to a 3/4 window so the pair sits
+                        level. Zoom shows the full scroll. */}
+                    <Fig
+                      src="/work/octopus-powerloop/dashboard-cycles.jpg"
+                      alt="Powerloop mobile dashboard showing charge cycles"
+                      caption="Charge cycles"
+                      ratio="3 / 4"
+                      objectPosition="top"
+                    />
+                    <Fig
+                      src="/work/octopus-powerloop/history.jpg"
+                      alt="Powerloop charging history with completed night cycles"
+                      caption="Charging history"
+                      ratio="3 / 4"
+                      objectPosition="top"
+                    />
                   </div>
                 </div>
               </div>
@@ -605,58 +452,29 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
-                  <figure className="fig">
-                    <div
-                      className="fig-frame"
-                      style={{ aspectRatio: "4 / 3" }}
-                    >
-                      <img
-                        src="/work/redington-frank-e/dashboard.jpg"
-                        alt="FRANK-E dashboard summarising a pension scheme's key metrics"
-                        loading="lazy"
-                        style={{ objectPosition: "top" }}
-                      />
-                    </div>
-                    <figcaption>
-                      <span>Scheme overview</span>
-                      <span className="path">
-                        work/redington-frank-e/dashboard.jpg
-                      </span>
-                    </figcaption>
-                  </figure>
+                  <Fig
+                    src="/work/redington-frank-e/dashboard.jpg"
+                    alt="FRANK-E dashboard summarising a pension scheme's key metrics"
+                    caption="Scheme overview"
+                    showPath
+                    ratio="4 / 3"
+                    objectPosition="top"
+                  />
                   <div className="fig-pair">
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "3 / 4" }}
-                      >
-                        <img
-                          src="/work/redington-frank-e/company-stats.jpg"
-                          alt="FRANK-E company statistics view"
-                          loading="lazy"
-                          style={{ objectPosition: "top" }}
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Company stats</span>
-                      </figcaption>
-                    </figure>
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "3 / 4" }}
-                      >
-                        <img
-                          src="/work/redington-frank-e/governance.jpg"
-                          alt="FRANK-E governance view"
-                          loading="lazy"
-                          style={{ objectPosition: "top" }}
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Governance</span>
-                      </figcaption>
-                    </figure>
+                    <Fig
+                      src="/work/redington-frank-e/company-stats.jpg"
+                      alt="FRANK-E company statistics view"
+                      caption="Company stats"
+                      ratio="3 / 4"
+                      objectPosition="top"
+                    />
+                    <Fig
+                      src="/work/redington-frank-e/governance.jpg"
+                      alt="FRANK-E governance view"
+                      caption="Governance"
+                      ratio="3 / 4"
+                      objectPosition="top"
+                    />
                   </div>
                 </div>
               </div>
@@ -693,53 +511,23 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
-                  <figure className="fig">
-                    <div
-                      className="fig-frame"
-                      style={{ aspectRatio: "2400 / 1500" }}
-                    >
-                      <img
-                        src="/work/ipc-ecosystem/table.jpg"
-                        alt="IPC ecosystem prototype: licensing data table"
-                        loading="lazy"
-                      />
-                    </div>
-                    <figcaption>
-                      <span>One of 50+ prototype screens</span>
-                      <span className="path">work/ipc-ecosystem/table.jpg</span>
-                    </figcaption>
-                  </figure>
+                  <Fig
+                    src="/work/ipc-ecosystem/table.jpg"
+                    alt="IPC ecosystem prototype: licensing data table"
+                    caption="One of 50+ prototype screens"
+                    showPath
+                  />
                   <div className="fig-pair">
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "2400 / 1500" }}
-                      >
-                        <img
-                          src="/work/ipc-ecosystem/menu.jpg"
-                          alt="IPC prototype navigation menu"
-                          loading="lazy"
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Navigation</span>
-                      </figcaption>
-                    </figure>
-                    <figure className="fig">
-                      <div
-                        className="fig-frame"
-                        style={{ aspectRatio: "2400 / 1500" }}
-                      >
-                        <img
-                          src="/work/ipc-ecosystem/modal.jpg"
-                          alt="IPC prototype modal dialog"
-                          loading="lazy"
-                        />
-                      </div>
-                      <figcaption>
-                        <span>Modal detail</span>
-                      </figcaption>
-                    </figure>
+                    <Fig
+                      src="/work/ipc-ecosystem/menu.jpg"
+                      alt="IPC prototype navigation menu"
+                      caption="Navigation"
+                    />
+                    <Fig
+                      src="/work/ipc-ecosystem/modal.jpg"
+                      alt="IPC prototype modal dialog"
+                      caption="Modal detail"
+                    />
                   </div>
                 </div>
               </div>
@@ -788,21 +576,11 @@ export default function Home() {
                 >
                   {SHEET.map((piece) => (
                     <li key={piece.file}>
-                      <figure className="fig">
-                        <div
-                          className="fig-frame"
-                          style={{ aspectRatio: piece.ratio }}
-                        >
-                          <img
-                            src={`/work/graphic-design/${piece.file}.jpg`}
-                            alt={piece.alt}
-                            loading="lazy"
-                          />
-                        </div>
-                        <figcaption>
-                          <span>{piece.caption}</span>
-                        </figcaption>
-                      </figure>
+                      <Fig
+                        src={`/work/graphic-design/${piece.file}.jpg`}
+                        alt={piece.alt}
+                        caption={piece.caption}
+                      />
                     </li>
                   ))}
                 </ul>

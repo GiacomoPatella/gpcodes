@@ -23,7 +23,7 @@
  */
 
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, copyFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 
 const ARCHIVE = process.argv[2];
@@ -45,6 +45,18 @@ if (!ARCHIVE || !existsSync(ARCHIVE)) {
  */
 const FEATURED = { w: 1600, h: 2400 }; // work entry figures, ~640 CSS px at 2x
 const SHEET = { w: 1200, h: 1600 }; // graphic design contact sheet thumbs
+
+/**
+ * The zoom variant, loaded only when the lightbox opens. Same no-upscale rule:
+ * it is capped by the source like everything else, which is why several assets
+ * get no zoom variant at all. Their display image already IS the source, and
+ * shipping a second identical file to "zoom" into would be a lie about how much
+ * detail exists. The lightbox falls back to the display image in that case.
+ */
+const ZOOM = { w: 2560, h: 5000 };
+
+/** Below this ratio a zoom variant is not worth a second download. */
+const ZOOM_WORTH_IT = 1.25;
 
 /**
  * Sources are matched by basename rather than full path: the archive has
@@ -155,9 +167,30 @@ const dims = (file) => {
   };
 };
 
+/** One resample-or-copy, shared by the display and zoom passes. */
+function emit(src, dest, scale, targetW) {
+  const common = ["-s", "format", "jpeg", "-s", "formatOptions", "82"];
+  execFileSync(
+    "sips",
+    scale < 1
+      ? ["--resampleWidth", String(targetW), ...common, src, "--out", dest]
+      : [...common, src, "--out", dest],
+  );
+}
+
 const index = indexArchive(ARCHIVE);
 const rows = [];
 const missing = [];
+
+/**
+ * Written to src/lib/images.json and imported by the Fig component. Carrying
+ * real dimensions here means aspect ratios stop being hand-maintained strings
+ * in page.tsx: one of those had already gone stale against its file.
+ */
+const manifest = {};
+const record = (out, w, h, zoom) => {
+  manifest[`/work/${out}`] = zoom ? { w, h, zoom } : { w, h };
+};
 
 for (const item of MANIFEST) {
   const dest = join(OUT_ROOT, item.out);
@@ -170,29 +203,42 @@ for (const item of MANIFEST) {
       missing.push(`${item.out}  (vector ${item.vector})`);
       continue;
     }
-    const tmp = join(ROOT, ".img-tmp");
-    mkdirSync(tmp, { recursive: true });
-    const stem = join(tmp, basename(item.out, ".jpg"));
+    const { r, x, y, w: cropW, h: cropH } = item.crop;
+    const aspect = cropH / cropW;
+    const dispW = Math.min(item.cap.w, cropW);
+    // The render is the ceiling here, not some original raster: re-rendering
+    // wider than the crop would be upscaling by another name.
+    const zoomW = Math.min(ZOOM.w, cropW);
+    const wantZoom = zoomW >= dispW * ZOOM_WORTH_IT;
+
     if (!DRY) {
-      const { r, x, y, w, h } = item.crop;
+      const tmp = join(ROOT, ".img-tmp");
+      mkdirSync(tmp, { recursive: true });
+      const stem = join(tmp, basename(item.out, ".jpg"));
       execFileSync("pdftocairo", [
         "-png", "-r", String(r),
-        "-x", String(x), "-y", String(y), "-W", String(w), "-H", String(h),
+        "-x", String(x), "-y", String(y), "-W", String(cropW), "-H", String(cropH),
         src, stem,
       ]);
       const rendered = `${stem}-1.png`;
-      execFileSync("sips", [
-        "--resampleWidth", String(item.cap.w),
-        "-s", "format", "jpeg", "-s", "formatOptions", "82",
-        rendered, "--out", dest,
-      ]);
+      emit(rendered, dest, dispW / cropW, dispW);
+      if (wantZoom) {
+        emit(rendered, dest.replace(/\.jpg$/, "-zoom.jpg"), zoomW / cropW, zoomW);
+      }
     }
+
+    record(
+      item.out,
+      dispW,
+      Math.round(dispW * aspect),
+      wantZoom ? { w: zoomW, h: Math.round(zoomW * aspect) } : null,
+    );
     rows.push({
       out: item.out,
-      srcW: "vector",
+      srcW: `vector ${cropW}x${cropH}`,
       cap: item.cap.w,
-      shipped: item.cap.w,
-      note: "rendered from vector",
+      shipped: dispW,
+      note: "rendered from vector" + (wantZoom ? ` +zoom ${zoomW}` : ""),
     });
     continue;
   }
@@ -208,28 +254,25 @@ for (const item of MANIFEST) {
   const scale = Math.min(item.cap.w / srcW, item.cap.h / srcH, 1);
   const target = Math.round(srcW * scale);
 
-  if (!DRY) {
-    if (scale < 1) {
-      execFileSync("sips", [
-        "--resampleWidth", String(target),
-        "-s", "format", "jpeg", "-s", "formatOptions", "82",
-        src, "--out", dest,
-      ]);
-    } else {
-      // Already within both caps. Re-encode at native size, no resample.
-      execFileSync("sips", [
-        "-s", "format", "jpeg", "-s", "formatOptions", "82",
-        src, "--out", dest,
-      ]);
-    }
+  if (!DRY) emit(src, dest, scale, target);
+
+  // --- zoom variant, only where the source actually has more to give --------
+  const zScale = Math.min(ZOOM.w / srcW, ZOOM.h / srcH, 1);
+  const zTarget = Math.round(srcW * zScale);
+  let zoom = null;
+  if (zTarget >= target * ZOOM_WORTH_IT) {
+    const zDest = dest.replace(/\.jpg$/, "-zoom.jpg");
+    if (!DRY) emit(src, zDest, zScale, zTarget);
+    zoom = { w: zTarget, h: Math.round(srcH * zScale) };
   }
 
+  record(item.out, target, Math.round(srcH * scale), zoom);
   rows.push({
     out: item.out,
     srcW: `${srcW}x${srcH}`,
     cap: item.cap.w,
     shipped: target,
-    note: scale === 1 ? "source-limited" : "downscaled",
+    note: (scale === 1 ? "source-limited" : "downscaled") + (zoom ? ` +zoom ${zTarget}` : ""),
   });
 }
 
@@ -250,4 +293,36 @@ if (missing.length) {
   console.log("\nNOT FOUND in archive:");
   for (const m of missing) console.log(`  ${m}`);
 }
-console.log(`\n${rows.length} written, ${missing.length} missing.${DRY ? " (dry run)" : ""}`);
+/**
+ * Shipped images with no manifest entry still need dimensions, or Fig has no
+ * aspect ratio to reserve space with. Measure them in place rather than
+ * re-exporting: for the Passionfruit screens there is no archive source, so
+ * "re-exporting" could only mean recompressing the existing guess. They are
+ * flagged `unverified` so the provenance gap stays visible in the data.
+ */
+function measureUnsourced(dir, prefix = "") {
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    if (e.isDirectory()) {
+      measureUnsourced(join(dir, e.name), `${prefix}${e.name}/`);
+      continue;
+    }
+    if (!e.name.endsWith(".jpg") || e.name.endsWith("-zoom.jpg")) continue;
+    const key = `/work/${prefix}${e.name}`;
+    if (manifest[key]) continue;
+    const { w, h } = dims(join(dir, e.name));
+    manifest[key] = { w, h, unverified: true };
+  }
+}
+if (!DRY) measureUnsourced(OUT_ROOT);
+
+const MANIFEST_PATH = join(ROOT, "src/lib/images.json");
+if (!DRY) {
+  // Sorted so the file diffs cleanly rather than reshuffling every run.
+  const sorted = Object.fromEntries(Object.entries(manifest).sort(([a], [b]) => a.localeCompare(b)));
+  writeFileSync(MANIFEST_PATH, JSON.stringify(sorted, null, 2) + "\n");
+}
+const withZoom = rows.filter((r) => r.note.includes("+zoom")).length;
+console.log(
+  `\n${rows.length} written, ${withZoom} with a zoom variant, ${missing.length} missing.` +
+    `${DRY ? " (dry run)" : `\nmanifest: ${MANIFEST_PATH}`}`,
+);

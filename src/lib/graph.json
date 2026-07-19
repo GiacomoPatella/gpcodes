@@ -70,7 +70,7 @@
       "kind": "external",
       "loc": 0,
       "imports": 0,
-      "importedBy": 5
+      "importedBy": 6
     },
     {
       "id": "scripts/graph.mjs",
@@ -84,7 +84,7 @@
       "id": "scripts/images.mjs",
       "label": "images.mjs",
       "kind": "script",
-      "loc": 253,
+      "loc": 328,
       "imports": 3,
       "importedBy": 0
     },
@@ -92,7 +92,7 @@
       "id": "src/app/globals.css",
       "label": "globals.css",
       "kind": "style",
-      "loc": 1502,
+      "loc": 1628,
       "imports": 1,
       "importedBy": 1
     },
@@ -116,16 +116,16 @@
       "id": "src/app/layout.tsx",
       "label": "app/layout.tsx",
       "kind": "route",
-      "loc": 60,
-      "imports": 3,
+      "loc": 64,
+      "imports": 4,
       "importedBy": 0
     },
     {
       "id": "src/app/page.tsx",
       "label": "app/page.tsx",
       "kind": "route",
-      "loc": 898,
-      "imports": 3,
+      "loc": 676,
+      "imports": 4,
       "importedBy": 0
     },
     {
@@ -161,6 +161,14 @@
       "importedBy": 1
     },
     {
+      "id": "src/components/Fig.tsx",
+      "label": "Fig.tsx",
+      "kind": "component",
+      "loc": 103,
+      "imports": 1,
+      "importedBy": 1
+    },
+    {
       "id": "src/components/lab/ArchCanvas.tsx",
       "label": "ArchCanvas.tsx",
       "kind": "component",
@@ -174,6 +182,14 @@
       "kind": "component",
       "loc": 33,
       "imports": 3,
+      "importedBy": 1
+    },
+    {
+      "id": "src/components/Lightbox.tsx",
+      "label": "Lightbox.tsx",
+      "kind": "component",
+      "loc": 138,
+      "imports": 1,
       "importedBy": 1
     },
     {
@@ -212,7 +228,15 @@
       "id": "src/lib/graph.json",
       "label": "graph.json",
       "kind": "lib",
-      "loc": 412,
+      "loc": 452,
+      "imports": 0,
+      "importedBy": 1
+    },
+    {
+      "id": "src/lib/images.json",
+      "label": "images.json",
+      "kind": "lib",
+      "loc": 245,
       "imports": 0,
       "importedBy": 1
     },
@@ -311,8 +335,16 @@
       "to": "src/app/globals.css"
     },
     {
+      "from": "src/app/layout.tsx",
+      "to": "src/components/Lightbox.tsx"
+    },
+    {
       "from": "src/app/page.tsx",
       "to": "src/components/CopyPrompt.tsx"
+    },
+    {
+      "from": "src/app/page.tsx",
+      "to": "src/components/Fig.tsx"
     },
     {
       "from": "src/app/page.tsx",
@@ -367,6 +399,10 @@
       "to": "src/lib/machine.ts"
     },
     {
+      "from": "src/components/Fig.tsx",
+      "to": "src/lib/images.json"
+    },
+    {
       "from": "src/components/lab/ArchCanvas.tsx",
       "to": "react"
     },
@@ -387,6 +423,10 @@
       "to": "src/lib/graph-types.ts"
     },
     {
+      "from": "src/components/Lightbox.tsx",
+      "to": "react"
+    },
+    {
       "from": "src/components/Menu.tsx",
       "to": "next/link"
     },
@@ -404,9 +444,9 @@
     }
   ],
   "stats": {
-    "files": 19,
-    "edges": 42,
-    "loc": 5300,
+    "files": 22,
+    "edges": 46,
+    "loc": 5809,
     "externals": 10
   }
 }

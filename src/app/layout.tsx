@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Figtree, Geist_Mono } from "next/font/google";
+import Lightbox from "@/components/Lightbox";
 import "./globals.css";
 
 /* Self-hosted at build time via next/font, so no runtime font CDN calls. */
@@ -54,6 +55,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         {children}
+        {/* One instance for the whole site: it listens for [data-zoom]
+            triggers, so any Fig on any route is zoomable without wiring. */}
+        <Lightbox />
       </body>
     </html>
   );

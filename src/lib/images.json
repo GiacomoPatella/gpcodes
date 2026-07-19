@@ -1,0 +1,245 @@
+{
+  "/work/graphic-design/compliance3-bizcard.jpg": {
+    "w": 1200,
+    "h": 786,
+    "zoom": {
+      "w": 2560,
+      "h": 1677
+    }
+  },
+  "/work/graphic-design/compliance3-stationery.jpg": {
+    "w": 1200,
+    "h": 900,
+    "zoom": {
+      "w": 2560,
+      "h": 1920
+    }
+  },
+  "/work/graphic-design/hundo-top-trumps.jpg": {
+    "w": 1200,
+    "h": 675,
+    "zoom": {
+      "w": 2560,
+      "h": 1440
+    }
+  },
+  "/work/graphic-design/hundo-trump-card-single.jpg": {
+    "w": 1050,
+    "h": 1600
+  },
+  "/work/graphic-design/janet-taylor-bizcard.jpg": {
+    "w": 919,
+    "h": 664
+  },
+  "/work/graphic-design/janet-taylor-stationery.jpg": {
+    "w": 1200,
+    "h": 900,
+    "zoom": {
+      "w": 2560,
+      "h": 1920
+    }
+  },
+  "/work/graphic-design/okappy-adwords.jpg": {
+    "w": 1200,
+    "h": 732
+  },
+  "/work/graphic-design/sensee-flyer-back.jpg": {
+    "w": 667,
+    "h": 478
+  },
+  "/work/graphic-design/sensee-flyer-front.jpg": {
+    "w": 670,
+    "h": 480
+  },
+  "/work/graphic-design/sensee-newsletter-1.jpg": {
+    "w": 743,
+    "h": 540
+  },
+  "/work/graphic-design/sensee-newsletter-2.jpg": {
+    "w": 1131,
+    "h": 1600
+  },
+  "/work/hundo/desktop-1.jpg": {
+    "w": 1600,
+    "h": 900,
+    "zoom": {
+      "w": 2560,
+      "h": 1440
+    }
+  },
+  "/work/hundo/desktop-2.jpg": {
+    "w": 1600,
+    "h": 900,
+    "zoom": {
+      "w": 2560,
+      "h": 1440
+    }
+  },
+  "/work/hundo/desktop-3.jpg": {
+    "w": 1600,
+    "h": 900,
+    "zoom": {
+      "w": 2560,
+      "h": 1440
+    }
+  },
+  "/work/hundo/employers.jpg": {
+    "w": 741,
+    "h": 2400,
+    "zoom": {
+      "w": 1543,
+      "h": 5000
+    }
+  },
+  "/work/hundo/learn-tablet.jpg": {
+    "w": 450,
+    "h": 685
+  },
+  "/work/hundo/mobile-1.jpg": {
+    "w": 1600,
+    "h": 900
+  },
+  "/work/hundo/mobile-2.jpg": {
+    "w": 1600,
+    "h": 900
+  },
+  "/work/hundo/trump-cards.jpg": {
+    "w": 1600,
+    "h": 900,
+    "zoom": {
+      "w": 2560,
+      "h": 1440
+    }
+  },
+  "/work/ipc-ecosystem/licensing.jpg": {
+    "w": 1440,
+    "h": 900
+  },
+  "/work/ipc-ecosystem/menu.jpg": {
+    "w": 1440,
+    "h": 900
+  },
+  "/work/ipc-ecosystem/modal.jpg": {
+    "w": 1440,
+    "h": 900
+  },
+  "/work/ipc-ecosystem/table.jpg": {
+    "w": 1440,
+    "h": 900
+  },
+  "/work/octopus-powerloop/dashboard-charge.jpg": {
+    "w": 640,
+    "h": 2260
+  },
+  "/work/octopus-powerloop/dashboard-cycles.jpg": {
+    "w": 640,
+    "h": 2260
+  },
+  "/work/octopus-powerloop/desktop.jpg": {
+    "w": 1440,
+    "h": 1080
+  },
+  "/work/octopus-powerloop/history.jpg": {
+    "w": 640,
+    "h": 1260
+  },
+  "/work/octopus-powerloop/tablet.jpg": {
+    "w": 768,
+    "h": 1024
+  },
+  "/work/okappy/connections-notes.jpg": {
+    "w": 1600,
+    "h": 1200,
+    "zoom": {
+      "w": 2560,
+      "h": 1920
+    }
+  },
+  "/work/okappy/db-concept-1.jpg": {
+    "w": 1440,
+    "h": 1024
+  },
+  "/work/okappy/db-concept-2.jpg": {
+    "w": 1440,
+    "h": 1024
+  },
+  "/work/okappy/db-list-click.jpg": {
+    "w": 1440,
+    "h": 1024
+  },
+  "/work/okappy/db-list-hover.jpg": {
+    "w": 1440,
+    "h": 1024
+  },
+  "/work/okappy/db-list.jpg": {
+    "w": 1440,
+    "h": 1024
+  },
+  "/work/okappy/home.jpg": {
+    "w": 1600,
+    "h": 750
+  },
+  "/work/passionfruit/agents-leads.jpg": {
+    "w": 2400,
+    "h": 1466,
+    "unverified": true
+  },
+  "/work/passionfruit/onboarding-goals.jpg": {
+    "w": 2400,
+    "h": 1400,
+    "unverified": true
+  },
+  "/work/passionfruit/pip-welcome.jpg": {
+    "w": 2400,
+    "h": 1400,
+    "unverified": true
+  },
+  "/work/pwc-consulting-source/methodology-light.jpg": {
+    "w": 768,
+    "h": 1024
+  },
+  "/work/pwc-consulting-source/overview.jpg": {
+    "w": 1600,
+    "h": 900
+  },
+  "/work/pwc-consulting-source/search-desktop.jpg": {
+    "w": 1131,
+    "h": 2400
+  },
+  "/work/pwc-consulting-source/search-filters.jpg": {
+    "w": 1021,
+    "h": 2400,
+    "zoom": {
+      "w": 1280,
+      "h": 3010
+    }
+  },
+  "/work/pwc-consulting-source/search-mobile.jpg": {
+    "w": 320,
+    "h": 1075
+  },
+  "/work/redington-frank-e/company-stats.jpg": {
+    "w": 1296,
+    "h": 2400
+  },
+  "/work/redington-frank-e/compliance.jpg": {
+    "w": 1440,
+    "h": 1600
+  },
+  "/work/redington-frank-e/dashboard.jpg": {
+    "w": 1440,
+    "h": 1300
+  },
+  "/work/redington-frank-e/governance.jpg": {
+    "w": 1072,
+    "h": 2400,
+    "zoom": {
+      "w": 1440,
+      "h": 3224
+    }
+  },
+  "/work/redington-frank-e/login.jpg": {
+    "w": 1440,
+    "h": 1024
+  }
+}
