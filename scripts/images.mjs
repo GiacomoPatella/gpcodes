@@ -136,10 +136,29 @@ const MANIFEST = [
   { out: "redington-frank-e/company-stats.jpg", src: "FRANK-E - Company Stats.png", cap: FEATURED },
   { out: "redington-frank-e/governance.jpg", src: "FRANK-E - Administration, Service & Governance.png", cap: FEATURED },
 
-  // Passionfruit is deliberately absent: nothing in the archive matches those
-  // three screens, so their true resolution is unknown and re-exporting them
-  // from the shipped files would only launder the existing guess. They need a
-  // fresh export from the live design file.
+  // --- Passionfruit --------------------------------------------------------
+  /* Sourced 19 Jul 2026. These were the last unsourced screens: they shipped at
+     2400px against a 1440px original, so the extra 960px were invented. The
+     real exports live in "Passionfruit 2026" rather than the 2023 archive,
+     which predates the work. Both ship source-limited at 1440, below the 1600
+     cap, and neither gets a zoom variant: the display image IS the source, and
+     the lightbox falls back to it.
+
+     Source filenames describe the flow they were cut from, not the screen, so
+     they read as crossed against the shipped names. Verified by eye before
+     wiring, and worth restating: "Chat - Welcome screen" is the PIP welcome
+     ("Welcome to PIP, Michael!"), and "PIP - Goal (selection)" is the
+     onboarding goal picker. Do not "fix" this mapping from the names alone. */
+  { out: "passionfruit/pip-welcome.jpg", src: "Chat - Welcome screen.png", cap: FEATURED },
+  { out: "passionfruit/agents-leads.jpg", src: "3.1 – Campaign detail_ Leads.png", cap: FEATURED },
+  /* onboarding-goals is deliberately still absent. Its source carries two
+     defects visible at full zoom: "camapaign" is a typo, and "Retain customers"
+     appears as two separate chips. Giacomo's call, 19 Jul: fix in the design
+     file and re-export rather than ship it. Until then the old 2400px guess
+     stays in place, flagged `unverified` by measureUnsourced, so the gap
+     stays visible in the data instead of disappearing quietly.
+       { out: "passionfruit/onboarding-goals.jpg",
+         src: "PIP - Goal (selection).png", cap: FEATURED }, */
 ];
 
 /** Index the archive once by basename, so manifest entries stay readable. */
@@ -301,9 +320,13 @@ if (missing.length) {
 /**
  * Shipped images with no manifest entry still need dimensions, or Fig has no
  * aspect ratio to reserve space with. Measure them in place rather than
- * re-exporting: for the Passionfruit screens there is no archive source, so
- * "re-exporting" could only mean recompressing the existing guess. They are
- * flagged `unverified` so the provenance gap stays visible in the data.
+ * re-exporting, which for an unsourced file could only mean recompressing the
+ * existing guess. They are flagged `unverified` so the provenance gap stays
+ * visible in the data.
+ *
+ * As of 19 Jul the only one left is passionfruit/onboarding-goals: its source
+ * exists but is held back pending a corrected export (see the manifest). Every
+ * other shipped image now traces to a real source file.
  */
 function measureUnsourced(dir, prefix = "") {
   for (const e of readdirSync(dir, { withFileTypes: true })) {

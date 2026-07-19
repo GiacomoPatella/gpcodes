@@ -104,11 +104,32 @@ All seven items shipped. What the work turned up that the plan did not predict:
 
 Two assets still need Giacomo:
 
-- **Passionfruit's three screens have no source in the archive** (it ends Nov 2023). Their true
-  resolution cannot be established, so they are deliberately excluded from the manifest rather
-  than re-exported from the shipped guess. They need a fresh export from the live design file.
+- ~~**Passionfruit's three screens have no source in the archive**~~ **RESOLVED for two of three,
+  19 Jul**, see "Passionfruit sources landed" below.
 - **`hundo/learn-tablet` has a 450x685 source**, far below the slot it occupies. Shrink its
   presentation, drop it, or re-export from Figma.
+
+### Passionfruit sources landed, 19 Jul 2026
+
+Giacomo exported the three screens. They were the last unsourced assets on the site: all three
+shipped at 2400px against a **1440px original**, so roughly 960px per image were invented.
+
+- **Two are now real.** `pip-welcome` and `agents-leads` are wired into `scripts/images.mjs` and
+  ship source-limited at 1440, under the 1600 cap. Neither gets a zoom variant, correctly: the
+  display image *is* the source, and the lightbox falls back to it. `unverified` in
+  `images.json` went from 3 entries to 1.
+- **`onboarding-goals` is deliberately still held back.** Its source carries two defects that are
+  readable at full zoom now that every figure zooms: **"camapaign"** is a typo, and **"Retain
+  customers" appears as two separate chips**. Giacomo's call, 19 Jul: fix in the design file and
+  re-export rather than ship it. The old 2400px guess stays in place meanwhile, still flagged
+  `unverified`, so the gap stays visible in the data rather than disappearing quietly.
+  **This is the one outstanding Passionfruit item.**
+- **The source filenames are crossed against the shipped names**, and this cost real time to
+  establish. They are named for the flow they were cut from, not the screen:
+  `Chat - Welcome screen.png` is the PIP welcome ("Welcome to PIP, Michael!"), and
+  `PIP - Goal (selection).png` is the onboarding goal picker. Verified by eye, not inferred, and
+  the two 1440x840 files are aspect-identical so dimensions cannot break the tie. The mapping is
+  recorded in the manifest comment. **Do not "correct" it from the filenames.**
 
 ### Group 2: image zoom, default everywhere. DONE, 19 Jul 2026
 
@@ -260,7 +281,9 @@ Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc
   have made one point twice and left the trade-off unillustrated. Renamed rather than
   re-exported, since the pixels were always correct.
 - `hundo/learn-tablet`: 450x685 source, too small for its slot. Shrink, drop, or re-export.
-- Passionfruit screenshots: no archive source, need a fresh export from the live design file.
+- ~~Passionfruit screenshots: no archive source.~~ **RESOLVED 19 Jul for two of three.** One left:
+  `onboarding-goals` needs a re-export with the "camapaign" typo and the duplicated "Retain
+  customers" chip fixed. See "Passionfruit sources landed".
 - Music player content source. Copyright makes hosting other artists' tracks a problem. Cleanest
   route is his own labels, Never Ready and Five Fold. Also, rotating a fixed set is not really
   "new tunes every day".
@@ -268,7 +291,9 @@ Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc
   personality he wants. Candidates: microcopy, the empty state of ⌘K, 404.
 - Tonic-lab: to be featured as a working link, the only live product on the site. Needs
   description, role, URL.
-- Copy still to write: Octopus Powerloop, Redington FRANK-E.
+- ~~Copy still to write: Octopus Powerloop, Redington FRANK-E.~~ **Stale, corrected 19 Jul.**
+  Both have shipped copy in `page.tsx`, short but written. Giacomo's call: short is fine, the
+  long version belongs on the future case study pages.
 - Photography: coming, slow. Route stays signposted and empty.
 - Asset rework: Giacomo is redesigning some older assets, FRANK-E named. Open question whether
   reworked screens are shown as today's design or as then/now pairs.
@@ -295,8 +320,17 @@ Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc
 - `direction/b2`: **the working branch**
 - Worktrees at `~/code/gpcodes-{a-editorial,b-instrument,c-tactile,b2}`
 - Dev server: `cd ~/code/gpcodes-b2 && npm run dev -- -p 3004`
-- Source archive: `~/Downloads/Portfolio.zip` (950MB, extracted subset in the session scratchpad
-  which will not survive a clear, re-extract as needed)
+- Source archive: **`~/Downloads/Portfolio/`, extracted and complete.** The pipeline resolves
+  every manifest entry against it (`node scripts/images.mjs ~/Downloads/Portfolio --dry` reports
+  0 missing). Note the `Portfolio.zip` this came from is **gone** from `~/Downloads`, so the
+  extracted tree is now the only copy. Run the pipeline from a root that resolves everything:
+  `images.json` is regenerated wholesale, so a run against a partial root would silently demote
+  every unresolved asset to `unverified`.
+- **`~/Downloads/Portfolio/Passionfruit 2026/`**: the three 2026 exports, added 19 Jul. They sit
+  inside the archive tree because the pipeline indexes it recursively by basename, which is why
+  no multi-root support was needed. The 2023 archive predates this work and never had them.
+  **These are the only copy of the Passionfruit sources**, and they deserve a more durable home
+  than `~/Downloads` alongside a zip that has already disappeared once.
 - **`~/code/todo-app`**: the interaction study, its own repo, its own branding. Not part of this
   site. `/lab` will link out to it.
 
@@ -344,4 +378,6 @@ still just a merge into `main`.
   during iteration. At launch, a GitHub Action building both sites into one Pages deploy is the
   clean version.
 - Turn on Vercel Deployment Protection while iterating if it should not be crawlable.
-- Not yet pushed: awaiting Giacomo's go-ahead, since the repo is public and history is permanent.
+- ~~Not yet pushed.~~ **Done.** `direction/b2` is on `origin` and Vercel is wired up, confirmed
+  19 Jul. The branch is public, so treat history as permanent. Vercel builds from the pushed
+  branch, so **the preview only moves when you push**: local commits do not update it.

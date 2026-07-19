@@ -84,7 +84,7 @@
       "id": "scripts/images.mjs",
       "label": "images.mjs",
       "kind": "script",
-      "loc": 333,
+      "loc": 356,
       "imports": 3,
       "importedBy": 0
     },
@@ -244,7 +244,7 @@
       "id": "src/lib/images.json",
       "label": "images.json",
       "kind": "lib",
-      "loc": 241,
+      "loc": 239,
       "imports": 0,
       "importedBy": 1
     },
@@ -462,7 +462,7 @@
   "stats": {
     "files": 23,
     "edges": 48,
-    "loc": 6297,
+    "loc": 6318,
     "externals": 10
   }
 }
