@@ -298,28 +298,26 @@ Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc
 - **`~/code/todo-app`**: the interaction study, its own repo, its own branding. Not part of this
   site. `/lab` will link out to it.
 
-### gpcodes.com expired, 19 Jul. Renewed same day
+### gpcodes.com expired and was renewed, 19 Jul. Resolved
 
-Worth knowing because the symptoms are confusing and this note is cheaper than
-re-diagnosing them. While the domain was expired the registrar parked it, so:
+While expired, the registrar parked it: `gpcodes.com` served a Vite-built lander with an empty
+`<title>` instead of the portfolio. **Renewing fixed it.** The site is back and HTTPS is valid,
+confirmed in a real browser (`isSecureContext: true`, title `GP Codes - UI/UX Design`).
 
-- `gpcodes.com` resolved to `216.227.142.171`, `server: nginx/1.28.3 (Ubuntu)`, serving a
-  Vite-built placeholder with an empty `<title>`. Not the portfolio.
-- **HTTPS failed the TLS handshake entirely.** Only `http://` answered.
-- GitHub Pages was still enabled and still 301-redirecting to `https://gpcodes.com/` because of
-  the `CNAME` file, so Pages was effectively serving into a void.
+**Lesson about tooling, worth more than the incident.** During this I reported that HTTPS was
+broken on the server. That was wrong. `curl` from the agent sandbox returns status `000` with a
+TLS handshake error for `https://gpcodes.com` even when the site is perfectly healthy, so the
+sandbox produces false negatives on TLS. **Verify anything network-facing in the browser before
+concluding it is broken.** The same caution applies to `dig` results from the sandbox.
 
-The site being "live on gpcodes.com via GitHub Pages" was therefore temporarily false, which
-briefly put the launch-is-a-merge decision in doubt. It was only the expiry.
-
-**Check after any future renewal**, since registrars often overwrite DNS while parked and do not
-always restore it:
-
-1. A records are all four Pages IPs: `185.199.108.153`, `.109.153`, `.110.153`, `.111.153`.
-   If `216.227.142.171` is still present, that is the parking record.
-2. GitHub repo Settings, Pages: the custom domain may have been cleared or marked unverified.
-3. Enforce HTTPS is likely unticked until DNS resolves correctly. The certificate re-provisions
-   automatically, and can take up to 24 hours.
+**Still genuinely unconfirmed:** whether `gpcodes.com` is served by GitHub Pages. From the
+sandbox, DNS resolved to `216.227.142.171` with `server: nginx/1.28.3 (Ubuntu)`, which is not a
+Pages IP (Pages uses `185.199.108-111.153`), and GitHub Pages was seen 301-redirecting to
+`https://gpcodes.com/`. If that is accurate, the live site is hosted elsewhere and **"launch is
+a merge into `main`" would not hold**, because merging would update Pages while the domain is
+served by another host. But given the sandbox's unreliability here, do not act on it: check
+**GitHub repo, Settings, Pages**, which states plainly where the site is served from. Settle this
+before planning a launch date, not on the day.
 
 ### Deploying a preview, decided 19 Jul
 
