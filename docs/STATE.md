@@ -95,10 +95,7 @@ All seven items shipped. What the work turned up that the plan did not predict:
   while writing nothing. `C3.pdf` is the real fix. It is a fully vector portfolio page carrying
   the logo and both card faces; the shipped asset is the right-hand face, rendered at 900dpi and
   cropped just inside its hairline frame (`crop` in the manifest). Genuinely sharp now.
-- **`okappy/connections-notes.jpg` is misnamed.** Its pixels are `OKAPPY-connex-1.jpg`, the
-  perspective mockup of the *card grid*. `OKAPPY-connex-2.jpg` is the *list and notes* layout
-  that the filename actually describes. Left as-is rather than silently swapped: decide which
-  was intended.
+- ~~**`okappy/connections-notes.jpg` is misnamed.**~~ **RESOLVED 19 Jul**, see below.
 - **Hero copy landed as** headline "I make complicated products easier to live with." plus a dek
   that repeats neither the name and role (already in the eyebrow) nor Florence (already in
   hero-meta). `layout.tsx` metadata carried the same stale "build when it counts" line and was
@@ -254,9 +251,14 @@ Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc
 ## Open questions
 
 - ~~Particle effect: hero or footer?~~ **RESOLVED: footer**, 19 Jul.
-- Which `connex` mockup the Okappy entry should show. The file called
-  `connections-notes.jpg` is actually `connex-1` (card grid); `connex-2` is the list-and-notes
-  layout the name describes. Left unswapped pending a decision.
+- ~~Which `connex` mockup the Okappy entry should show.~~ **RESOLVED 19 Jul: the image was right,
+  the label was wrong.** It is now `okappy/db-cards.jpg`, captioned "Cards: fewer, with more
+  detail". Reasoning worth keeping: the Okappy copy already weighs "more connections above the
+  fold against fewer with richer detail", and `db-list.jpg` directly above shows the dense list,
+  so `connex-1` (card grid) is the other half of that sentence. Swapping to `connex-2` would
+  have been the actual mistake: it is a perspective mockup of the same list, so the entry would
+  have made one point twice and left the trade-off unillustrated. Renamed rather than
+  re-exported, since the pixels were always correct.
 - `hundo/learn-tablet`: 450x685 source, too small for its slot. Shrink, drop, or re-export.
 - Passionfruit screenshots: no archive source, need a fresh export from the live design file.
 - Music player content source. Copyright makes hosting other artists' tracks a problem. Cleanest

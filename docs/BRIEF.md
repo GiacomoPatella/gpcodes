@@ -72,7 +72,7 @@ In `public/work/<project>/`. Reference as `/work/hundo/desktop-1.jpg` etc.
 | `hundo` | `desktop-1..3`, `mobile-1..2`, `trump-cards`, `employers`, `learn-tablet` |
 | `octopus-powerloop` | `desktop`, `tablet`, `dashboard-cycles`, `dashboard-charge`, `history` |
 | `redington-frank-e` | `dashboard`, `compliance`, `company-stats`, `governance`, `login` |
-| `okappy` | `db-list`, `db-list-hover`, `db-list-click`, `db-concept-1..2`, `connections-notes`, `home` |
+| `okappy` | `db-list`, `db-list-hover`, `db-list-click`, `db-concept-1..2`, `db-cards`, `home` |
 | `pwc-consulting-source` | `search-desktop`, `search-filters`, `search-mobile`, `methodology-light`, `overview` |
 | `ipc-ecosystem` | `menu`, `licensing`, `modal`, `table` |
 

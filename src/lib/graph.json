@@ -84,7 +84,7 @@
       "id": "scripts/images.mjs",
       "label": "images.mjs",
       "kind": "script",
-      "loc": 328,
+      "loc": 333,
       "imports": 3,
       "importedBy": 0
     },
@@ -124,7 +124,7 @@
       "id": "src/app/page.tsx",
       "label": "app/page.tsx",
       "kind": "route",
-      "loc": 678,
+      "loc": 681,
       "imports": 5,
       "importedBy": 0
     },
@@ -462,7 +462,7 @@
   "stats": {
     "files": 23,
     "edges": 48,
-    "loc": 6289,
+    "loc": 6297,
     "externals": 10
   }
 }

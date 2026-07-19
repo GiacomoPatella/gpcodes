@@ -112,7 +112,12 @@ const MANIFEST = [
   { out: "okappy/db-list-click.jpg", src: "OKAPPY - Customers_DB_list-click.png", cap: FEATURED },
   { out: "okappy/db-concept-1.jpg", src: "OKAPPY - Customers_DB_1.png", cap: FEATURED },
   { out: "okappy/db-concept-2.jpg", src: "OKAPPY - Customers_DB_2.png", cap: FEATURED },
-  { out: "okappy/connections-notes.jpg", src: "OKAPPY-connex-1.jpg", cap: FEATURED },
+  /* Named for what it shows. It was "connections-notes", which described
+     OKAPPY-connex-2 (the dense list) rather than connex-1 (the card grid) that
+     was actually shipped. connex-1 is the right image: paired with db-list it
+     is the "fewer with richer detail" half of the trade-off the copy
+     describes, where connex-2 would just restate the list twice. */
+  { out: "okappy/db-cards.jpg", src: "OKAPPY-connex-1.jpg", cap: FEATURED },
   { out: "okappy/home.jpg", src: "OKAPPY - home.png", cap: FEATURED },
 
   // --- PwC Consulting Source ----------------------------------------------

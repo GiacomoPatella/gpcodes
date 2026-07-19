@@ -365,10 +365,13 @@ export default function Home() {
                       alt="Early layout concept for the connections database"
                       caption="Layout concept"
                     />
+                    {/* The other half of the trade-off in the copy above:
+                        db-list is many connections at a glance, this is fewer
+                        with richer detail on each. */}
                     <Fig
-                      src="/work/okappy/connections-notes.jpg"
-                      alt="Connection record with notes panel open"
-                      caption="Notes on a connection"
+                      src="/work/okappy/db-cards.jpg"
+                      alt="Connections as cards, one expanded to show jobs, invoices and note actions alongside invited and connected states"
+                      caption="Cards: fewer, with more detail"
                       ratio="2400 / 1706"
                       objectPosition="top"
                     />
