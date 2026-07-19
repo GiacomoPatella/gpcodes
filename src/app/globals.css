@@ -341,24 +341,56 @@ kbd {
   color: var(--ink);
 }
 
-/* ---- header ---- */
+/* ---- the floating menu ----
+   One navigation surface for the whole site: header and dock collapsed into
+   a single floating bar. Sticky (not fixed) so it stays in flow and cannot
+   overlap content; the gap above it lets the page read through, which is
+   what makes it float rather than just being a header with rounded corners. */
 
-.site-header {
+.fmenu-wrap {
   position: sticky;
   top: 0;
-  z-index: 50;
-  height: var(--header-h);
-  border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg) 86%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  z-index: 60;
+  /* Shrink-wrapped and centred — a compact floating menu, not a full-width
+     header with rounded corners. */
+  width: fit-content;
+  max-width: calc(100vw - var(--sp-4));
+  margin-inline: auto;
+  padding: var(--sp-3) var(--sp-3) 0;
+  /* the transparent frame around the bar must not eat clicks */
+  pointer-events: none;
 }
-.site-header .container {
-  height: 100%;
+.fmenu {
+  pointer-events: auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--sp-4);
+  height: var(--header-h);
+  padding-inline: var(--sp-4) var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+}
+.fmenu-home {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  text-decoration: none;
+  min-width: 0;
+}
+.fmenu-avatar {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid var(--line-strong);
+  /* Greyscale so the portrait sits inside the instrument palette instead of
+     being the one warm-toned object on the page. */
+  filter: grayscale(1) contrast(1.02);
 }
 .wordmark {
   font-family: var(--font-mono);
@@ -367,33 +399,103 @@ kbd {
   letter-spacing: 0.01em;
   text-decoration: none;
   color: var(--ink);
+  white-space: nowrap;
 }
 .wordmark .tld {
   color: var(--muted);
   font-weight: 400;
 }
-.site-nav {
+.fmenu-links {
   display: flex;
   align-items: center;
-  gap: var(--sp-5);
-}
-.site-nav a {
+  gap: var(--sp-1);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
+  white-space: nowrap;
+}
+.fmenu-link {
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--radius);
+  text-decoration: none;
   color: var(--muted);
 }
-.site-nav a:hover,
-.site-nav a:focus-visible {
+.fmenu-link:hover,
+.fmenu-link:focus-visible {
   color: var(--ink);
 }
-.nav-links {
-  display: none;
-  align-items: center;
-  gap: var(--sp-5);
+.fmenu-link[aria-current="page"] {
+  color: var(--accent-ink);
+  background: var(--accent-wash);
 }
-@media (min-width: 40rem) {
-  .nav-links {
-    display: flex;
+.fmenu-soon-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.fmenu-soon {
+  padding: var(--sp-1) var(--sp-2);
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--muted);
+  opacity: 0.5;
+  cursor: default;
+}
+.fmenu-tip {
+  position: absolute;
+  top: calc(100% + 0.875rem);
+  left: 50%;
+  padding: var(--sp-1) var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: var(--text-xs);
+  color: var(--muted);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translate(-50%, -4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.fmenu-soon-wrap:hover .fmenu-tip,
+.fmenu-soon:focus-visible + .fmenu-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.fmenu-rule {
+  width: 1px;
+  align-self: stretch;
+  margin-block: var(--sp-3);
+  background: var(--line);
+}
+/* Degradation, widest first: planned routes drop out (they are signposts,
+   not function — ⌘K still lists everything), then the trigger's text label.
+   The live IA, palette and theme toggle survive to the narrowest viewport. */
+@media (max-width: 44rem) {
+  .fmenu-soon-wrap {
+    display: none;
+  }
+}
+@media (max-width: 30rem) {
+  .fmenu {
+    gap: var(--sp-3);
+  }
+  .palette-trigger span,
+  .wordmark .tld {
+    display: none;
+  }
+}
+.fmenu > * {
+  flex-shrink: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fmenu-tip {
+    transition: none;
+  }
+}
+@media print {
+  .fmenu-wrap {
+    display: none;
   }
 }
 .palette-trigger {
@@ -440,46 +542,29 @@ kbd {
   font-weight: 500;
 }
 
-.field-grid {
+/* The hero's metadata, demoted from a six-cell table to one quiet line:
+   only what the prose above does not already say (place, coordinates,
+   address). The hairline groups it with the copy-as-prompt row below into
+   a single subdued block. */
+.hero-meta {
   margin-top: var(--sp-7);
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding-top: var(--sp-4);
   border-top: 1px solid var(--line);
-  border-left: 1px solid var(--line);
+  max-width: 38rem;
 }
-@media (min-width: 48rem) {
-  .field-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-.field {
-  padding: var(--sp-3) var(--sp-4);
-  border-right: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background: var(--surface);
-}
-.field dt {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: var(--muted);
-}
-.field dd {
-  margin-top: var(--sp-1);
+.hero-meta-line {
   font-family: var(--font-mono);
   font-size: var(--text-sm);
-  color: var(--ink);
+  color: var(--muted);
   overflow-wrap: anywhere;
 }
-.field dd a {
-  color: inherit;
+.hero-meta-line a {
+  color: var(--ink);
   text-decoration: underline;
   text-decoration-color: var(--line-strong);
   text-underline-offset: 0.2em;
 }
-.field dd a:hover {
+.hero-meta-line a:hover {
   text-decoration-color: var(--accent-ink);
   color: var(--accent-ink);
 }
@@ -658,15 +743,16 @@ kbd {
 }
 .fig figcaption {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: var(--sp-3);
+  gap: var(--sp-1) var(--sp-3);
   margin-top: var(--sp-2);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--muted);
 }
 .fig figcaption .path {
-  flex-shrink: 0;
+  overflow-wrap: anywhere;
 }
 .fig + .fig,
 .fig-pair + .fig,
@@ -758,35 +844,56 @@ kbd {
   color: var(--muted);
 }
 
-/* ---- placeholder entry (Passionfruit) ---- */
+/* ---- gallery strip (graphic design entry) ----
+   A contact sheet, not a masonry grid: one row, uniform height, each piece
+   at its own aspect ratio, horizontal scroll with snap. Pure CSS — works
+   without JavaScript, keyboard-scrollable via tabindex on the strip.
+   This is the pattern the future /work gallery inherits. */
 
-.placeholder-slot {
-  padding: var(--sp-6);
-  border: 1px dashed var(--line-strong);
-  border-radius: var(--radius);
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      transparent 0,
-      transparent 11px,
-      var(--wash) 11px,
-      var(--wash) 12px
-    );
+.gallery {
+  --strip-h: clamp(13rem, 32vw, 18rem);
+  margin-top: var(--sp-6);
 }
-.placeholder-slot p {
-  max-width: 34rem;
+.gallery-strip {
+  display: flex;
+  gap: var(--sp-4);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: var(--sp-3);
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+.gallery-strip:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+.gallery-strip li {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+.gallery-strip .fig-frame {
+  height: var(--strip-h);
+  width: auto;
+}
+.gallery-strip figcaption {
+  justify-content: flex-start;
+}
+.gallery-note {
+  margin-top: var(--sp-2);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  line-height: 1.7;
+  font-size: var(--text-xs);
   color: var(--muted);
 }
-.placeholder-slot .mono-label {
-  display: inline-block;
-  margin-bottom: var(--sp-2);
-  padding: 0.125rem var(--sp-2);
-  border: 1px solid var(--accent-ink);
-  border-radius: var(--radius);
-  color: var(--accent-ink);
+.gallery-copy {
+  max-width: 44rem;
+}
+.gallery-copy .chip-row {
+  margin-top: var(--sp-5);
 }
 
 /* ---- testimonials ---- */
@@ -846,7 +953,7 @@ kbd {
 /* ---- footer ---- */
 
 .site-footer {
-  padding-block: var(--sp-9) calc(var(--sp-9) + 3.5rem);
+  padding-block: var(--sp-9);
 }
 .footer-email {
   font-family: var(--font-mono);
@@ -910,97 +1017,6 @@ kbd {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--muted);
-}
-
-/* ---- floating dock: signposts the planned IA ---- */
-
-.dock {
-  position: fixed;
-  bottom: calc(var(--sp-4) + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 60;
-  display: flex;
-  align-items: center;
-  gap: var(--sp-1);
-  padding: var(--sp-1) var(--sp-2);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: var(--shadow);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  white-space: nowrap;
-  flex-wrap: wrap;
-  justify-content: center;
-  row-gap: 0;
-  max-width: calc(100vw - 2rem);
-}
-.dock-link {
-  padding: var(--sp-1) var(--sp-2);
-  border-radius: 999px;
-  text-decoration: none;
-  color: var(--muted);
-}
-.dock-link[aria-current="page"] {
-  color: var(--accent-ink);
-  background: var(--accent-wash);
-}
-.dock-link:hover {
-  color: var(--ink);
-}
-.dock-rule {
-  width: 1px;
-  height: 1rem;
-  background: var(--line);
-  margin-inline: var(--sp-1);
-}
-.dock-soon-wrap {
-  position: relative;
-  display: inline-flex;
-}
-.dock-soon {
-  padding: var(--sp-1) var(--sp-2);
-  border: none;
-  border-radius: 999px;
-  background: none;
-  font: inherit;
-  color: var(--muted);
-  opacity: 0.55;
-  cursor: default;
-}
-.dock-tip {
-  position: absolute;
-  bottom: calc(100% + 0.625rem);
-  left: 50%;
-  padding: var(--sp-1) var(--sp-2);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--muted);
-  box-shadow: var(--shadow);
-  opacity: 0;
-  transform: translate(-50%, 4px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  pointer-events: none;
-  white-space: nowrap;
-}
-.dock-soon-wrap:hover .dock-tip,
-.dock-soon:focus-visible + .dock-tip {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-@media (prefers-reduced-motion: reduce) {
-  .dock-tip {
-    transition: none;
-  }
-}
-@media print {
-  .dock {
-    display: none;
-  }
 }
 
 /* ---- command palette ---- */
@@ -1216,7 +1232,7 @@ kbd {
    like a reading off a bench instrument. */
 
 .lab-page {
-  padding-block: var(--sp-8) calc(var(--sp-10) + 3.5rem);
+  padding-block: var(--sp-8) var(--sp-10);
 }
 .lab-page h1 {
   margin-top: var(--sp-3);
@@ -1482,22 +1498,3 @@ kbd {
   text-wrap: pretty;
 }
 
-/* ---- byline avatar ----
-   Small portrait beside the hero eyebrow. Sized in em so it tracks the
-   mono-label type step rather than being pinned to a pixel value. */
-.byline {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-}
-
-.byline-avatar {
-  width: 2.4em;
-  height: 2.4em;
-  border-radius: 999px;
-  object-fit: cover;
-  border: 1px solid var(--line);
-  /* The portrait is cool-toned greyscale; a touch of the accent keeps it
-     from reading as a stock headshot dropped onto the page. */
-  filter: grayscale(1) contrast(1.02);
-}

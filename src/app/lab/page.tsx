@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import CommandPalette from "@/components/CommandPalette";
-import Dock from "@/components/Dock";
-import ThemeToggle from "@/components/ThemeToggle";
+import Menu from "@/components/Menu";
 
 export const metadata: Metadata = {
   title: "Lab — gpcodes",
@@ -17,17 +15,7 @@ export default function LabPage() {
         skip to content
       </a>
 
-      <header className="site-header">
-        <div className="container">
-          <Link className="wordmark" href="/">
-            gp<span className="tld">codes.com</span>
-          </Link>
-          <nav className="site-nav" aria-label="Primary">
-            <CommandPalette />
-            <ThemeToggle />
-          </nav>
-        </div>
-      </header>
+      <Menu current="/lab" />
 
       <main id="main" className="container lab-page flex-1">
         <p className="mono-label">lab</p>
@@ -44,7 +32,7 @@ export default function LabPage() {
             <Link href="/lab/architecture/" className="lab-entry">
               <div className="lab-entry-head">
                 <h2>Architecture map</h2>
-                <span className="lab-entry-meta">p5 · force-directed</span>
+                <span className="lab-entry-meta">canvas 2d · force-directed</span>
               </div>
               <p>
                 This site&rsquo;s real module graph — every file and import,
@@ -56,8 +44,6 @@ export default function LabPage() {
           </li>
         </ul>
       </main>
-
-      <Dock current="/lab" />
     </>
   );
 }

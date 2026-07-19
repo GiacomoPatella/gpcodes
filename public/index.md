@@ -16,7 +16,21 @@ front-end when it counts.
 
 ### Passionfruit (current, 2026)
 
-My current role. Case study in preparation, content not yet available.
+Passionfruit is a marketing platform that grew from a vetted freelance talent
+marketplace into an AI-powered workspace for enterprise marketing teams. I
+lead product design across that whole evolution — on the marketplace, both
+sides of it: client onboarding, project creation, specialist matching,
+proposals and collaboration.
+
+The centre of it now is PIP, Passionfruit's AI platform for marketing teams.
+PIP connects company knowledge and marketing data — analytics, ad accounts,
+CRMs, spreadsheets — to an assistant that analyses, reports and automates
+recurring work. I define the information architecture and design the core
+experiences: chat, agents, integrations, files and knowledge, workflows,
+AI-generated artefacts — making complex AI capabilities feel clear and
+trustworthy.
+
+Tags: product design, AI, enterprise, IA, design system
 
 ### hundo — hundo.xyz (2022)
 
@@ -84,6 +98,20 @@ clickable prototype in Principle with over 50 screens.
 Outcome: the client's customer invested a six-figure sum to develop it further.
 
 Tags: prototyping, enterprise, fintech
+
+### Graphic design & branding (2015–2022)
+
+One consolidated body of work across six clients. For Compliance3 (PCI
+compliance for contact centres, motto "People, Process, Technology", four
+steps to each) I drew the logo as three chain rings of four elements each.
+For Janet Taylor, an organisational psychologist consulting to large
+engineering firms, a clean geometric monogram. Then the range: 100 Top
+Trumps cards for hundo revealed one a day before Careercon22; Sensée's
+recruitment campaign and a monthly newsletter re-designed every issue within
+a strict pink palette; 20 Google Ads banners for Okappy; a sales brochure
+for Custodia Technology.
+
+Tags: branding, identity, print, campaign
 
 ## Testimonials
 

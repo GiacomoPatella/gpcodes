@@ -1,9 +1,104 @@
-import Link from "next/link";
-import CommandPalette from "@/components/CommandPalette";
 import CopyPrompt from "@/components/CopyPrompt";
-import Dock from "@/components/Dock";
-import ThemeToggle from "@/components/ThemeToggle";
+import Menu from "@/components/Menu";
 import { TESTIMONIALS } from "@/data/site";
+
+/* The graphic design contact sheet. Aspect ratios are the real pixel
+   dimensions of each file, so the strip lays out before a single image
+   loads. The Sensée infographic is a 147×2000 strip — shown as a top-crop
+   detail (and captioned as such) because no honest full view fits a row. */
+const SHEET: {
+  file: string;
+  ratio: string;
+  caption: string;
+  alt: string;
+  crop?: boolean;
+}[] = [
+  {
+    file: "compliance3-stationery",
+    ratio: "2000 / 1500",
+    caption: "Compliance3 · identity",
+    alt: "Compliance3 stationery set: letterhead, envelope, cards and mugs carrying a chain-ring logo in three blues",
+  },
+  {
+    file: "compliance3-bizcard",
+    ratio: "2000 / 1311",
+    caption: "Compliance3 · card",
+    alt: "Compliance3 business card, the three chain rings running across the top edge",
+  },
+  {
+    file: "janet-taylor-stationery",
+    ratio: "2000 / 1500",
+    caption: "Janet Taylor · identity",
+    alt: "Janet Taylor Consulting letterhead, envelope and cards with a circular JT monogram",
+  },
+  {
+    file: "janet-taylor-bizcard",
+    ratio: "2000 / 1445",
+    caption: "Janet Taylor · card",
+    alt: "Stacks of Janet Taylor Consulting business cards, geometric monogram in teal",
+  },
+  {
+    file: "hundo-top-trumps",
+    ratio: "2000 / 1125",
+    caption: "hundo · Top Trumps",
+    alt: "Six of hundo's 100 Top Trumps cards, black with teal and gold variants",
+  },
+  {
+    file: "hundo-trump-card-single",
+    ratio: "1312 / 2000",
+    caption: "hundo · one of 100",
+    alt: "A single hundo Top Trump card with pixel-drawn stat counters",
+  },
+  {
+    file: "sensee-flyer-front",
+    ratio: "2000 / 1433",
+    caption: "Sensée · flyer",
+    alt: "Sensée recruitment flyer: THIS COULD BE YOU beside a teal duotone photo of a father and son",
+  },
+  {
+    file: "sensee-flyer-back",
+    ratio: "2000 / 1433",
+    caption: "Sensée · flyer, back",
+    alt: "Flyer reverse: apply now for a home-based job, benefits set in bold condensed type",
+  },
+  {
+    file: "sensee-newsletter-1",
+    ratio: "2000 / 1453",
+    caption: "Sensée · newsletter",
+    alt: "Newsletter spread: a speech-bubble cover page and a home-agent diary page in the pink palette",
+  },
+  {
+    file: "sensee-newsletter-2",
+    ratio: "1413 / 2000",
+    caption: "Sensée · newsletter",
+    alt: "Newsletter page: Diary of a Sensée Home Agent, magenta panels over a desk photo",
+  },
+  {
+    file: "sensee-infographic",
+    ratio: "3 / 4",
+    caption: "Sensée · infographic, detail",
+    alt: "Top of a very tall Sensée and Aviva year-one infographic",
+    crop: true,
+  },
+  {
+    file: "okappy-adwords",
+    ratio: "2000 / 1220",
+    caption: "Okappy · Google Ads",
+    alt: "The Okappy banner set at every ad size, each one keeping Simplify and the green CTA legible",
+  },
+  {
+    file: "custodia-front",
+    ratio: "1426 / 2000",
+    caption: "Custodia · brochure",
+    alt: "Custodia Technology sales brochure cover in navy with cyan diagonals",
+  },
+  {
+    file: "custodia-back",
+    ratio: "1426 / 2000",
+    caption: "Custodia · brochure, back",
+    alt: "Brochure services page: audit, design, delivery and support offerings with line icons",
+  },
+];
 
 export default function Home() {
   return (
@@ -12,45 +107,13 @@ export default function Home() {
         skip to content
       </a>
 
-      <header className="site-header">
-        <div className="container">
-          <Link className="wordmark" href="/">
-            gp<span className="tld">codes.com</span>
-          </Link>
-          <nav className="site-nav" aria-label="Primary">
-            <div className="nav-links">
-              <a className="u-link" href="#work">
-                work
-              </a>
-              <a className="u-link" href="#testimonials">
-                testimonials
-              </a>
-              <a className="u-link" href="#contact">
-                contact
-              </a>
-            </div>
-            <CommandPalette />
-            <ThemeToggle />
-          </nav>
-        </div>
-      </header>
+      <Menu current="/" />
 
       <main id="main" className="flex-1">
         {/* ============ HERO ============ */}
         <section className="hero" aria-labelledby="hero-title">
           <div className="container">
-            <p className="mono-label byline">
-              {/* Plain img: static export runs images.unoptimized, so next/image
-                  would add a wrapper without adding anything. */}
-              <img
-                className="byline-avatar"
-                src="/avatar-192.jpg"
-                srcSet="/avatar-96.jpg 1x, /avatar-192.jpg 2x, /avatar-384.jpg 4x"
-                width={96}
-                height={96}
-                alt="Giacomo Patella"
-                decoding="async"
-              />
+            <p className="mono-label">
               Giacomo Patella · senior product designer
             </p>
             <h1 id="hero-title" style={{ marginTop: "var(--sp-4)" }}>
@@ -62,36 +125,16 @@ export default function Home() {
               counts. Over a decade in, currently at Passionfruit.
             </p>
 
-            <dl className="field-grid">
-              <div className="field">
-                <dt>role</dt>
-                <dd>Senior Product Designer</dd>
-              </div>
-              <div className="field">
-                <dt>location</dt>
-                <dd>Florence, IT · 43.77°N 11.26°E</dd>
-              </div>
-              <div className="field">
-                <dt>practice</dt>
-                <dd>over a decade</dd>
-              </div>
-              <div className="field">
-                <dt>focus</dt>
-                <dd>product · design systems · prototyping</dd>
-              </div>
-              <div className="field">
-                <dt>current</dt>
-                <dd>Passionfruit</dd>
-              </div>
-              <div className="field">
-                <dt>contact</dt>
-                <dd>
-                  <a href="mailto:gp@gpcodes.com">gp@gpcodes.com</a>
-                </dd>
-              </div>
-            </dl>
-
-            <CopyPrompt />
+            {/* Everything the prose already says (role, tenure, Passionfruit)
+                is gone — what's left is only what it doesn't: where, exactly,
+                and how to reach me. */}
+            <div className="hero-meta">
+              <p className="hero-meta-line">
+                Florence, Italy · 43.77°N 11.26°E ·{" "}
+                <a href="mailto:gp@gpcodes.com">gp@gpcodes.com</a>
+              </p>
+              <CopyPrompt />
+            </div>
           </div>
         </section>
 
@@ -100,23 +143,97 @@ export default function Home() {
           <div className="container">
             <div className="sec-head">
               <h2 id="work-title">Selected work</h2>
-              <span className="sec-meta">7 projects · 2015 → now</span>
+              <span className="sec-meta">8 entries · 2015 → now</span>
             </div>
 
-            {/* Passionfruit — placeholder, content not yet available */}
+            {/* Passionfruit */}
             <article className="entry reveal" id="passionfruit">
               <div className="entry-head">
                 <h3 className="entry-title">Passionfruit</h3>
-                <span className="entry-org">current work</span>
+                <span className="entry-org">current role</span>
                 <span className="entry-year">2026</span>
               </div>
-              <div className="placeholder-slot">
-                <span className="mono-label">case study in preparation</span>
-                <p>
-                  I&rsquo;m currently at Passionfruit and still writing this
-                  one up. The slot is reserved rather than filled with
-                  placeholder copy pretending otherwise.
-                </p>
+              <div className="entry-body">
+                <div className="entry-copy">
+                  <p>
+                    Passionfruit is a marketing platform that grew from a
+                    vetted freelance talent marketplace into an AI-powered
+                    workspace for enterprise marketing teams. I lead product
+                    design across that whole evolution — on the marketplace,
+                    both sides of it: client onboarding, project creation,
+                    specialist matching, proposals and collaboration.
+                  </p>
+                  <p>
+                    The centre of it now is PIP, Passionfruit&rsquo;s AI
+                    platform for marketing teams. PIP connects company
+                    knowledge and marketing data — analytics, ad accounts,
+                    CRMs, spreadsheets — to an assistant that analyses,
+                    reports and automates recurring work. I define the
+                    information architecture and design the core experiences:
+                    chat, agents, integrations, files and knowledge,
+                    workflows, AI-generated artefacts — making complex AI
+                    capabilities feel clear and trustworthy.
+                  </p>
+                  <ul className="chip-row" aria-label="Disciplines">
+                    <li className="chip">product design</li>
+                    <li className="chip">AI</li>
+                    <li className="chip">enterprise</li>
+                    <li className="chip">IA</li>
+                    <li className="chip">design system</li>
+                  </ul>
+                </div>
+                <div>
+                  <figure className="fig">
+                    <div
+                      className="fig-frame"
+                      style={{ aspectRatio: "2400 / 1400" }}
+                    >
+                      <img
+                        src="/work/passionfruit/pip-welcome.jpg"
+                        alt="PIP's chat home: an AI marketing co-pilot greeting the user, with agents, workflows, files, artefacts and integrations in the sidebar"
+                        loading="lazy"
+                      />
+                    </div>
+                    <figcaption>
+                      <span>PIP, the AI marketing co-pilot</span>
+                      <span className="path">
+                        work/passionfruit/pip-welcome.jpg
+                      </span>
+                    </figcaption>
+                  </figure>
+                  <div className="fig-pair">
+                    <figure className="fig">
+                      <div
+                        className="fig-frame"
+                        style={{ aspectRatio: "2400 / 1466" }}
+                      >
+                        <img
+                          src="/work/passionfruit/agents-leads.jpg"
+                          alt="An outreach agent's campaign view: leads found, contacted, replies and reply rate above a lead table"
+                          loading="lazy"
+                        />
+                      </div>
+                      <figcaption>
+                        <span>Outreach agent, campaign view</span>
+                      </figcaption>
+                    </figure>
+                    <figure className="fig">
+                      <div
+                        className="fig-frame"
+                        style={{ aspectRatio: "2400 / 1466" }}
+                      >
+                        <img
+                          src="/work/passionfruit/onboarding-goals.jpg"
+                          alt="Onboarding step asking what goal the team is chasing, answered with selectable goal chips"
+                          loading="lazy"
+                        />
+                      </div>
+                      <figcaption>
+                        <span>Onboarding, goals</span>
+                      </figcaption>
+                    </figure>
+                  </div>
+                </div>
               </div>
             </article>
 
@@ -643,6 +760,80 @@ export default function Home() {
                 </div>
               </div>
             </article>
+
+            {/* Graphic design & branding — one consolidated entry.
+                Six clients as one body of work: together they read as range;
+                as six entries they'd dilute the product work. */}
+            <article className="entry reveal" id="graphic-design">
+              <div className="entry-head">
+                <h3 className="entry-title">Graphic design &amp; branding</h3>
+                <span className="entry-org">six clients</span>
+                <span className="entry-year">2015 → 2022</span>
+              </div>
+              <div className="entry-copy gallery-copy">
+                <p>
+                  Product is the day job; this is the rest of the practice.
+                  For Compliance3 — PCI compliance for contact centres, motto
+                  &ldquo;People, Process, Technology&rdquo;, four steps to
+                  each — I drew the logo as three chain rings of four elements
+                  each. For Janet Taylor, an organisational psychologist
+                  consulting to large engineering firms, a clean geometric
+                  monogram: creative, but academic.
+                </p>
+                <p>
+                  Then the range: 100 Top Trumps cards for hundo, one revealed
+                  a day in the run-up to Careercon22; Sensée&rsquo;s
+                  recruitment campaign and a monthly newsletter for hundreds
+                  of remote agents — re-designed every issue to fit the
+                  content, held together by a strict pink palette; 20 Google
+                  Ads banners for Okappy that keep &ldquo;Simplify&rdquo;
+                  legible at every size; and a sales brochure for Custodia
+                  Technology.
+                </p>
+                <ul className="chip-row" aria-label="Disciplines">
+                  <li className="chip">branding</li>
+                  <li className="chip">identity</li>
+                  <li className="chip">print</li>
+                  <li className="chip">campaign</li>
+                </ul>
+              </div>
+              <div className="gallery">
+                <ul
+                  className="gallery-strip"
+                  tabIndex={0}
+                  aria-label="Graphic design contact sheet: 14 pieces, scrolls sideways"
+                >
+                  {SHEET.map((piece) => (
+                    <li key={piece.file}>
+                      <figure className="fig">
+                        <div
+                          className="fig-frame"
+                          style={{ aspectRatio: piece.ratio }}
+                        >
+                          <img
+                            src={`/work/graphic-design/${piece.file}.jpg`}
+                            alt={piece.alt}
+                            loading="lazy"
+                            style={
+                              piece.crop
+                                ? { objectPosition: "top" }
+                                : undefined
+                            }
+                          />
+                        </div>
+                        <figcaption>
+                          <span>{piece.caption}</span>
+                        </figcaption>
+                      </figure>
+                    </li>
+                  ))}
+                </ul>
+                <p className="gallery-note">
+                  <span>14 pieces · 6 clients</span>
+                  <span aria-hidden="true">scroll →</span>
+                </p>
+              </div>
+            </article>
           </div>
         </section>
 
@@ -724,8 +915,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      <Dock current="/" />
     </>
   );
 }

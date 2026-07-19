@@ -7,13 +7,14 @@ export type WorkRef = {
 };
 
 export const WORK_INDEX: WorkRef[] = [
-  { id: "passionfruit", name: "Passionfruit", meta: "current, case study in preparation" },
+  { id: "passionfruit", name: "Passionfruit", meta: "current · marketplace to AI platform" },
   { id: "hundo", name: "hundo", meta: "learning platform · 2022" },
   { id: "pwc", name: "PwC, Consulting Source", meta: "enterprise knowledge system" },
   { id: "okappy", name: "Okappy", meta: "connections database & UX process" },
   { id: "octopus", name: "Octopus Energy, Powerloop", meta: "gamified EV charging pilot" },
   { id: "redington", name: "Redington, FRANK-E", meta: "pensions dashboard" },
   { id: "ipc", name: "IPC, Ecosystem prototype", meta: "fintech prototype, 50+ screens" },
+  { id: "graphic-design", name: "Graphic design & branding", meta: "identity · print · campaign" },
 ];
 
 export type Testimonial = {

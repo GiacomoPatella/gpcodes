@@ -1,11 +1,10 @@
 "use client";
 
 /**
- * Client boundary for the architecture map. The canvas component (and p5
- * inside it) is loaded with `ssr: false`, so it stays out of the server
- * render and out of every other route's bundle. The static placeholder keeps
- * the first paint deterministic — same frame, same height, no layout shift
- * when the canvas arrives.
+ * Client boundary for the architecture map. The canvas component is loaded
+ * with `ssr: false`, so it stays out of the server render and other routes'
+ * bundles. The static placeholder keeps the first paint deterministic —
+ * same frame, same height, no layout shift when the canvas arrives.
  */
 
 import dynamic from "next/dynamic";

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import CommandPalette from "@/components/CommandPalette";
-import Dock from "@/components/Dock";
-import ThemeToggle from "@/components/ThemeToggle";
+import Menu from "@/components/Menu";
 import ArchMap from "@/components/lab/ArchMap";
 import graphJson from "@/lib/graph.json";
 import type { Graph } from "@/lib/graph-types";
@@ -27,22 +25,7 @@ export default function ArchitecturePage() {
         skip to content
       </a>
 
-      <header className="site-header">
-        <div className="container">
-          <Link className="wordmark" href="/">
-            gp<span className="tld">codes.com</span>
-          </Link>
-          <nav className="site-nav" aria-label="Primary">
-            <div className="nav-links">
-              <Link className="u-link" href="/lab/">
-                lab
-              </Link>
-            </div>
-            <CommandPalette />
-            <ThemeToggle />
-          </nav>
-        </div>
-      </header>
+      <Menu current="/lab/architecture" />
 
       <main id="main" className="container lab-page flex-1">
         <p className="mono-label">lab / architecture</p>
@@ -153,8 +136,6 @@ export default function ArchitecturePage() {
           </p>
         </section>
       </main>
-
-      <Dock current="/lab" />
     </>
   );
 }

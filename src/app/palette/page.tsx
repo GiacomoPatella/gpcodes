@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
-import ThemeToggle from "@/components/ThemeToggle";
+import Menu from "@/components/Menu";
 import AccentPicker from "@/components/AccentPicker";
 
 export const metadata: Metadata = {
@@ -110,19 +110,7 @@ function Samples() {
 export default function PalettePage() {
   return (
     <>
-      <header className="site-header">
-        <div className="container">
-          <Link className="wordmark" href="/">
-            gp<span className="tld">codes.com</span>
-          </Link>
-          <nav className="site-nav" aria-label="Primary">
-            <Link className="u-link" href="/">
-              back to index
-            </Link>
-            <ThemeToggle />
-          </nav>
-        </div>
-      </header>
+      <Menu current="/palette" />
 
       <main className="container swatch-page">
         <h1>Accent comparison</h1>
