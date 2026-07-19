@@ -6,81 +6,53 @@ The Notion doc "Portfolio" (under "Build") holds the decision history.
 
 ---
 
-## IN FLIGHT, 19 Jul ~20:45. Read this first, it expires.
+## The to-do app lives elsewhere now. Settled 19 Jul, 20:50
 
-**A second Claude session is editing this worktree right now.** Do not run `git add -A`,
-`git commit`, `git restore` or `git clean` here until it has stopped. Check first:
+It was briefed into the wrong place: my prompt said "Repo: `~/code/gpcodes-b2`" and "build a
+to-do app for the /lab section of my portfolio", so it was built **inside** the site at
+`/lab/rows`, inheriting the portfolio's design system. Giacomo always intended a **separate
+entity with its own branding** that `/lab` merely links out to. My briefing error.
 
-```
-stat -f "%Sm %N" -t "%H:%M:%S" src/components/lab/RowsStudy.tsx src/app/globals.css
-```
+**Resolved.** The work was moved, not rebuilt, into `~/code/todo-app` (commits `ccb05cd` then
+`ac5c45c`). This worktree is clean again and the portfolio branch never carried any of it.
 
-If those timestamps are within a few minutes of now, it is still writing.
+- `RowsStudy.tsx` moved verbatim: no portfolio imports, no Tailwind, only its own `rows-*`
+  classes. Its stylesheet was one contiguous block appended to `globals.css`, so `git diff`
+  extracted it exactly.
+- The study consumes ~22 design tokens, now declared at the top of todo-app's `globals.css` and
+  marked as **the rebrand surface**: nothing in `rows-*` reads a hardcoded colour, size or
+  radius, so changing those values rebrands the whole thing. They currently hold this
+  portfolio's slate values, which is the starting point to move away from.
+- Stage 1 and a working slice of Stage 2 came across, verified in a browser rather than by build
+  alone: `add · sprout · 380ms`, `delete · crumple · 400ms` with gravity easing and a computed
+  `--fall-x/--fall-y` trajectory, the 0.25x toggle still driving `--t` to 4, undo delete, and a
+  live region announcing deletions.
 
-### What happened
+**Do not re-embed it in the site.** `/lab` needs an entry linking **out**, with a short
+description and its URL. Still to do, roughly ten minutes, once there is a URL.
 
-The to-do app was briefed into the wrong place. My prompt said "Repo: `~/code/gpcodes-b2`" and
-"build a to-do app for the /lab section of my portfolio", so it was built **inside** the site at
-`/lab/rows`, inheriting the portfolio's design system. Giacomo always intended it as a **separate
-entity with its own branding**, in `~/code/todo-app`, that `/lab` merely links out to. My
-briefing error.
+### The dependency question, and why the answer is CSS
 
-### Uncommitted changes here, all belonging to that session
+The no-dependencies rule was inherited from this portfolio's brief and does not apply to a
+standalone motion study, so it was lifted and Motion or GSAP put on the table. The build session
+chose **no library**, and the reasoning is better than the case I put to it, so it is recorded
+here rather than lost:
 
-```
- M src/app/globals.css          (a large appended block, its stylesheet)
- M src/app/lab/page.tsx         (lab index entry)
- M src/components/CommandPalette.tsx
- M src/lib/graph.json           (regenerated build artefact)
-?? src/app/lab/rows/            (route)
-?? src/components/lab/RowsStudy.tsx
-```
+**The 0.25x toggle is incompatible with springs, and the toggle is the best thing in the piece.**
+It works because every duration is a number multiplied by `--t`. A spring has no duration; slowing
+one means changing stiffness and damping, which alters its *character*, not just its speed. The
+thing you inspected at quarter speed would no longer be the thing that plays at full speed, so
+the toggle would become a lie. The toggle plus the readout are what make this an interaction
+study rather than a to-do app.
 
-**None of this should be committed to `direction/b2`.** The portfolio branch is otherwise clean
-at `36d1938`.
+On the three arguments I raised: velocity-on-interrupt is real, but the native fix is WAAPI,
+`element.animate()` with `composite: "add"` layering onto the running animation, plus
+`playbackRate` for exact time-scaling that a spring cannot give; drag-reorder already works, so
+a library would buy a rewrite back to where it started; and the crumple plays on a ghost that is
+already out of flow and never retargets, which is the one case where fire-and-forget keyframes
+are genuinely correct.
 
-### The transfer, and why it is stale
-
-`~/code/todo-app` exists, builds, runs and is committed (`ccb05cd`). It was verified working:
-adding a row fires the readout, FLIP reordering works, localStorage persists.
-
-**But it is a snapshot taken at 20:18 and that session kept working.** By 20:41 the component had
-gone 33,765 to 45,437 bytes and the CSS block 576 to 856 lines. **The transfer must be re-synced
-before the cleanup.**
-
-### The re-sync method, which is mechanical and repeatable
-
-1. `cp src/components/lab/RowsStudy.tsx ~/code/todo-app/src/components/RowsStudy.tsx`
-   (it moves verbatim: no portfolio imports, no Tailwind, only its own `rows-*` classes)
-2. Extract its stylesheet, which is one contiguous block appended to `globals.css`:
-   `git diff -U0 src/app/globals.css | grep '^+' | grep -v '^+++' | sed 's/^+//'`
-3. Replace everything after the `/lab/rows` banner comment in
-   `~/code/todo-app/src/app/globals.css` with that block, keeping the token header above it.
-4. Check for tokens the new block consumes that are not yet declared in todo-app's `:root`.
-   The 20:18 version needed 22. A newer version may need more.
-5. `npm run build` in todo-app, then drive it in a browser. Do not trust the build alone.
-
-### Only after that, clean this worktree
-
-```
-git restore src/app/globals.css src/app/lab/page.tsx \
-            src/components/CommandPalette.tsx src/lib/graph.json
-rm -rf src/app/lab/rows src/components/lab/RowsStudy.tsx
-npm run graph            # regenerate graph.json cleanly
-```
-
-### Open with that session
-
-It was sent an amendment lifting the no-dependencies rule for the to-do app (the rule was
-inherited from this portfolio's brief and does not apply to a standalone motion study). It was
-asked to choose CSS or Motion, justify it, and decide **before** Stage 2, because Motion's
-`layout` animations would replace its hand-rolled FLIP. **Its answer is not back yet.** If it
-adopts Motion, the re-synced todo-app will need `motion` added to its dependencies.
-
-### Still to do in the portfolio once the above is settled
-
-`/lab` needs an entry linking **out** to the to-do app as an external project, with a short
-description and its URL. It must not be re-embedded in the site.
+Revisit only if burst-testing shows stutter that `composite: "add"` cannot fix.
 
 ---
 
