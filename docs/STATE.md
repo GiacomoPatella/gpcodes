@@ -110,15 +110,14 @@ scroll lock surviving dismissal, leaving the page permanently unscrollable. Tear
 funnelled through one `dismiss()` used by every path (button, backdrop, and Esc via `cancel`,
 which is preventable). Do not reintroduce a dependency on `close`.
 
-### Group 3: the two effects, own pass, iterate by eye
+### Group 3: DONE, 19 Jul 2026
 
-- **End-of-page reveal** (vladsavruk.com): page scales in near the end of the scroll, revealing
-  a background where the footer sits.
-  - **Giacomo's call: not essential. If it carries performance or rendering risk, drop it.**
-  - Critical trap: a CSS transform on an ancestor creates a containing block and **breaks
-    `position: sticky` and `fixed` for descendants**. The floating menu is sticky, so it must
-    live outside the scaled wrapper.
-  - Needs `animation-timeline: view()` progressive enhancement plus a reduced-motion path.
+- **End-of-page reveal (vladsavruk.com): DROPPED.** Giacomo's call, 19 Jul, do not revisit. Two
+  reasons it was not worth the risk: a CSS transform on an ancestor creates a containing block
+  and breaks `position: sticky` for descendants, and the floating menu is sticky, so the page
+  would have had to be restructured around the effect. `animation-timeline: view()` also has no
+  Firefox support. The particle wordmark is the footer's signature moment instead, and stacking
+  a reveal on top of it would have made the foot of the page busier rather than better.
 - **Particle formation effect: BUILT**, 19 Jul. `src/components/ParticleWordmark.tsx`, in the
   footer. Raw Canvas 2D, no p5, no dependencies. The wordmark is sampled by rendering it to an
   offscreen canvas and walking the alpha channel, so the particles trace the real letterforms.
@@ -131,6 +130,18 @@ which is preventable). Do not reintroduce a dependency on `close`.
   - The plain-text wordmark underneath is the no-JS fallback. A canvas is transparent and cannot
     cover it, so the component sets `data-ready` once it has particles and the text steps aside.
   - Accent colour is resolved once per settle, not per frame, and repaints on theme change.
+  - **The string is `ciao :)`**, not the domain, and lives in one `WORDMARK` constant at the top
+    of the component. Warmer than repeating the domain, which the menu already carries on every
+    page. The `:)` is ASCII rather than an emoji: in a mono face it reads as machine-native, so
+    the warmth arrives without breaking the instrument register. This is also the first real
+    answer to the humour gap, which is the longest-standing open question on the site.
+  - **Dot density doubled**, 19 Jul. The step is a grid pitch, so count goes as 1/step^2 and
+    doubling the dots means dividing by sqrt(2): 4 to 2.8, and 3 to 2.1 on narrow viewports.
+    The dot radius came down with it or the grid closes up into solid type, but not by the
+    coverage maths alone: a ~1.2px rect lands on sub-pixel bounds and antialiasing eats its
+    weight, so holding coverage constant read visibly fainter. Sized back up by eye to 0.78.
+  - Size is fitted to width then clamped by height. Without the height clamp a short string
+    like this one asks for a ~210px face in a 140px box and the caps get cut off.
   - **RESOLVED: the footer.** Giacomo's call, 19 Jul. Combined with the end-of-page reveal as
     one signature moment. The reasoning that decided it: the rewritten hero copy is deliberately
     warm ("whether I can become one"), and a particle spectacle directly above it fights that

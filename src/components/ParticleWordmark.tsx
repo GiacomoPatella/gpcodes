@@ -23,6 +23,17 @@ import { useEffect, useRef } from "react";
  *
  * Reduced motion draws the settled state immediately, with no travel.
  */
+/**
+ * Change the sign-off here and nowhere else.
+ *
+ * Warmer than the bare domain, which the menu already carries on every page.
+ * The `:)` is ASCII rather than an emoji: in a mono face that reads as
+ * machine-native, so the warmth arrives without breaking the instrument
+ * register the rest of the site keeps. Short strings also particle better,
+ * since the glyphs get bigger at the same dot density.
+ */
+const WORDMARK = "ciao :)";
+
 export default function ParticleWordmark() {
   const hostRef = useRef<HTMLDivElement>(null);
 
@@ -93,21 +104,31 @@ export default function ParticleWordmark() {
       const mono = getComputedStyle(probe).fontFamily;
       probe.remove();
 
-      // Fit the word to the width rather than guessing a size.
+      /* Fit to width, then clamp by height. The height clamp is what keeps a
+         short sign-off from overflowing: fitting "ciao :)" to 82% of a wide
+         container alone asks for a ~210px face in a 140px box, and the caps
+         would be cut off. Long strings are width-bound, short ones
+         height-bound, and both stay inside the frame. */
       let size = Math.round(H * 0.62);
       octx.font = `600 ${size}px ${mono}`;
       const target = W * 0.82;
-      const measured = octx.measureText("gpcodes.com").width;
-      size = Math.max(12, Math.round((size * target) / measured));
+      const measured = octx.measureText(WORDMARK).width;
+      const byWidth = Math.round((size * target) / measured);
+      size = Math.max(12, Math.min(byWidth, Math.round(H * 0.95)));
       octx.font = `600 ${size}px ${mono}`;
       octx.textAlign = "center";
       octx.textBaseline = "middle";
       octx.fillStyle = "#000";
-      octx.fillText("gpcodes.com", W / 2, H / 2);
+      octx.fillText(WORDMARK, W / 2, H / 2);
 
       const img = octx.getImageData(0, 0, off.width, off.height).data;
-      // Step in CSS px, scaled to device px when indexing.
-      const step = W < 480 ? 3 : 4;
+      /* Step in CSS px, scaled to device px when indexing. It is a grid
+         pitch, so the particle count goes as 1/step^2: doubling the dots
+         means dividing the step by sqrt(2), not by 2. These are the previous
+         4 and 3 over sqrt(2). The dot radius drops to match, below, or the
+         tighter grid closes up and the word reads as solid type instead of a
+         dot matrix. */
+      const step = W < 480 ? 2.1 : 2.8;
       const pts: { x: number; y: number }[] = [];
       for (let y = 0; y < H; y += step) {
         for (let x = 0; x < W; x += step) {
@@ -160,7 +181,12 @@ export default function ParticleWordmark() {
       ctx.fillStyle = ink;
 
       let done = true;
-      const r = dpr > 1 ? 0.9 : 1;
+      /* Scaled down with the tighter grid so the dots stay separate, but not
+         purely by the coverage maths: a 1.2px rect lands on sub-pixel bounds
+         and antialiasing eats much of its weight, so holding ink coverage
+         constant still read visibly fainter than the coarser grid did. Sized
+         up until it matches by eye. */
+      const r = dpr > 1 ? 0.78 : 0.85;
       for (const p of particles) {
         let t = 1;
         if (!settledOnly) {
@@ -295,9 +321,9 @@ export default function ParticleWordmark() {
 
   return (
     <div className="pw" ref={hostRef}>
-      {/* The real wordmark, for anyone the canvas is not for. The canvas
-          covers it once it paints. */}
-      <span className="pw-text">gpcodes.com</span>
+      {/* The real text, for anyone the canvas is not for. It steps aside via
+          data-ready once the canvas has particles to show. */}
+      <span className="pw-text">{WORDMARK}</span>
     </div>
   );
 }

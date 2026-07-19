@@ -188,7 +188,7 @@
       "id": "src/components/Lightbox.tsx",
       "label": "Lightbox.tsx",
       "kind": "component",
-      "loc": 201,
+      "loc": 204,
       "imports": 1,
       "importedBy": 1
     },
@@ -204,7 +204,7 @@
       "id": "src/components/ParticleWordmark.tsx",
       "label": "ParticleWordmark.tsx",
       "kind": "component",
-      "loc": 303,
+      "loc": 329,
       "imports": 1,
       "importedBy": 1
     },
@@ -462,7 +462,7 @@
   "stats": {
     "files": 23,
     "edges": 48,
-    "loc": 6260,
+    "loc": 6289,
     "externals": 10
   }
 }
