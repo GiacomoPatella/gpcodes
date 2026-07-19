@@ -57,11 +57,10 @@ easy to use.
 
 **Assets:** `public/work/passionfruit/` — `pip-welcome`, `agents-leads`, `onboarding-goals`.
 
-> ⚠️ **Placeholder images, to be replaced.** Two open issues before these can ship:
-> 1. They are branded **Quotient**, not Passionfruit, while the copy calls PIP "Passionfruit's AI
->    platform". Naming needs reconciling before publication.
-> 2. Confirm clearance to show pre-release enterprise product UI publicly.
-> Until both are resolved, treat the imagery as internal-only.
+> **Note on the screenshots:** "Quotient" is a **placeholder customer name** inside the product —
+> a demo tenant, not a client and not a rebrand. PIP is Passionfruit's platform. No naming
+> conflict; nothing to reconcile. Images are placeholders pending Giacomo's rework, but they
+> are safe to use as-is meanwhile.
 
 ### hundo — hundo.xyz
 On-demand learning content platform aimed at Gen Z, launched end of 2022.
@@ -137,6 +136,47 @@ Play is a digital product innovation studio creating playful experiences that in
 of the Product team: stakeholder interviews, brainstorming and ideation, user flows, wireframes,
 prototypes, final UIs, and design assets for web and print. Small teams, user-centred design and
 gamification techniques.
+
+### Graphic design & branding
+A single consolidated entry with a gallery — this work spans a decade and several clients, and
+reads as range rather than as six separate projects competing with the product work.
+
+**Compliance3 — logo & branding.** Compliance3 helps merchants that accept card payments via
+contact centres achieve and maintain PCI compliance. I was asked for a modern, authoritative
+identity that wasn't cold or corporate. Their motto is "People, Process, Technology", and each
+of those phases has four steps within it — so the logo is three chain rings, each made of four
+elements. Chosen from three concepts.
+
+**Janet Taylor Consulting — logo & branding.** Janet is an organisational psychology consultant
+launching her own management consultancy. After discussing her audience (large engineering
+firms), their demographic, and her approach — creative but academic — I built a clean geometric
+monogram from her initials.
+
+**hundo — 'The hundo' Top Trumps.** 100 digital trading cards celebrating the 100 people who
+helped hundo get where it is. In the run-up to Careercon22 one card was revealed per day on
+social, to great response. A fun way to credit partners, mentors and friends.
+
+**Sensée — recruitment campaign.** Flyers and posters to hire new agents as the client list
+expanded, focused on the benefits of working from home. I handled graphics, layout and imagery.
+
+**Sensée — monthly newsletter.** A layout for a monthly newsletter keeping hundreds of remote
+agents up to date. Realising the content changed drastically each month, I designed a different
+layout every issue to fit the content rather than forcing it into a rigid template — all held
+together by a strict pink palette from their rebrand. Feedback from employees and management
+was extremely positive.
+
+**Okappy — Google Ads campaign.** 20 banners exploring combinations of colour and typography to
+push the tagline and call to action. Dark type on light for the smaller sizes to hold
+readability, the keyword "Simplify" highlighted throughout, and a high-contrast CTA.
+
+**Custodia Technology — sales brochure.**
+
+*Assets:* `public/work/graphic-design/` — `compliance3-stationery`, `compliance3-bizcard`,
+`janet-taylor-stationery`, `janet-taylor-bizcard`, `hundo-top-trumps`,
+`hundo-trump-card-single`, `sensee-flyer-front`, `sensee-flyer-back`, `sensee-newsletter-1`,
+`sensee-newsletter-2`, `sensee-infographic`, `okappy-adwords`, `custodia-front`, `custodia-back`.
+
+*Tags: branding, identity, print, campaign*
 
 ---
 
