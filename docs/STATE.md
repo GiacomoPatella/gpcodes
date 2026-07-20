@@ -9,8 +9,10 @@ below; Vercel builds the preview from it, so the preview only moves when you pus
 clean, `npm run build` passes, lint 0 errors (the 3 `no-img-element` warnings are deliberate).
 `main` is untouched and gpcodes.com still serves the old site.
 
-The commits of 20 Jul, newest first, from a design-audit pass (see below):
+The commits of 20 Jul, newest first, from two audit passes (see below):
 
+- `<this commit>` impeccable critique: side-stripe and muted contrast fixed, findings recorded
+- `e166cf8` STATE: branch is pushed, and note what to check on the preview
 - `179b91a` STATE: record the audit and what it left open
 - `9f85b0d` motion tokens, affordance consistency, and a 404 route
 - `e237bee` correctness pass: pair alignment, accent default, typography
@@ -420,6 +422,132 @@ Explicitly rejected during the audit, do not re-raise: count-up animation on the
 while spinning, and the most model-reachable idea in the file), a cross-fade on theme toggle
 (paints everything, and instant is honest for a settings action), stagger on the contact sheet,
 and animating the skip link.
+
+---
+
+## impeccable critique, 20 Jul 2026. SCORED 29/40. Discussion pending
+
+Ran `/impeccable critique` against the homepage, dual-agent (A design review, B detector plus
+browser evidence), register `brand.md`. Snapshot at
+`.impeccable/critique/2026-07-20T15-06-24Z__src-app-page-tsx.md`. First run, no trend yet.
+
+**Giacomo asked for a full greenfield judgement**, explicitly relaxing the standing rules and the
+inherited bans, on the grounds that several were not written by him. He asked to be reminded where
+a finding collides with something already decided, and for nothing to be fixed before discussion.
+**Two things were fixed (below); everything else is waiting on that conversation.**
+
+Note from Giacomo when the results landed: he has already cut the sections and hidden two entries,
+so the "six entries, one template" finding should be read against work already done, not as a
+first pass. See the Okappy / FRANK-E item under open questions.
+
+### Fixed already, 20 Jul
+
+- **`.outcome` side-stripe, P0.** `border-left: 2px solid var(--accent-ink)` was an absolute-ban
+  match (side-stripe borders), the only detector finding, and independently the top P0 from the
+  design review. It was also the loudest single use of the accent on the site, so the one place
+  the brand colour became visible was the most templated element on the page, and it was the only
+  non-1px edge on a site built from hairlines. Now a full 1px `--line` border with the wash kept
+  and `--accent-ink` moved onto the label. **Detector is now clean, exit 0, zero findings.**
+- **`--muted` contrast, P1.** `#6b6f76` measured 4.88:1 on `--bg` but **4.45:1 on `--bg-far`**,
+  failing AA. The mechanism matters and both agents got it partly wrong: `body` uses
+  `background-attachment: fixed`, so the gradient is **viewport-relative, not document-relative**.
+  Muted text sitting in the bottom tenth of the *screen* met the darkest ground at any scroll
+  position. Now `#5f636a`: worst case 5.32:1 light, 6.76:1 dark. Verified in both themes.
+
+### The headline finding, unresolved and the thing to discuss first
+
+**The site passes the first-order AI-slop test and fails the second-order one.** Category alone
+predicts white/cream, display serif, project cards, and this is none of that. But category *plus
+its own anti-references*, "designer portfolio that isn't editorial-serif, by someone who wants to
+be a design engineer", predicts cool grey, mono metadata, hairline rules, ⌘K, a `/lab`,
+`llms.txt`, an ASCII wordmark. That is this page item for item. The lane has a name,
+terminal-native / instrument-utility, and it sits directly beside the editorial-typographic lane
+`brand.md` already flags as saturated. `brand.md` names brutalist-utility as the next entry to
+that reject list.
+
+This is **not** slop in execution. The OKLCH accent derivation, the length-based `animation-range`,
+the alt text and the generated dimension manifest are all above what an unattended model produces.
+The verdict is that it is craft applied to a reflex *direction*.
+
+**The second P0 was deliberately not actioned: the accent does not exist.** A colour census found
+the accent on **10 of ~1600** computed colour slots, under 1%, plus one wash. Chroma 0.033 is
+perceptually grey. The colour strategy is Restrained, which the skill calls the *product* default;
+the brand register has explicit permission for Committed (one saturated colour carrying 30-60% of
+the surface) and Drenched. The recommendation was to name a real reference, then drench the hero
+in one saturated ground dropping into the light body at `Selected work`. **This is a direction
+change, not a fix**, and the `--accent` architecture already makes it a one-line experiment on the
+`/palette` route. Nothing was touched.
+
+### The `.mono-label` ruling, which went against the site
+
+Judged with no benefit of the doubt, per Giacomo's instruction. **Not a deliberate named brand
+system.** 12 instances doing five unrelated jobs: identity eyebrow, section counter, stat labels,
+callout label, footer column heads. A named system has a rule meaning one thing; this one means
+"small", which is the definition of scaffolding. Two supporting tells, both verified:
+`.sec-meta` is byte-identical to `.mono-label` apart from alignment, and the comment at
+`page.tsx:92` already admits the hero eyebrow duplicates the h1 and dek. Monospace is roughly
+**25% of homepage characters**, against a `brand.md` ban on mono as shorthand for
+"technical/developer".
+
+### Remaining issues, none actioned
+
+- **P1 the stats block is the hero-metric template**, a named ban: big number, small label,
+  supporting caption. Also supplies 4 of the 12 eyebrows. Suggested fix is structural, not
+  stylistic: set the figures as one line of prose in the entry copy.
+- **P2 there is no call to action anywhere.** The only contact affordance above the footer is the
+  email at 13px mono muted, sharing a line with the latitude and styled identically to it.
+  Meanwhile copy-as-prompt gets two bordered buttons, so **the page currently gives an LLM a
+  stronger call to action than a hiring manager.**
+- **P2 touch targets.** 16 under 44px at 360px. See the correction below.
+- **P3 type scale is flat.** Measured steps 11/13/15/17/22/28/52/64 give ratios 1.18, 1.15, 1.13,
+  1.29, 1.27, 1.86, 1.23. Four of seven are under the 1.25 rule and the three tightest carry
+  **166 of ~197** text elements, which is why the small labels blur together.
+- `.stats-caption` runs **90ch desktop, 106ch at 768px**, the longest measure on the page at the
+  smallest size, against a 65-75ch rule.
+- `.sec-meta` duplicates `.mono-label`; consolidate.
+- The `.fmenu` comment claims sticky positioning means it "cannot overlap content". It is
+  `top: 0` over a scrolling document and overlaps on every screen. Correct the comment or the code.
+- `.fmenu-soon` is a `<button>` with `cursor: default` and no `disabled` / `aria-disabled`, so
+  screen readers announce a working button that does nothing.
+- Hero right half is empty at >=1024px, roughly 45% of the first screen.
+- `--bg-far` at chroma ~0.005 buys nothing visually and was what pushed `--muted` under AA.
+- `.stats-ruler` was called the best purely decorative element on the site, and it appears once.
+  Named as the vocabulary worth extending.
+
+### Collisions with decisions already recorded as Giacomo's
+
+Flagged rather than actioned, which is what he asked for:
+
+- **The translucent menu.** Settled 20 Jul: he disagreed that it hides content and had the ground
+  quieted to 92% over a 20px blur. The critique reports testimonial copy **plainly readable
+  through the bar** in screenshots, so the code comment and the render disagree. This is new
+  evidence against that call rather than a re-litigation, and deserves a look on his own screen.
+- **Six entries in one template.** The July portfolio audit said "cut to five or six" and he
+  rejected it as one lens. This finding is different: not fewer entries, but that Passionfruit,
+  the current role, deserves to break the template rather than being visually identical to a 2015
+  contact sheet. `brand.md` grants art direction per section.
+- **The greyscale avatar**, read as the register enforcing itself against its own content.
+- **The deliberately unfunny 404**, which the critique agreed is the right surface.
+- The `.reveal` length-range fix shipped earlier the same day was singled out as correctly done.
+
+### Correction to an earlier claim in this document
+
+The commit `9f85b0d` message and the summary of it said hit areas were "grown to the 40px floor".
+**Measured with `elementFromPoint`, they were not.** Effective hit heights: `.icon-btn` 37px,
+`.palette-trigger` 37px, `.fmenu-link` 41px. `inset: -4px` on a 32px box should give 40 and does
+not, and none of the three reach the **44px** touch standard, which is the figure that actually
+matters for the mobile persona. Unfixed, and worth redoing properly rather than trusting the
+earlier claim.
+
+### Two tooling lessons from this run
+
+- **`getBoundingClientRect` does not measure a hit area.** Assessment B reported the visual boxes
+  and missed that pseudo-element expansion had changed the targets. `elementFromPoint` probing is
+  the honest measurement.
+- **Assessment B produced two false negatives worth knowing about**: it reported contrast ratios
+  of 1.09 and 2.09 from a parser bug on `color(srgb ...)` (it caught and corrected this itself),
+  and it reported the theme toggle as broken. The toggle is fine: `toggleTheme` reads the
+  *effective* theme and flips it, verified as one click taking `--bg` from `#0e0f11` to `#fbfbfc`.
 
 ---
 

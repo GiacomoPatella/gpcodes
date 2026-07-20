@@ -72,7 +72,11 @@
   --surface: #ffffff;
   --wash: #f2f3f5;
   --ink: #0e0f11;
-  --muted: #6b6f76;
+  /* Darkened from #6b6f76, which measured 4.88:1 on --bg but only 4.45:1 on
+     --bg-far. The body gradient is background-attachment: fixed, so it is
+     viewport-relative: muted text sitting in the bottom tenth of the screen
+     met the darkest ground at any scroll position and failed AA there. */
+  --muted: #5f636a;
   --line: #e3e5e8;
   --line-strong: #c9ccd2;
   /* Ground gradient: --bg settling into a light slate toward the foot of the
@@ -816,12 +820,21 @@ kbd {
 }
 
 /* outcome callout: the IPC six-figure line and friends */
+/* A 2px coloured left border is the side-stripe anti-pattern, and it was also
+   the single loudest use of the accent on the site: the one place the brand
+   colour became visible was the most templated thing on the page. It broke the
+   hairline rule too, being the only non-1px edge anywhere. Full hairline plus
+   the wash carries the same emphasis without the stripe, and the accent now
+   lands on the label, which is the part that should be coloured. */
 .outcome {
   margin-top: var(--sp-5);
   padding: var(--sp-3) var(--sp-4);
-  border-left: 2px solid var(--accent-ink);
+  border: 1px solid var(--line);
   background: var(--accent-wash);
-  border-radius: 0 var(--radius) var(--radius) 0;
+  border-radius: var(--radius);
+}
+.outcome .mono-label {
+  color: var(--accent-ink);
 }
 .outcome .mono-label {
   display: block;

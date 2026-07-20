@@ -92,7 +92,7 @@
       "id": "src/app/globals.css",
       "label": "globals.css",
       "kind": "style",
-      "loc": 1945,
+      "loc": 1958,
       "imports": 1,
       "importedBy": 1
     },
@@ -482,7 +482,7 @@
   "stats": {
     "files": 24,
     "edges": 51,
-    "loc": 6877,
+    "loc": 6890,
     "externals": 10
   }
 }
