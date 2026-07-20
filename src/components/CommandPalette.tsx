@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { WORK_INDEX } from "@/data/site";
+import { VISIBLE_WORK } from "@/data/site";
 import { copyPageAsPrompt, toggleTheme } from "@/lib/machine";
 
 type Item = {
@@ -36,7 +36,7 @@ function goTo(hash: string, close: () => void) {
 }
 
 const ITEMS: Item[] = [
-  ...WORK_INDEX.map<Item>((w) => ({
+  ...VISIBLE_WORK.map<Item>((w) => ({
     id: w.id,
     label: w.name,
     hint: w.meta,

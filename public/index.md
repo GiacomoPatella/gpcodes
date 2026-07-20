@@ -59,19 +59,6 @@ Saudi Arabia.
 
 Tags: enterprise UX, design system, search
 
-### Okappy, Connections database & UX process
-
-I reviewed and redesigned features of Okappy's web and mobile apps,
-presenting concepts to stakeholders. I rethought the Connections database
-layout to make better use of empty space and direct attention with a more
-selective use of the brand orange. I also designed a drip email onboarding
-flow with a deliberately warm, informal tone, mapped the user journey with
-emotional states at each touchpoint, and reworked sign-up so users get
-straight into the app while an emailed activation link verifies them in the
-background: less friction, same verification.
-
-Tags: UX process, IA, user flows, stakeholder facilitation
-
 ### Octopus Energy, Powerloop
 
 I helped Octopus Energy launch an innovative, gamified pilot scheme for EV
@@ -79,15 +66,6 @@ owners to efficiently charge their electric car and home systems at night via
 a smart charging point. Delivered via Play Consulting.
 
 Tags: gamification, energy, web app
-
-### Redington, FRANK-E
-
-I designed a highly personal digital experience that lets pension managers
-quickly understand their scheme's key metrics, spot weak points, and see what
-to do about them. The aim: more confident decision makers, more value
-delivered to members, lower costs.
-
-Tags: data visualisation, fintech, dashboard
 
 ### IPC, Ecosystem prototype
 

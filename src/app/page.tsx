@@ -2,7 +2,7 @@ import CopyPrompt from "@/components/CopyPrompt";
 import Fig from "@/components/Fig";
 import ParticleWordmark from "@/components/ParticleWordmark";
 import Menu from "@/components/Menu";
-import { TESTIMONIALS } from "@/data/site";
+import { TESTIMONIALS, VISIBLE_WORK, isHidden } from "@/data/site";
 
 /* The graphic design contact sheet, eleven pieces across five clients.
    Aspect ratios are no longer written here: Fig reads the real dimensions from
@@ -117,7 +117,9 @@ export default function Home() {
           <div className="container">
             <div className="sec-head">
               <h2 id="work-title">Selected work</h2>
-              <span className="sec-meta">8 entries · 2015 → now</span>
+              <span className="sec-meta">
+                {VISIBLE_WORK.length} entries · 2015 → now
+              </span>
             </div>
 
             {/* Passionfruit */}
@@ -326,64 +328,68 @@ export default function Home() {
             </article>
 
             {/* Okappy */}
-            <article className="entry reveal" id="okappy">
-              <div className="entry-head">
-                <h3 className="entry-title">Connections database</h3>
-                <span className="entry-org">Okappy</span>
-              </div>
-              <div className="entry-body">
-                <div className="entry-copy">
-                  <p>
-                    I reviewed and redesigned features of Okappy&rsquo;s web
-                    and mobile apps, presenting concepts to stakeholders for
-                    discussion and approval. I rethought the Connections
-                    database layout to make better use of empty space and
-                    direct attention with a more selective use of the brand
-                    orange, weighing more connections above the fold against
-                    fewer with richer detail.
-                  </p>
-                  <p>
-                    I also designed a drip email onboarding flow with a
-                    deliberately warm tone, mapped the user journey with
-                    emotional states at each touchpoint, and reworked sign-up
-                    so users get straight into the app while an emailed
-                    activation link verifies them in the background: less
-                    friction, same verification.
-                  </p>
-                  <ul className="chip-row" aria-label="Disciplines">
-                    <li className="chip">UX process</li>
-                    <li className="chip">IA</li>
-                    <li className="chip">user flows</li>
-                    <li className="chip">stakeholder facilitation</li>
-                  </ul>
+            {/* Withheld, not deleted. The entry keeps its copy, images and
+                markup; `hidden` in src/data/site.ts is the only switch. */}
+            {!isHidden("okappy") && (
+              <article className="entry reveal" id="okappy">
+                <div className="entry-head">
+                  <h3 className="entry-title">Connections database</h3>
+                  <span className="entry-org">Okappy</span>
                 </div>
-                <div>
-                  <Fig
-                    src="/work/okappy/db-list.jpg"
-                    alt="Okappy connections database: redesigned list layout"
-                    caption="Connections database, list layout"
-                    showPath
-                  />
-                  <div className="fig-pair">
+                <div className="entry-body">
+                  <div className="entry-copy">
+                    <p>
+                      I reviewed and redesigned features of Okappy&rsquo;s web
+                      and mobile apps, presenting concepts to stakeholders for
+                      discussion and approval. I rethought the Connections
+                      database layout to make better use of empty space and
+                      direct attention with a more selective use of the brand
+                      orange, weighing more connections above the fold against
+                      fewer with richer detail.
+                    </p>
+                    <p>
+                      I also designed a drip email onboarding flow with a
+                      deliberately warm tone, mapped the user journey with
+                      emotional states at each touchpoint, and reworked sign-up
+                      so users get straight into the app while an emailed
+                      activation link verifies them in the background: less
+                      friction, same verification.
+                    </p>
+                    <ul className="chip-row" aria-label="Disciplines">
+                      <li className="chip">UX process</li>
+                      <li className="chip">IA</li>
+                      <li className="chip">user flows</li>
+                      <li className="chip">stakeholder facilitation</li>
+                    </ul>
+                  </div>
+                  <div>
                     <Fig
-                      src="/work/okappy/db-concept-1.jpg"
-                      alt="Early layout concept for the connections database"
-                      caption="Layout concept"
+                      src="/work/okappy/db-list.jpg"
+                      alt="Okappy connections database: redesigned list layout"
+                      caption="Connections database, list layout"
+                      showPath
                     />
-                    {/* The other half of the trade-off in the copy above:
-                        db-list is many connections at a glance, this is fewer
-                        with richer detail on each. */}
-                    <Fig
-                      src="/work/okappy/db-cards.jpg"
-                      alt="Connections as cards, one expanded to show jobs, invoices and note actions alongside invited and connected states"
-                      caption="Cards: fewer, with more detail"
-                      ratio="2400 / 1706"
-                      objectPosition="top"
-                    />
+                    <div className="fig-pair">
+                      <Fig
+                        src="/work/okappy/db-concept-1.jpg"
+                        alt="Early layout concept for the connections database"
+                        caption="Layout concept"
+                      />
+                      {/* The other half of the trade-off in the copy above:
+                          db-list is many connections at a glance, this is fewer
+                          with richer detail on each. */}
+                      <Fig
+                        src="/work/okappy/db-cards.jpg"
+                        alt="Connections as cards, one expanded to show jobs, invoices and note actions alongside invited and connected states"
+                        caption="Cards: fewer, with more detail"
+                        ratio="2400 / 1706"
+                        objectPosition="top"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
+              </article>
+            )}
 
             {/* Octopus Energy */}
             <article className="entry reveal" id="octopus">
@@ -436,58 +442,62 @@ export default function Home() {
             </article>
 
             {/* Redington */}
-            <article className="entry reveal" id="redington">
-              <div className="entry-head">
-                <h3 className="entry-title">FRANK-E</h3>
-                <span className="entry-org">Redington</span>
-              </div>
-              <div className="entry-body">
-                <div className="entry-copy">
-                  <p>
-                    I designed a highly personal digital experience that lets
-                    pension managers quickly understand their scheme&rsquo;s
-                    key metrics, spot weak points, and see what to do about
-                    them.
-                  </p>
-                  <p>
-                    Nothing like it was available to pension managers at the
-                    time. The aim: more confident decision makers, more value
-                    delivered to members, lower costs.
-                  </p>
-                  <ul className="chip-row" aria-label="Disciplines">
-                    <li className="chip">data visualisation</li>
-                    <li className="chip">fintech</li>
-                    <li className="chip">dashboard</li>
-                  </ul>
+            {/* Withheld, not deleted. The entry keeps its copy, images and
+                markup; `hidden` in src/data/site.ts is the only switch. */}
+            {!isHidden("redington") && (
+              <article className="entry reveal" id="redington">
+                <div className="entry-head">
+                  <h3 className="entry-title">FRANK-E</h3>
+                  <span className="entry-org">Redington</span>
                 </div>
-                <div>
-                  <Fig
-                    src="/work/redington-frank-e/dashboard.jpg"
-                    alt="FRANK-E dashboard summarising a pension scheme's key metrics"
-                    caption="Scheme overview"
-                    showPath
-                    ratio="4 / 3"
-                    objectPosition="top"
-                  />
-                  <div className="fig-pair">
+                <div className="entry-body">
+                  <div className="entry-copy">
+                    <p>
+                      I designed a highly personal digital experience that lets
+                      pension managers quickly understand their scheme&rsquo;s
+                      key metrics, spot weak points, and see what to do about
+                      them.
+                    </p>
+                    <p>
+                      Nothing like it was available to pension managers at the
+                      time. The aim: more confident decision makers, more value
+                      delivered to members, lower costs.
+                    </p>
+                    <ul className="chip-row" aria-label="Disciplines">
+                      <li className="chip">data visualisation</li>
+                      <li className="chip">fintech</li>
+                      <li className="chip">dashboard</li>
+                    </ul>
+                  </div>
+                  <div>
                     <Fig
-                      src="/work/redington-frank-e/company-stats.jpg"
-                      alt="FRANK-E company statistics view"
-                      caption="Company stats"
-                      ratio="3 / 4"
+                      src="/work/redington-frank-e/dashboard.jpg"
+                      alt="FRANK-E dashboard summarising a pension scheme's key metrics"
+                      caption="Scheme overview"
+                      showPath
+                      ratio="4 / 3"
                       objectPosition="top"
                     />
-                    <Fig
-                      src="/work/redington-frank-e/governance.jpg"
-                      alt="FRANK-E governance view"
-                      caption="Governance"
-                      ratio="3 / 4"
-                      objectPosition="top"
-                    />
+                    <div className="fig-pair">
+                      <Fig
+                        src="/work/redington-frank-e/company-stats.jpg"
+                        alt="FRANK-E company statistics view"
+                        caption="Company stats"
+                        ratio="3 / 4"
+                        objectPosition="top"
+                      />
+                      <Fig
+                        src="/work/redington-frank-e/governance.jpg"
+                        alt="FRANK-E governance view"
+                        caption="Governance"
+                        ratio="3 / 4"
+                        objectPosition="top"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
+              </article>
+            )}
 
             {/* IPC */}
             <article className="entry reveal" id="ipc">

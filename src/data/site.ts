@@ -4,18 +4,34 @@ export type WorkRef = {
   id: string;
   name: string;
   meta: string;
+  /**
+   * Withheld from the site without being deleted from it. The entry keeps its
+   * copy, its images and its markup; it is only filtered out of what renders.
+   * Set this back to false (or drop the line) to bring one back, and check
+   * nothing else needs to follow: the count in the work heading and the
+   * VISIBLE_WORK filter are derived, but public/llms.txt and public/index.md
+   * are hand-written and do not read this file.
+   */
+  hidden?: boolean;
 };
 
 export const WORK_INDEX: WorkRef[] = [
   { id: "passionfruit", name: "Passionfruit", meta: "current · marketplace to AI platform" },
   { id: "hundo", name: "hundo", meta: "learning platform · 2022" },
   { id: "pwc", name: "PwC, Consulting Source", meta: "enterprise knowledge system" },
-  { id: "okappy", name: "Okappy", meta: "connections database & UX process" },
+  { id: "okappy", name: "Okappy", meta: "connections database & UX process", hidden: true },
   { id: "octopus", name: "Octopus Energy, Powerloop", meta: "gamified EV charging pilot" },
-  { id: "redington", name: "Redington, FRANK-E", meta: "pensions dashboard" },
+  { id: "redington", name: "Redington, FRANK-E", meta: "pensions dashboard", hidden: true },
   { id: "ipc", name: "IPC, Ecosystem prototype", meta: "fintech prototype, 50+ screens" },
   { id: "graphic-design", name: "Graphic design & branding", meta: "identity · print · campaign" },
 ];
+
+/** What actually renders. Everything user-facing should read this, not the raw index. */
+export const VISIBLE_WORK: WorkRef[] = WORK_INDEX.filter((w) => !w.hidden);
+
+/** True for an entry that is currently withheld, so page.tsx can gate its markup. */
+export const isHidden = (id: string): boolean =>
+  WORK_INDEX.some((w) => w.id === id && w.hidden === true);
 
 export type Testimonial = {
   quote: string;
