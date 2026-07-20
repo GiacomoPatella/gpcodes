@@ -1,8 +1,27 @@
 # Current state and outstanding work
 
-Written 19 Jul 2026, as a handoff so no context is lost on a session clear.
+Written 19 Jul 2026, last updated 20 Jul, as a handoff so no context is lost on a session clear.
 Branch `direction/b2`. Read alongside `BRIEF.md`, `REVISION.md`, `CONTENT.md`, `MAP.md`, `PASS3.md`.
 The Notion doc "Portfolio" (under "Build") holds the decision history.
+
+**Where things stand, 20 Jul.** `direction/b2` is pushed and in sync with `origin` at the commit
+below; Vercel builds the preview from it, so the preview only moves when you push. Working tree
+clean, `npm run build` passes, lint 0 errors (the 3 `no-img-element` warnings are deliberate).
+`main` is untouched and gpcodes.com still serves the old site.
+
+The five commits of 19 and 20 Jul, newest first:
+
+- `d9119a7` STATE corrections: withheld entries, worktree cleanup
+- `c729b41` menu ground settled; Okappy and FRANK-E withheld
+- `e04977b` wordmark flash fixed; Tonic Lab added; PwC led with the composite
+- `7d9c500` JS weight measured and closed as no cheap win
+- `e5b28c9` Passionfruit screens sourced, `onboarding-goals` held back
+
+**The two things waiting on Giacomo**, both detailed below: a corrected `onboarding-goals`
+export, and whether Okappy and FRANK-E come back at all.
+
+Next unblocked piece of work, if you want one: **where humour lives**, still the longest-standing
+open question and the biggest gap between this site and the personality he wants.
 
 ---
 
@@ -255,6 +274,73 @@ Notes on that, to weigh rather than obey:
   interrupt gracefully rather than queueing.
 - Being showier here than on the rest of the site is fine. It is `/lab`, and experimentation is
   the stated point of the page.
+
+---
+
+## Portfolio audit, 20 Jul 2026
+
+Ran the third-party skill at **github.com/hey-stefan/portfolio-audit**, a hiring-manager rubric
+distilled from 143 Dive Club episodes. Read the SKILL.md before running it: it is benign, and it
+usefully constrains the agent (no `eval`, no custom scripts, no `curl`). It drives
+`npx agent-browser` (vercel-labs, Apache-2.0).
+
+**Audited `localhost:3004`, not gpcodes.com**, which is still the old pre-redesign site. The
+rubric's custom-domain criterion therefore does not apply and was ignored.
+
+**Scored 35/40.** Gut check 5, Work is Hero 4, Curation 3, Storytelling 4, Ambition 5,
+Soul 4, Portfolio as Product 5, Builder signals 5.
+
+What it praised, worth not breaking: the hero, the machine-readable layer (`index.md`,
+`llms.txt`, copy-as-prompt), the architecture map and its "sparse truth over padded diagram"
+line, and the testimonials. It called the builder signals the thing that would actually earn a
+reply.
+
+Actioned:
+- **Menu ground quieted** (see below).
+- **Okappy and FRANK-E withheld**, taking the curation note down from eight entries to six.
+
+Rejected or deferred, deliberately:
+- **The menu-overlap diagnosis.** The audit called it the top defect. Giacomo disagrees that it
+  hides content: it sits at the very top, replaces a static nav, and he likes it. The fix was
+  therefore to quiet the ground, not restructure the menu.
+- **"Cut to five or six entries" is one lens, not a verdict.** The rubric is tuned for hiring
+  managers skimming at speed; this site doubles as a personal site. Eight entries and the
+  consolidated graphic design gallery were deliberate Pass 3 calls.
+- **"Lead each entry with the image, not the copy."** Not attempted. Still an open idea.
+- **`/photography` and `/about` showing as disabled** was flagged as advertising an unfinished
+  site. Unchanged for now.
+
+### Menu ground, changed 20 Jul
+
+`.fmenu` went from 80% ground over a 14px blur to **92% over 20px plus a little saturation**.
+It stays translucent on purpose, because the depth cue is the point and Giacomo wants it kept.
+What passes underneath now reads as a wash rather than as text with the contrast knocked out.
+
+---
+
+## Tooling lesson: the Chrome tools go silent when the window is hidden
+
+Cost real time on 20 Jul, and it produces false conclusions rather than errors.
+
+When the Chrome window is minimised or backgrounded, `document.visibilityState` is `"hidden"` in
+every tab, so **IntersectionObserver never delivers and rAF is paused**. Anything gated on
+either, which here means the reveal animations and the whole particle wordmark, simply never
+runs. It looks exactly like a bug in the code. Long `await`s in `javascript_tool` also start
+timing out against a frozen renderer, and `computer` screenshots fail with script-injection
+timeouts.
+
+DOM reads still work fine in a hidden tab, so structural checks (`data-ready`, computed styles,
+which images an entry renders) are trustworthy. Anything motion or visibility driven is not.
+
+**The workaround is `npx agent-browser`**, which drives its own headless browser and is immune to
+this. It is what the audit used, and it rendered, scrolled and screenshotted the whole site
+without trouble. Two notes: it defaults to `prefers-color-scheme: dark`, so click the theme
+toggle to review the light-first default, and scrolling occasionally does not register, so put a
+`sleep` between scroll and screenshot. Also, a full-page screenshot captures the page with every
+`.reveal` still at opacity 0 and comes back nearly blank: scroll progressively instead.
+
+Same shape as the `curl`/TLS false negative below. **Verify what the sandbox tells you before
+concluding something is broken.**
 
 ---
 
