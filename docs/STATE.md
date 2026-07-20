@@ -4,16 +4,22 @@ Written 19 Jul 2026, last updated 20 Jul, as a handoff so no context is lost on 
 Branch `direction/b2`. Read alongside `BRIEF.md`, `REVISION.md`, `CONTENT.md`, `MAP.md`, `PASS3.md`.
 The Notion doc "Portfolio" (under "Build") holds the decision history.
 
-**Where things stand, 20 Jul.** Working tree clean, `npm run build` passes, lint 0 errors (the 3
-`no-img-element` warnings are deliberate). `main` is untouched and gpcodes.com still serves the
-old site. **Three commits are local and NOT yet pushed**, so the Vercel preview is currently
-behind the branch: push to move it.
+**Where things stand, 20 Jul.** `direction/b2` is pushed and in sync with `origin` at the commit
+below; Vercel builds the preview from it, so the preview only moves when you push. Working tree
+clean, `npm run build` passes, lint 0 errors (the 3 `no-img-element` warnings are deliberate).
+`main` is untouched and gpcodes.com still serves the old site.
 
-The three commits of 20 Jul, newest first, all from a design-audit pass (see below):
+The commits of 20 Jul, newest first, from a design-audit pass (see below):
 
+- `179b91a` STATE: record the audit and what it left open
 - `9f85b0d` motion tokens, affordance consistency, and a 404 route
 - `e237bee` correctness pass: pair alignment, accent default, typography
 - `5c033ae` dialog exits, and fix the ⌘K scroll jitter
+
+Two things from that pass are worth checking on the deployed preview, because neither can be seen
+locally: the **dialog exits in the production build**, since the minifier is what turned `110ms`
+into `.11s` and broke the JS hold once already, and **`scrollbar-gutter: stable`**, which is
+invisible on macOS overlay scrollbars by design.
 
 Earlier, 19 and 20 Jul:
 
