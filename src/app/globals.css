@@ -147,6 +147,10 @@
 
 html {
   scroll-behavior: smooth;
+  /* Reserve the scrollbar gutter so locking scroll for a dialog cannot shift
+     the page underneath. Invisible with macOS overlay scrollbars; on Windows
+     and most Linux the page jumped sideways behind the lightbox without it. */
+  scrollbar-gutter: stable;
 }
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -162,7 +166,13 @@ body {
   font-size: var(--text-base);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* Declared once here rather than per selector. It was on ten blocks and
+     missing from four (.outcome p, .stats-caption, .footer-col dd,
+     .hero-meta-line), which is the failure mode of applying a global rule by
+     hand. Headings override with `balance`, which beats this inherited value. */
+  text-wrap: pretty;
 }
 
 ::selection {
@@ -552,7 +562,6 @@ kbd {
   font-size: var(--text-lg);
   line-height: 1.45;
   color: var(--muted);
-  text-wrap: pretty;
 }
 .hero .dek strong {
   color: var(--ink);
@@ -715,7 +724,6 @@ kbd {
 }
 .entry-copy > p {
   color: var(--ink);
-  text-wrap: pretty;
 }
 .entry-copy > p + p {
   margin-top: var(--sp-4);
@@ -778,6 +786,14 @@ kbd {
 .fig + .fig-pair {
   margin-top: var(--sp-4);
 }
+/* The stacking rule above is for figures stacked in flow. Inside .fig-pair the
+   two figures are grid columns, already separated by `gap`, so the inherited
+   margin only pushed the right-hand figure 16px down and knocked every pair off
+   level. Two entries carry a `ratio` override specifically to sit level, which
+   this was quietly defeating. */
+.fig-pair > .fig + .fig {
+  margin-top: 0;
+}
 .fig-pair {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -839,6 +855,10 @@ kbd {
 }
 .stat-num {
   display: block;
+  /* Separates the number from its label. This sat on .stat-label, which is the
+     <dt> and therefore the *first* child, so it padded the top of the cell
+     instead and left the two lines touching. */
+  margin-top: var(--sp-1);
   font-family: var(--font-mono);
   font-size: var(--text-xl);
   font-weight: 500;
@@ -848,7 +868,6 @@ kbd {
 }
 .stat-label {
   display: block;
-  margin-top: var(--sp-1);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   text-transform: uppercase;
@@ -944,7 +963,6 @@ kbd {
   font-size: var(--text-md);
   line-height: 1.65;
   color: var(--ink);
-  text-wrap: pretty;
 }
 .quote-lead blockquote {
   font-size: var(--text-lg);
@@ -1045,7 +1063,7 @@ kbd {
   margin: 12vh auto auto;
   padding: 0;
   border: 1px solid var(--line-strong);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--ink);
   box-shadow: var(--shadow);
@@ -1303,7 +1321,6 @@ kbd {
   margin-top: var(--sp-4);
   max-width: 44rem;
   color: var(--muted);
-  text-wrap: pretty;
 }
 .lab-page .lede + .lede {
   margin-top: var(--sp-3);
@@ -1400,7 +1417,6 @@ kbd {
   max-width: 44rem;
   font-size: var(--text-sm);
   color: var(--muted);
-  text-wrap: pretty;
 }
 
 .graph-data,
@@ -1505,7 +1521,6 @@ kbd {
   margin-top: var(--sp-4);
   max-width: 44rem;
   font-size: var(--text-md);
-  text-wrap: pretty;
 }
 
 /* lab index */
@@ -1553,7 +1568,6 @@ kbd {
   max-width: 40rem;
   font-size: var(--text-md);
   color: var(--muted);
-  text-wrap: pretty;
 }
 
 
@@ -1633,6 +1647,10 @@ button.fig-frame:hover {
   font-size: var(--text-xs);
   color: var(--muted);
   cursor: default;
+  /* The counter and dimensions both change on every arrow press, and they are
+     the only numbers on the site that update live. Without this, paging
+     1/11 → 2/11 → 10/11 reflows the whole caption row. */
+  font-variant-numeric: tabular-nums;
 }
 .lb-dim {
   opacity: 0.7;

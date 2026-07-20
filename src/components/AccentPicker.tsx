@@ -21,7 +21,11 @@ const PRESETS: { hex: string; name: string }[] = [
   { hex: "#1f2430", name: "near-black" },
 ];
 
-const DEFAULT = "#2b4cff";
+/* Must match --accent in globals.css. This route's whole job is reporting
+   which accent is live, so a wrong value here does more than mislabel the
+   swatch: no preset reads as selected, and reset returns to the real accent
+   while the field still shows this one. */
+const DEFAULT = "#2c4a56";
 
 /* Relative luminance per WCAG 2.x. */
 function luminance([r, g, b]: number[]): number {

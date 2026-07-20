@@ -43,20 +43,20 @@ export type Testimonial = {
 export const TESTIMONIALS: Testimonial[] = [
   {
     quote:
-      "His design and UX abilities speak for themselves but his way of working sets him apart from most others. He has a highly perceptive instinct for design that he uses to interrogate, challenge and fully understand what it is we're trying to achieve; this makes briefing sessions highly productive and enjoyable. We couldn't have done without him.",
+      "His design and UX abilities speak for themselves but his way of working sets him apart from most others. He has a highly perceptive instinct for design that he uses to interrogate, challenge and fully understand what it is we’re trying to achieve; this makes briefing sessions highly productive and enjoyable. We couldn’t have done without him.",
     name: "Will Kemble-Clarkson",
     role: "CEO, Zen Exchange",
     lead: true,
   },
   {
     quote:
-      "I have had the pleasure of working with Giacomo at both Play and hundo. Giacomo has a talent for distilling complexity into well thought-out and enjoyable to use product design deliverables. Giacomo was a key player in launching hundo.xyz. He was responsible for the full spectrum of design from user testing and UX to visual design. When I started building a new team at hundo, I didn't think twice about reaching out to Giacomo.",
+      "I have had the pleasure of working with Giacomo at both Play and hundo. Giacomo has a talent for distilling complexity into well thought-out and enjoyable to use product design deliverables. Giacomo was a key player in launching hundo.xyz. He was responsible for the full spectrum of design from user testing and UX to visual design. When I started building a new team at hundo, I didn’t think twice about reaching out to Giacomo.",
     name: "Scott Byrne-Fraser",
     role: "Technical Co-Founder, hundo",
   },
   {
     quote:
-      "Giacomo's UI/UX and Graphic Design work was instrumental in delivering our prototype product which secured funding from a Global Tier 1 Investment Bank for further development and testing. Throughout our early development cycles Giacomo brought clarity and focus to the UI/UX design process and delivered working concepts that introduced an ease of use and customer friendly GUI not often found in enterprise banking software.",
+      "Giacomo’s UI/UX and Graphic Design work was instrumental in delivering our prototype product which secured funding from a Global Tier 1 Investment Bank for further development and testing. Throughout our early development cycles Giacomo brought clarity and focus to the UI/UX design process and delivered working concepts that introduced an ease of use and customer friendly GUI not often found in enterprise banking software.",
     name: "Harel Zanzuri",
     role: "VP Risk & Compliance Services, IPC",
   },
@@ -75,7 +75,7 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     quote:
-      "Giacomo's work has enabled us to fast track Compliance3's entry to a buoyant and highly competitive market. From brand design to priority applications, everything he has done has been of the highest standard and designed not just for today, but also with the longevity required to underpin our growth.",
+      "Giacomo’s work has enabled us to fast track Compliance3’s entry to a buoyant and highly competitive market. From brand design to priority applications, everything he has done has been of the highest standard and designed not just for today, but also with the longevity required to underpin our growth.",
     name: "Compliance3",
     role: "Client",
   },
