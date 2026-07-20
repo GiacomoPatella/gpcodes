@@ -302,8 +302,38 @@ Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc
 
 ## Technical debt
 
-- Homepage references ~640KB uncompressed JS. Not urgent, but "not laggy" was an explicit
-  requirement, so it wants a look before launch.
+- ~~Homepage references ~640KB uncompressed JS.~~ **Measured 20 Jul. Closing this: there is no
+  cheap win, and the site is already fast.** Details below, because the obvious fix was tried
+  and it made things worse.
+
+  **The numbers.** 631KB is the *uncompressed* figure and it was the wrong one to worry about:
+  the homepage transfers **189KB gzipped** across 9 chunks. On the production build served
+  statically: `domInteractive` 237ms, `load` 344ms, one long task of **219ms** at startup, total
+  blocking time **169ms**. The long task, not the byte count, is what "laggy" would actually be.
+
+  **The architecture is already right, which is why there is nothing easy left.** `page.tsx` is
+  a Server Component and only the genuinely interactive leaves carry `"use client"`. There is no
+  misplaced client boundary to fix. The 219ms is React plus the Next App Router client runtime
+  booting and hydrating, plus parsing the 60KB RSC flight payload inlined in the HTML.
+
+  **Tried and reverted: code-splitting the three interaction-only islands.** `Lightbox` (204
+  lines), `CommandPalette` (313) and `ParticleWordmark` (329) are all eagerly imported for
+  features nobody has used at first paint, so `next/dynamic` looked like an easy ~850 lines off
+  the critical path. It is not. **TBT went 169ms to 223ms** and a second 102ms long task
+  appeared, while the original 221ms task did not shrink at all. The reason: with SSR left on
+  you still pay the full hydration, and now also pay a chunk round-trip and a second hydration
+  pass on top. Payload did not move either (631.4KB to 632.8KB), because Next preloads the
+  split chunks anyway.
+
+  **And SSR cannot simply be turned off on those three.** `ParticleWordmark` renders the
+  plain-text `ciao :)` fallback that the canvas replaces, so `ssr: false` empties the footer
+  until JS lands and forever without it. `CommandPalette` renders the visible ⌘K chip in the
+  menu, not just the dialog, so it would pop into the header after load.
+
+  **What would actually move it is architectural**, not tuning: not shipping a React runtime for
+  a page that is ~95% static. That is a rewrite, and it is not worth doing before launch for
+  169ms of blocking on a page that is otherwise entirely static content. Revisit only if real
+  devices say otherwise: on a mid-tier phone that one task is roughly 4x longer.
 - Below 44rem the menu drops the planned-route signposts entirely, so mobile users get no IA
   hint. ⌘K is the only escape hatch.
 - "Coming soon" tooltips are hover/focus only, invisible on touch.
