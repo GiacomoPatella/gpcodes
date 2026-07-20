@@ -6,7 +6,7 @@
       "kind": "external",
       "loc": 0,
       "imports": 0,
-      "importedBy": 4
+      "importedBy": 5
     },
     {
       "id": "next/dynamic",
@@ -30,7 +30,7 @@
       "kind": "external",
       "loc": 0,
       "imports": 0,
-      "importedBy": 4
+      "importedBy": 5
     },
     {
       "id": "node:child_process",
@@ -92,7 +92,7 @@
       "id": "src/app/globals.css",
       "label": "globals.css",
       "kind": "style",
-      "loc": 1824,
+      "loc": 1945,
       "imports": 1,
       "importedBy": 1
     },
@@ -118,6 +118,14 @@
       "kind": "route",
       "loc": 64,
       "imports": 4,
+      "importedBy": 0
+    },
+    {
+      "id": "src/app/not-found.tsx",
+      "label": "not-found.tsx",
+      "kind": "lib",
+      "loc": 69,
+      "imports": 3,
       "importedBy": 0
     },
     {
@@ -148,7 +156,7 @@
       "id": "src/components/CommandPalette.tsx",
       "label": "CommandPalette.tsx",
       "kind": "component",
-      "loc": 377,
+      "loc": 400,
       "imports": 3,
       "importedBy": 1
     },
@@ -188,7 +196,7 @@
       "id": "src/components/Lightbox.tsx",
       "label": "Lightbox.tsx",
       "kind": "component",
-      "loc": 242,
+      "loc": 256,
       "imports": 1,
       "importedBy": 1
     },
@@ -198,7 +206,7 @@
       "kind": "component",
       "loc": 99,
       "imports": 3,
-      "importedBy": 4
+      "importedBy": 5
     },
     {
       "id": "src/components/ParticleWordmark.tsx",
@@ -236,7 +244,7 @@
       "id": "src/lib/graph.json",
       "label": "graph.json",
       "kind": "lib",
-      "loc": 468,
+      "loc": 488,
       "imports": 0,
       "importedBy": 1
     },
@@ -345,6 +353,18 @@
     {
       "from": "src/app/layout.tsx",
       "to": "src/components/Lightbox.tsx"
+    },
+    {
+      "from": "src/app/not-found.tsx",
+      "to": "next"
+    },
+    {
+      "from": "src/app/not-found.tsx",
+      "to": "next/link"
+    },
+    {
+      "from": "src/app/not-found.tsx",
+      "to": "src/components/Menu.tsx"
     },
     {
       "from": "src/app/page.tsx",
@@ -460,9 +480,9 @@
     }
   ],
   "stats": {
-    "files": 23,
-    "edges": 48,
-    "loc": 6630,
+    "files": 24,
+    "edges": 51,
+    "loc": 6877,
     "externals": 10
   }
 }

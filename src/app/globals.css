@@ -48,6 +48,15 @@
   --ease-enter: cubic-bezier(0.2, 0, 0.2, 1);
   --ease-exit: cubic-bezier(0.4, 0, 0.7, 1);
 
+  /* ---- affordance motion: hover, focus, press. One duration, because these
+     are all the same job. The wipe is the single exception and keeps its own,
+     since a line drawing across a word wants longer than a colour change. ---- */
+  --dur-hover: 140ms;
+  --dur-wipe: 220ms;
+  --ease-hover: ease;
+  --ease-wipe: cubic-bezier(0.4, 0, 0.2, 1);
+  --press: translateY(1px); /* the house press idiom, not a scale */
+
   /* ============================================================
      ACCENT: swap the site's accent by changing this ONE line.
      Everything else (text-safe shade, dark-mode variant, washes)
@@ -282,7 +291,7 @@ kbd {
   background: currentColor;
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--dur-wipe) var(--ease-wipe);
 }
 .u-link:hover::after,
 .u-link:focus-visible::after {
@@ -322,7 +331,7 @@ kbd {
   border-radius: inherit;
   background: var(--wash);
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transition: opacity var(--dur-hover) var(--ease-hover);
 }
 .btn:hover::after {
   opacity: 1;
@@ -344,6 +353,35 @@ kbd {
   }
 }
 
+/* Guards for the affordance motion added in the consistency pass. .u-link::after
+   is in here because it was the one transform transition on the site with no
+   reduced-motion guard at all, which this pass is the right moment to close. */
+@media (prefers-reduced-motion: reduce) {
+  .u-link::after,
+  .icon-btn,
+  .palette-trigger,
+  .fmenu-link,
+  .lb-nav,
+  .lb-close,
+  .hero-meta-line a,
+  .copy-row-links a,
+  .footer-col dd a,
+  button.fig-frame {
+    transition: none;
+  }
+  .icon-btn:active,
+  .palette-trigger:active,
+  .fmenu-link:active,
+  .lb-close:active,
+  button.fig-frame:active {
+    transform: none;
+  }
+  /* Not `none`: that would drop the centring this element depends on. */
+  .lb-nav:active {
+    transform: translateY(-50%);
+  }
+}
+
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -356,6 +394,20 @@ kbd {
   color: var(--muted);
   font-size: var(--text-md);
   cursor: pointer;
+  position: relative;
+  transition: color var(--dur-hover) var(--ease-hover),
+    border-color var(--dur-hover) var(--ease-hover);
+}
+/* The visual box is 32px inside a 56px bar. The pointer target is grown to the
+   40px floor with a pseudo-element, so the hit area changes and the look does
+   not. */
+.icon-btn::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+}
+.icon-btn:active {
+  transform: var(--press);
 }
 .icon-btn:hover {
   border-color: var(--line);
@@ -445,6 +497,20 @@ kbd {
   border-radius: var(--radius);
   text-decoration: none;
   color: var(--muted);
+  position: relative;
+  transition: color var(--dur-hover) var(--ease-hover);
+}
+/* Grown on the block axis only: the links sit --sp-1 apart, so widening the
+   inline axis would butt two hit areas together, which is worse than a small
+   target. */
+.fmenu-link::before {
+  content: "";
+  position: absolute;
+  inset-block: -6px;
+  inset-inline: 0;
+}
+.fmenu-link:active {
+  transform: var(--press);
 }
 .fmenu-link:hover,
 .fmenu-link:focus-visible {
@@ -480,7 +546,8 @@ kbd {
   box-shadow: var(--shadow);
   opacity: 0;
   transform: translate(-50%, -4px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity var(--dur-hover) var(--ease-hover),
+    transform var(--dur-hover) var(--ease-hover);
   pointer-events: none;
   white-space: nowrap;
 }
@@ -537,6 +604,17 @@ kbd {
   font-size: var(--text-xs);
   color: var(--muted);
   cursor: pointer;
+  position: relative;
+  transition: color var(--dur-hover) var(--ease-hover),
+    border-color var(--dur-hover) var(--ease-hover);
+}
+.palette-trigger::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+}
+.palette-trigger:active {
+  transform: var(--press);
 }
 .palette-trigger:hover {
   border-color: var(--line-strong);
@@ -589,6 +667,8 @@ kbd {
   text-decoration: underline;
   text-decoration-color: var(--line-strong);
   text-underline-offset: 0.2em;
+  transition: color var(--dur-hover) var(--ease-hover),
+    text-decoration-color var(--dur-hover) var(--ease-hover);
 }
 .hero-meta-line a:hover {
   text-decoration-color: var(--accent-ink);
@@ -622,7 +702,8 @@ kbd {
   font-size: var(--text-xs);
   color: var(--ink);
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition: border-color var(--dur-hover) var(--ease-hover),
+    color var(--dur-hover) var(--ease-hover);
 }
 .ai-btn:hover {
   border-color: var(--accent-ink);
@@ -639,6 +720,8 @@ kbd {
   text-decoration: underline;
   text-decoration-color: var(--line-strong);
   text-underline-offset: 0.2em;
+  transition: color var(--dur-hover) var(--ease-hover),
+    text-decoration-color var(--dur-hover) var(--ease-hover);
 }
 .copy-row-links a:hover {
   color: var(--accent-ink);
@@ -1038,6 +1121,8 @@ kbd {
   text-decoration: underline;
   text-decoration-color: var(--line-strong);
   text-underline-offset: 0.2em;
+  transition: color var(--dur-hover) var(--ease-hover),
+    text-decoration-color var(--dur-hover) var(--ease-hover);
 }
 .footer-col dd a:hover {
   color: var(--accent-ink);
@@ -1287,7 +1372,12 @@ kbd {
     .reveal {
       animation: rise both;
       animation-timeline: view();
-      animation-range: entry 5% entry 35%;
+      /* Length offsets, not percentages. A percentage resolves against the
+         entry range, which is capped at the scrollport height, so tall work
+         entries all clamped to a ~190px ramp while the short testimonial
+         cards ran in ~79px: the same declaration, 2.4x apart. A length makes
+         the reveal a fixed scroll distance whatever it wraps. */
+      animation-range: entry 24px entry 200px;
     }
     @keyframes rise {
       from {
@@ -1538,7 +1628,7 @@ kbd {
   background: var(--surface);
   text-decoration: none;
   color: inherit;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--dur-hover) var(--ease-hover);
 }
 .lab-entry:hover,
 .lab-entry:focus-visible {
@@ -1585,7 +1675,11 @@ button.fig-frame {
   font: inherit;
   color: inherit;
   cursor: zoom-in;
-  transition: border-color 160ms ease;
+  transition: border-color var(--dur-hover) var(--ease-hover),
+    transform var(--dur-hover) var(--ease-hover);
+}
+button.fig-frame:active {
+  transform: var(--press);
 }
 button.fig-frame:hover {
   border-color: var(--muted);
@@ -1655,10 +1749,21 @@ button.fig-frame:hover {
 .lb-dim {
   opacity: 0.7;
 }
+/* Fixed, like the arrows it belongs to. It used to sit in .lb-cap at the foot
+   of .lb-box, which scrolls: on a tall screenshot the arrows stayed put while
+   the one piece of state they depend on scrolled out of sight. */
 .lb-count {
-  padding-left: var(--sp-3);
-  border-left: 1px solid var(--line);
+  position: fixed;
+  top: var(--sp-4);
+  left: var(--sp-4);
+  padding: 0.35rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
   color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Paging controls. Fixed, so they stay put while a tall image scrolls. */
@@ -1676,6 +1781,12 @@ button.fig-frame:hover {
   border: 1px solid var(--line);
   border-radius: 50%;
   cursor: pointer;
+  transition: color var(--dur-hover) var(--ease-hover),
+    border-color var(--dur-hover) var(--ease-hover);
+}
+/* Composes with the -50% centring above, which a bare translateY would drop. */
+.lb-nav:active {
+  transform: translateY(calc(-50% + 1px));
 }
 .lb-nav:hover {
   color: var(--ink);
@@ -1713,6 +1824,16 @@ button.fig-frame:hover {
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: color var(--dur-hover) var(--ease-hover),
+    border-color var(--dur-hover) var(--ease-hover);
+}
+.lb-close::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+}
+.lb-close:active {
+  transform: var(--press);
 }
 .lb-close:hover {
   color: var(--ink);

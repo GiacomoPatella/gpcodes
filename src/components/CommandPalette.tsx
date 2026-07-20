@@ -189,11 +189,19 @@ export default function CommandPalette() {
       navSource.current = "key";
       lastPointer.current = null;
       d.showModal();
+      // showModal() does not lock background scroll, so the page moved under an
+      // open palette and you lost your place. html carries scrollbar-gutter:
+      // stable, so taking the scrollbar away cannot shift the layout.
+      document.documentElement.style.overflow = "hidden";
       inputRef.current?.focus();
     }
   }, []);
 
+  /* Every dismissal path funnels through here, for the same reason the lightbox
+     does it: a scroll lock released on only some paths is a page that silently
+     stops scrolling. */
   const close = useCallback(() => {
+    document.documentElement.style.overflow = "";
     dialogRef.current?.close();
   }, []);
 
@@ -208,6 +216,21 @@ export default function CommandPalette() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, close]);
+
+  useEffect(() => {
+    const el = dialogRef.current;
+    if (!el) return;
+    /* Esc dismisses a native dialog without going through close(), which would
+       leave the scroll lock on and the page frozen. `cancel` is preventable, so
+       take the dismissal over rather than letting the default run untorn-down.
+       Same trap as the lightbox, and the same fix. */
+    const onCancel = (e: Event) => {
+      e.preventDefault();
+      close();
+    };
+    el.addEventListener("cancel", onCancel);
+    return () => el.removeEventListener("cancel", onCancel);
+  }, [close]);
 
   function onListKey(e: React.KeyboardEvent) {
     if (["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) {

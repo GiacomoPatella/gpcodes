@@ -141,6 +141,20 @@ export default function Lightbox() {
     scrollerRef.current?.scrollTo({ top: 0 });
   }, [i]);
 
+  /* Warm the neighbours. Zoom variants reach ~750KB, and paging swaps src with
+     nothing bridging the gap, so arrowing through a gallery showed an empty box
+     while the next file decoded. Decoding one step either side covers the two
+     directions a viewer can go, and wraps because paging does. */
+  useEffect(() => {
+    const n = group.length;
+    if (n < 2) return;
+    for (const j of [(i + 1) % n, (i - 1 + n) % n]) {
+      if (j === i) continue;
+      const img = new Image();
+      img.src = group[j].src;
+    }
+  }, [i, group]);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -203,11 +217,6 @@ export default function Lightbox() {
               <span className="lb-dim">
                 {shot.w} × {shot.h}
               </span>
-              {many && (
-                <span className="lb-count">
-                  {i + 1} / {group.length}
-                </span>
-              )}
             </p>
           </div>
         </div>
@@ -215,6 +224,11 @@ export default function Lightbox() {
 
       {many && (
         <>
+          {/* Fixed chrome, so it does not scroll away from the arrows it
+              describes when a tall screenshot overflows. */}
+          <p className="lb-count">
+            {i + 1} / {group.length}
+          </p>
           <button
             type="button"
             className="lb-nav lb-prev"
