@@ -289,8 +289,15 @@ Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc
   "new tunes every day".
 - Where humour lives. Still unsolved and still the biggest gap between this site and the
   personality he wants. Candidates: microcopy, the empty state of ⌘K, 404.
-- Tonic-lab: to be featured as a working link, the only live product on the site. Needs
-  description, role, URL.
+- ~~Tonic-lab: to be featured as a working link.~~ **DONE 19 Jul.** It leads `/lab`, and is in
+  the palette and `llms.txt`. Copy written from the running app, not guessed.
+- **Okappy and Redington FRANK-E are withheld from the site, 20 Jul.** Giacomo's call, taken
+  after a portfolio audit flagged eight entries as too many. They are hidden, not deleted:
+  `hidden: true` on the entry in `src/data/site.ts` is the single switch, and the markup stays
+  in `page.tsx` behind an `isHidden` guard. Open question is whether they come back, and if so
+  whether FRANK-E returns as the reworked design or as a then/now pair (see asset rework below).
+  If you flip either flag, remember `public/llms.txt` and `public/index.md` are hand-written and
+  do not read `site.ts`.
 - ~~Copy still to write: Octopus Powerloop, Redington FRANK-E.~~ **Stale, corrected 19 Jul.**
   Both have shipped copy in `page.tsx`, short but written. Giacomo's call: short is fine, the
   long version belongs on the future case study pages.
@@ -346,9 +353,15 @@ Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc
 
 - `main`: old site, still live on gpcodes.com, untouched
 - `redesign`: Next scaffold baseline, old site in `legacy/`, CNAME in `public/`
-- `direction/a-editorial`, `direction/b-instrument`, `direction/c-tactile`: the explorations
+- `direction/a-editorial`, `direction/b-instrument`, `direction/c-tactile`: the explorations.
+  **Branches kept, worktrees removed 20 Jul**, since b2 settled it and the three checkouts were
+  about 1.7GB of mostly `node_modules`. Nothing was lost: every commit is still on its branch,
+  and `git worktree add ~/code/gpcodes-a-editorial direction/a-editorial` brings one back.
+  Note these three are local-only and have never been pushed, so the branches are the only copy.
 - `direction/b2`: **the working branch**
-- Worktrees at `~/code/gpcodes-{a-editorial,b-instrument,c-tactile,b2}`
+- Only two worktrees now: `~/code/gpcodes` (the primary repo, `.git` lives here) and
+  `~/code/gpcodes-b2`. **Do not delete `~/code/gpcodes`**: besides being the real repo, it still
+  holds the untracked Passionfruit source exports and the Powerloop PNG.
 - Dev server: `cd ~/code/gpcodes-b2 && npm run dev -- -p 3004`
 - Source archive: **`~/Downloads/Portfolio/`, extracted and complete.** The pipeline resolves
   every manifest entry against it (`node scripts/images.mjs ~/Downloads/Portfolio --dry` reports
