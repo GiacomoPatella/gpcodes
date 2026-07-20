@@ -17,6 +17,11 @@
 - [IPC, Ecosystem prototype](https://gpcodes.com/#ipc): 50+ screen fintech prototype I built; the client's customer invested a six-figure sum to develop it further
 - [Graphic design & branding](https://gpcodes.com/#graphic-design): identities for Compliance3 and Janet Taylor Consulting, hundo's 100 Top Trumps cards, Sensée's campaign and newsletters, Okappy's ad banners
 
+## Lab
+
+- [Tonic Lab](https://toniclab.vercel.app/): a music theory explorer I built; intervals, chords, scales, key signatures and the circle of fifths, all played on a keyboard rather than described, plus a quiz mode, key finder, mood finder and MIDI input
+- [Architecture map](https://gpcodes.com/lab/architecture/): this site's real module graph, generated from the source at build time and drawn as an interactive map
+
 ## Docs
 
 - [index.md](https://gpcodes.com/index.md): full Markdown version of my homepage, including testimonials

@@ -60,6 +60,12 @@ export default function ParticleWordmark() {
     let raf = 0;
     let start = 0;
     let running = false;
+    /* Whether the entrance has actually happened. The footer is below the fold,
+       so everything here first runs while off screen, and painting the settled
+       word then means it is already finished by the time it scrolls into view:
+       you get a flash of the end state, then the entrance restarts over the top
+       of it. Nothing may paint the settled word until this is true. */
+    let played = false;
 
     const reduced = () =>
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -139,9 +145,16 @@ export default function ParticleWordmark() {
         }
       }
 
-      /* Hand over from the plain-text fallback only once there is something
-         real to show. A canvas is transparent, so it never "covers" the text
-         underneath: without this the two render on top of each other. */
+      /* Hand over from the plain-text fallback as soon as there are points to
+         draw, NOT when they are first drawn. A canvas is transparent, so it
+         never "covers" the text underneath: without this the two render on top
+         of each other.
+
+         Deferring this to the entrance was tried and is wrong: the swap then
+         happens on screen, so the text visibly blinks out a frame before the
+         particles arrive. Empty space that fills in is the correct "before"
+         state for a formation effect. The text is the no-JS floor, not a
+         placeholder. */
       if (pts.length) host.dataset.ready = "true";
 
       particles = pts.map((p) => {
@@ -212,6 +225,13 @@ export default function ParticleWordmark() {
       return done;
     }
 
+    /* Empty the canvas without touching the handover. Deliberately does NOT
+       restore the text: putting it back would only swap it in and straight back
+       out again when the entrance runs, which is the blink this is avoiding. */
+    const clear = () => {
+      ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+    };
+
     function frame(now: number) {
       if (!start) start = now;
       const done = draw(false, now);
@@ -226,6 +246,7 @@ export default function ParticleWordmark() {
 
     function run() {
       if (running || !particles.length) return;
+      played = true;
       if (reduced()) {
         draw(true, 0);
         return;
@@ -264,7 +285,12 @@ export default function ParticleWordmark() {
       lastW = W;
       reset();
       if (visible && replay) run();
-      else draw(true, 0);
+      /* Settling in place is only correct once the entrance has been seen: a
+         resize after the fact should not replay it. Before that, stay blank and
+         leave the text showing, so the first thing anyone sees when the footer
+         arrives is the entrance rather than its finished state. */
+      else if (played) draw(true, 0);
+      else clear();
     };
 
     document.fonts.ready.then(() => {
@@ -295,10 +321,13 @@ export default function ParticleWordmark() {
     );
     io.observe(host);
 
-    // Theme or accent changes repaint the settled word; no need to replay.
+    /* Theme or accent changes repaint the settled word; no need to replay.
+       Guarded on `played` for the same reason as rebuild: toggling the theme
+       while the footer is still off screen must not paint the finished word
+       into a canvas nobody has watched assemble yet. */
     const repaint = () => {
       refreshInk();
-      if (!running) draw(true, 0);
+      if (played && !running) draw(true, 0);
     };
     const themeObserver = new MutationObserver(repaint);
     themeObserver.observe(document.documentElement, {

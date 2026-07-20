@@ -524,7 +524,7 @@ kbd {
 }
 .hero h1 {
   font-size: var(--text-2xl);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.025em;
   line-height: 1.04;
   text-wrap: balance;
@@ -1113,7 +1113,6 @@ kbd {
 }
 .palette-item[aria-selected="true"] {
   background: var(--wash);
-  box-shadow: inset 2px 0 0 var(--accent-ink);
 }
 .palette-empty {
   padding: var(--sp-5);

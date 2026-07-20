@@ -5,7 +5,7 @@ import Menu from "@/components/Menu";
 export const metadata: Metadata = {
   title: "Lab · gpcodes",
   description:
-    "Small built things: instruments, experiments, side pieces. One entry so far.",
+    "Small built things: instruments, experiments, side pieces. Tonic Lab, a music theory explorer, and this site's own architecture map.",
 };
 
 export default function LabPage() {
@@ -22,12 +22,36 @@ export default function LabPage() {
         <h1>Small built things</h1>
         <p className="lede">
           Design is my job; building is how I check my own thinking. This is
-          where the built pieces go. There&rsquo;s one entry so far; this
-          section is new, and I&rsquo;d rather open with a single real piece
-          than pad the list.
+          where the built pieces go. Two so far, and I&rsquo;d rather keep the
+          list short and real than pad&nbsp;it.
         </p>
 
         <ul className="lab-list">
+          <li>
+            {/* Lives on its own domain, so a plain anchor rather than Link.
+                Same tab on purpose: the site opens nothing in a new window,
+                and the arrow plus the visible host already say it leaves. */}
+            <a
+              href="https://toniclab.vercel.app/"
+              className="lab-entry"
+              rel="noreferrer"
+            >
+              <div className="lab-entry-head">
+                <h2>Tonic Lab ↗</h2>
+                <span className="lab-entry-meta">
+                  toniclab.vercel.app · web audio · midi
+                </span>
+              </div>
+              <p>
+                A music theory explorer I built to learn theory properly:
+                intervals, chords, scales, key signatures and the circle of
+                fifths, each one played on a keyboard rather than described in
+                prose. There&rsquo;s a quiz mode, a key finder and a mood
+                finder, and it takes MIDI in if you have something
+                plugged&nbsp;in.
+              </p>
+            </a>
+          </li>
           <li>
             <Link href="/lab/architecture/" className="lab-entry">
               <div className="lab-entry-head">

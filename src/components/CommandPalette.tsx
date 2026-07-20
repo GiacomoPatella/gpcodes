@@ -82,6 +82,16 @@ const ITEMS: Item[] = [
     },
   },
   {
+    id: "go-tonic-lab",
+    label: "Tonic Lab ↗",
+    hint: "toniclab.vercel.app",
+    group: "go to",
+    run: ({ close }) => {
+      close();
+      window.location.assign("https://toniclab.vercel.app/");
+    },
+  },
+  {
     id: "go-palette",
     label: "Compare accent palettes",
     hint: "/palette",

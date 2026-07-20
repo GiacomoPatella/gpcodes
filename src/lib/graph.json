@@ -92,7 +92,7 @@
       "id": "src/app/globals.css",
       "label": "globals.css",
       "kind": "style",
-      "loc": 1702,
+      "loc": 1701,
       "imports": 1,
       "importedBy": 1
     },
@@ -108,7 +108,7 @@
       "id": "src/app/lab/page.tsx",
       "label": "lab/page.tsx",
       "kind": "route",
-      "loc": 49,
+      "loc": 73,
       "imports": 3,
       "importedBy": 0
     },
@@ -124,7 +124,7 @@
       "id": "src/app/page.tsx",
       "label": "app/page.tsx",
       "kind": "route",
-      "loc": 681,
+      "loc": 686,
       "imports": 5,
       "importedBy": 0
     },
@@ -148,7 +148,7 @@
       "id": "src/components/CommandPalette.tsx",
       "label": "CommandPalette.tsx",
       "kind": "component",
-      "loc": 313,
+      "loc": 323,
       "imports": 3,
       "importedBy": 1
     },
@@ -204,7 +204,7 @@
       "id": "src/components/ParticleWordmark.tsx",
       "label": "ParticleWordmark.tsx",
       "kind": "component",
-      "loc": 329,
+      "loc": 358,
       "imports": 1,
       "importedBy": 1
     },
@@ -462,7 +462,7 @@
   "stats": {
     "files": 23,
     "edges": 48,
-    "loc": 6318,
+    "loc": 6385,
     "externals": 10
   }
 }

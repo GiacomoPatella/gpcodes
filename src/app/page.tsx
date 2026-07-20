@@ -262,30 +262,34 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
-                  {/* These three crop on purpose: the frames carry Lorem
-                      ipsum, so they are cut to interaction detail and the
-                      footnote below says so. The ratio override is what keeps
-                      that crop; the manifest's true ratio would undo it. */}
+                  {/* The composite leads: it is the one PwC frame that was
+                      composed to be looked at, and it carries the responsive
+                      story on its own, search on desktop, a toolkit page and
+                      the mobile results, so the separate mobile shot was
+                      saying something already said here. Its true 16:9 is the
+                      frame, so no ratio override. */}
                   <Fig
-                    src="/work/pwc-consulting-source/search-desktop.jpg"
-                    alt="Consulting Source search results page, cropped to the results list and filter rail"
-                    caption="Search redesign, cropped to detail*"
+                    src="/work/pwc-consulting-source/overview.jpg"
+                    alt="Consulting Source shown across three screens on PwC's orange and pink brand pattern: desktop search results, a Responsible AI toolkit page with nested navigation, and the mobile results view with filters applied"
+                    caption="Consulting Source, across breakpoints*"
                     showPath
-                    ratio="16 / 10"
-                    objectPosition="top"
                   />
                   <div className="fig-pair">
+                    {/* These two crop on purpose: the frames carry Lorem ipsum,
+                        so they are cut to interaction detail and the footnote
+                        below says so. The ratio override is what keeps that
+                        crop; the manifest's true ratio would undo it. */}
                     <Fig
-                      src="/work/pwc-consulting-source/search-filters.jpg"
-                      alt="Advanced search filter panel, cropped to the filter controls"
-                      caption="Advanced filters"
+                      src="/work/pwc-consulting-source/search-desktop.jpg"
+                      alt="Consulting Source search results page, cropped to the results list and filter rail"
+                      caption="Search redesign, cropped to detail"
                       ratio="4 / 5"
                       objectPosition="top"
                     />
                     <Fig
-                      src="/work/pwc-consulting-source/search-mobile.jpg"
-                      alt="Consulting Source search on mobile, cropped to the results list"
-                      caption="Mobile search"
+                      src="/work/pwc-consulting-source/search-filters.jpg"
+                      alt="Advanced search filter panel, cropped to the filter controls"
+                      caption="Advanced filters"
                       ratio="4 / 5"
                       objectPosition="top"
                     />
@@ -312,8 +316,9 @@ export default function Home() {
                     </dl>
                     <p className="stats-caption">
                       2021 telemetry · top contributors: US, UK, IN, CA, AU,
-                      DE, SA. *The frames above carry placeholder copy, so I
-                      crop them to interaction detail.
+                      DE, SA. *These frames carry placeholder copy, so the two
+                      detail shots are cropped to the interaction rather than
+                      the content.
                     </p>
                   </div>
                 </div>
