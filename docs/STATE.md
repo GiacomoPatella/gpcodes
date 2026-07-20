@@ -4,12 +4,18 @@ Written 19 Jul 2026, last updated 20 Jul, as a handoff so no context is lost on 
 Branch `direction/b2`. Read alongside `BRIEF.md`, `REVISION.md`, `CONTENT.md`, `MAP.md`, `PASS3.md`.
 The Notion doc "Portfolio" (under "Build") holds the decision history.
 
-**Where things stand, 20 Jul.** `direction/b2` is pushed and in sync with `origin` at the commit
-below; Vercel builds the preview from it, so the preview only moves when you push. Working tree
-clean, `npm run build` passes, lint 0 errors (the 3 `no-img-element` warnings are deliberate).
-`main` is untouched and gpcodes.com still serves the old site.
+**Where things stand, 20 Jul.** Working tree clean, `npm run build` passes, lint 0 errors (the 3
+`no-img-element` warnings are deliberate). `main` is untouched and gpcodes.com still serves the
+old site. **Three commits are local and NOT yet pushed**, so the Vercel preview is currently
+behind the branch: push to move it.
 
-The five commits of 19 and 20 Jul, newest first:
+The three commits of 20 Jul, newest first, all from a design-audit pass (see below):
+
+- `9f85b0d` motion tokens, affordance consistency, and a 404 route
+- `e237bee` correctness pass: pair alignment, accent default, typography
+- `5c033ae` dialog exits, and fix the ⌘K scroll jitter
+
+Earlier, 19 and 20 Jul:
 
 - `d9119a7` STATE corrections: withheld entries, worktree cleanup
 - `c729b41` menu ground settled; Okappy and FRANK-E withheld
@@ -21,7 +27,8 @@ The five commits of 19 and 20 Jul, newest first:
 export, and whether Okappy and FRANK-E come back at all.
 
 Next unblocked piece of work, if you want one: **where humour lives**, still the longest-standing
-open question and the biggest gap between this site and the personality he wants.
+open question and the biggest gap between this site and the personality he wants. The 404 route
+now exists and is deliberately unfunny, so there is a real surface waiting for that copy.
 
 ---
 
@@ -318,6 +325,98 @@ What passes underneath now reads as a wash rather than as text with the contrast
 
 ---
 
+## Design-engineering audit, 20 Jul 2026
+
+Ran the site against four skills: `emil-design-eng`, `make-interfaces-feel-better`,
+`transitions-dev` and `find-animation-opportunities`, one agent per lens, then reconciled.
+`improve-animations` and `fixing-motion-performance` were deliberately skipped: the first
+overlaps the transitions review and emits plans rather than findings, and the second would
+re-tread the JS-weight work already closed under technical debt.
+
+Everything below was measured in a real browser via `npx agent-browser`, before and after.
+
+**Shipped in `5c033ae`, dialog exits and the ⌘K scroll jitter.** Both dialogs entered with a
+keyframe and vanished on the frame, so the exit was an omission rather than a decision. Enter and
+exit now share one transition with `@starting-style`, with `overlay` and `display` on
+`allow-discrete`. The asymmetry is free: a transition runs at the duration of the state it moves
+*to*, so the closed rule owns the exit (110ms) and `[open]` owns the enter. Backdrops need their
+own pair, since `opacity` on a dialog does not reach `::backdrop`.
+
+The ⌘K list had three separate defects stacked: `scrollIntoView` walks every scrollable ancestor
+so it moved the page behind the dialog; scrolling the list put fresh rows under a stationary
+cursor, which the browser reports as a **synthetic pointermove**, which set active, which
+scrolled again; and hovering ran the scroll effect at all. Fixed by writing `list.scrollTop`
+directly, comparing pointer coordinates to spot the synthetic events, and letting only the
+keyboard scroll.
+
+**Shipped in `e237bee`, correctness.** `.fig-pair` sat 16px off level on all five pairs because
+`.fig + .fig` has no child combinator and matched the figures *inside* a pair. Two entries carry a
+`ratio` override specifically to sit level, which this was defeating. `AccentPicker` reported
+`#2b4cff` as the default against a real accent of `#2c4a56`, so `/palette` misreported the live
+colour. Stat cells were padded 20/16 with label and number touching, because the margin sat on the
+`<dt>`, the first child. Plus `text-wrap: pretty` consolidated onto `body` (it was hand-applied to
+ten blocks and missing from four), `tabular-nums` on the lightbox caption, `scrollbar-gutter:
+stable`, and five straight apostrophes inside testimonial quotes.
+
+**Shipped in `9f85b0d`, tokens and consistency.** Zero hardcoded durations remain in
+`globals.css`. Four durations and four easings collapsed to `--dur-hover` (140ms) for every
+affordance plus `--dur-wipe` (220ms) as the one exception, and `--press` holds the existing
+`translateY(1px)` idiom. Eight snapping hover states fixed, and they were the whole floating menu
+plus both lightbox controls: the most-touched surfaces were the ones missed. Hit areas grown to
+40px with pseudo-elements, block-axis only on the nav links since they sit `--sp-1` apart and
+touching hit areas are worse than small ones. `.u-link::after` was the one transform transition
+with no reduced-motion guard, now closed. `.lb-count` moved into the fixed chrome. ⌘K locks
+background scroll. The lightbox preloads neighbours.
+
+### Two lessons worth more than the fixes
+
+**Agreement between reviewers is not verification.** Three of the four lenses reported on
+`.reveal`; two independently measured it as "constant, well-built" and cleared it, and one called
+it a 4x defect. All three were wrong. The `entry` range caps at the scrollport height, so every
+work entry (all taller than the viewport) clamped to an identical 190px ramp while the short quote
+cards ran in ~79px. The two clearing lenses had only sampled `.entry`, where it genuinely is
+constant; the flagging lens computed 340px by ignoring the cap. Real spread was 2.4x. **Two
+independent measurements converged on a wrong answer because they sampled the same subset.** Fixed
+with length offsets, verified by tracing a 1112px entry and a 265px quote to an identical curve.
+
+**A CSS token read from JS is not the number you wrote.** The lightbox holds its image in the DOM
+until the exit fade ends, reading the duration from `--dur-exit` so the two cannot drift. The
+build minifies `110ms` to `.11s`, so `parseFloat` returned `0.11` and the hold fired after 0.11ms,
+fading out an empty dialog. The unit has to be parsed. Anything else reading a duration token from
+CSS has the same trap waiting.
+
+### Still open from the audit, not done
+
+Ordered roughly by value. None are blocking.
+
+- **Copy-prompt success shifts its own trigger.** The label swap reflows ~184px to ~170px, so the
+  buttons you just pressed jump left and back 2.6s later. The one confirmation moment in the
+  product reads as a glitch. The fix is a reserved `min-width`, a layout fix, not a motion one.
+- **`.fig-frame:hover` jumps two steps of the grey ramp**, `--line` straight to `--muted`, skipping
+  `--line-strong`. Reads heavier than any other hover on the page.
+- **Passionfruit's pair is unequal height** even now the 16px is gone: `agents-leads` is 1440/880
+  and `onboarding-goals` is 2400/1400, an ~8px mismatch. Resolves itself if that screen is
+  re-exported (see the outstanding Passionfruit item), so it was left alone.
+- **Image outlines are tinted** (`--line` is cool-toned) where the rubric wants pure black/white at
+  low alpha. Small, and arguably the one-hairline-token approach is the better taste call.
+- **Quote marks are not optically hung.** `hanging-punctuation` plus a small negative `text-indent`
+  on `.quote blockquote p`.
+- **Particle wordmark replays on every re-entry** and runs ~1.66s. One lens argued for latching it
+  to once per page load so the first arrival is the event. Deliberately not touched: it is the
+  site's signature moment and the call is Giacomo's.
+- **Architecture map labels collide** in the upper band of the default layout. The page's "sparse
+  truth over padded diagram" claim is undercut by unreadable labels. A label-collision pass that
+  hides an intersecting label while keeping its node dot would fix it.
+- **The theme toggle is a static `◐`** in a fallback font, so its centring is a coincidence and it
+  never reflects state. A 14px inline SVG would match how the rest of the site draws its marks.
+
+Explicitly rejected during the audit, do not re-raise: count-up animation on the stats (unreadable
+while spinning, and the most model-reachable idea in the file), a cross-fade on theme toggle
+(paints everything, and instant is honest for a settings action), stagger on the contact sheet,
+and animating the skip link.
+
+---
+
 ## Tooling lesson: the Chrome tools go silent when the window is hidden
 
 Cost real time on 20 Jul, and it produces false conclusions rather than errors.
@@ -374,7 +473,13 @@ Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc
   route is his own labels, Never Ready and Five Fold. Also, rotating a fixed set is not really
   "new tunes every day".
 - Where humour lives. Still unsolved and still the biggest gap between this site and the
-  personality he wants. Candidates: microcopy, the empty state of ⌘K, 404.
+  personality he wants. Candidates: microcopy, the empty state of ⌘K, 404. **The 404 now exists**
+  (`src/app/not-found.tsx`, added 20 Jul) and its copy is deliberately plain: a joke written in
+  someone else's voice reads worse than no joke, so the structure was built and the line left for
+  Giacomo. It is the cheapest of the three surfaces to write for, since a 404 is seen once by
+  someone already mildly annoyed. The ⌘K empty state (`no matches for "…"`) is the other strong
+  candidate: it is the one surface that speaks only when someone has typed something that is not
+  there, and it is currently the flattest string in the codebase.
 - ~~Tonic-lab: to be featured as a working link.~~ **DONE 19 Jul.** It leads `/lab`, and is in
   the palette and `llms.txt`. Copy written from the running app, not guessed.
 - **Okappy and Redington FRANK-E are withheld from the site, 20 Jul.** Giacomo's call, taken
