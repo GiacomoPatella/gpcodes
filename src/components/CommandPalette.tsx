@@ -158,9 +158,17 @@ const GROUP_ORDER: Item["group"][] = ["work", "go to", "actions"];
 export default function CommandPalette() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const [statusMsg, setStatusMsg] = useState("");
+
+  /* Which input last moved the selection. Only the keyboard is allowed to
+     scroll the list: a pointer is already looking at the row it is over, so
+     scrolling under it is both unnecessary and the start of the feedback loop
+     described on onItemPointerMove. */
+  const navSource = useRef<"key" | "pointer">("key");
+  const lastPointer = useRef<{ x: number; y: number } | null>(null);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -178,6 +186,8 @@ export default function CommandPalette() {
       setQuery("");
       setActive(0);
       setStatusMsg("");
+      navSource.current = "key";
+      lastPointer.current = null;
       d.showModal();
       inputRef.current?.focus();
     }
@@ -200,6 +210,9 @@ export default function CommandPalette() {
   }, [open, close]);
 
   function onListKey(e: React.KeyboardEvent) {
+    if (["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) {
+      navSource.current = "key";
+    }
     if (e.key === "ArrowDown") {
       e.preventDefault();
       setActive((a) => (results.length ? (a + 1) % results.length : 0));
@@ -220,12 +233,50 @@ export default function CommandPalette() {
     }
   }
 
-  // Keep the active row visible while arrowing.
+  /**
+   * Keep the active row visible while arrowing, and only while arrowing.
+   *
+   * This replaces scrollIntoView({ block: "nearest" }), which caused two
+   * distinct defects. It scrolls every scrollable ancestor, not just the list,
+   * so it could move the page behind the dialog as well as the list inside it.
+   * And scrolling the list moves fresh rows under a stationary cursor, which
+   * the browser reports as a pointermove: that set active from the pointer,
+   * which scrolled again, which fired another pointermove. That loop is the
+   * jitter, and the guard in onItemPointerMove is the other half of the fix.
+   *
+   * Writing list.scrollTop directly cannot touch an ancestor, so the page
+   * behind the dialog stays where it was.
+   */
   useEffect(() => {
-    dialogRef.current
-      ?.querySelector(`#palette-opt-${active}`)
-      ?.scrollIntoView({ block: "nearest" });
+    if (navSource.current !== "key") return;
+    const list = listRef.current;
+    const el = list?.querySelector<HTMLElement>(`#palette-opt-${active}`);
+    if (!list || !el) return;
+    const pad = 8; // matches .palette-list padding, so a row never sits flush
+    const lr = list.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    if (er.top < lr.top + pad) {
+      list.scrollTop -= lr.top + pad - er.top;
+    } else if (er.bottom > lr.bottom - pad) {
+      list.scrollTop += er.bottom - (lr.bottom - pad);
+    }
   }, [active]);
+
+  /**
+   * onPointerMove rather than onPointerEnter is the right primitive here: it
+   * stops the selection jumping when the list scrolls under a still cursor.
+   * But the browser also emits a synthetic pointermove after a scroll, at the
+   * same coordinates, precisely so hover states stay correct. Indistinguishable
+   * from a real move except by position, so compare positions: an event that
+   * has not moved is the scroll talking, not the user, and is ignored.
+   */
+  const onItemPointerMove = useCallback((e: React.PointerEvent, i: number) => {
+    const last = lastPointer.current;
+    if (last && last.x === e.clientX && last.y === e.clientY) return;
+    lastPointer.current = { x: e.clientX, y: e.clientY };
+    navSource.current = "pointer";
+    setActive(i);
+  }, []);
 
   const activeId = results[active] ? `palette-opt-${active}` : undefined;
 
@@ -270,13 +321,16 @@ export default function CommandPalette() {
             onChange={(e) => {
               setQuery(e.target.value);
               setActive(0);
+              // Filtering rebuilds the list, so the scroll should return to the
+              // top even though the pointer moved last.
+              navSource.current = "key";
             }}
             onKeyDown={onListKey}
           />
           <kbd>esc</kbd>
         </div>
 
-        <div className="palette-list" id="palette-listbox" role="listbox">
+        <div className="palette-list" id="palette-listbox" role="listbox" ref={listRef}>
           {results.length === 0 && (
             <p className="palette-empty">no matches for “{query}”</p>
           )}
@@ -298,7 +352,7 @@ export default function CommandPalette() {
                       role="option"
                       aria-selected={i === active}
                       className="palette-item"
-                      onPointerMove={() => setActive(i)}
+                      onPointerMove={(e) => onItemPointerMove(e, i)}
                       onClick={() => item.run({ close, status: setStatusMsg })}
                     >
                       <span>{item.label}</span>

@@ -34,17 +34,47 @@ function toShot(el: HTMLElement): Shot {
  * focus returns to the trigger on close for free. Without JS the buttons simply
  * do nothing and the display image stays visible, which is an acceptable floor.
  */
+/** The exit duration, read from the one place it is declared so the JS hold
+ *  below cannot drift from the CSS transition it is waiting on.
+ *
+ *  The unit has to be parsed, not assumed: the build minifies `110ms` to
+ *  `.11s`, so reading this as a bare number gave a 0.11ms timeout that fired
+ *  on the next frame and emptied the dialog before it had begun to fade. */
+function exitMs(): number {
+  const v = getComputedStyle(document.documentElement)
+    .getPropertyValue("--dur-exit")
+    .trim();
+  const n = Number.parseFloat(v);
+  if (!Number.isFinite(n)) return 110;
+  return v.endsWith("ms") ? n : n * 1000;
+}
+
 export default function Lightbox() {
   const ref = useRef<HTMLDialogElement>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [group, setGroup] = useState<Shot[]>([]);
   const [i, setI] = useState(0);
   const shot = group[i];
+  /* Clearing the group is what empties the dialog, so it has to wait for the
+     exit transition. Held here so a re-open can cancel it: without that,
+     opening a new image inside the exit window would be wiped by the timer
+     the previous dismissal left running. */
+  const clearTimer = useRef<number | null>(null);
+
+  const cancelClear = useCallback(() => {
+    if (clearTimer.current !== null) {
+      clearTimeout(clearTimer.current);
+      clearTimer.current = null;
+    }
+  }, []);
+
+  useEffect(() => () => cancelClear(), [cancelClear]);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       const trigger = (e.target as HTMLElement | null)?.closest?.("[data-zoom]");
       if (!(trigger instanceof HTMLElement)) return;
+      cancelClear();
 
       /* The gallery is whatever the image sits in: an explicit [data-gallery]
          if one is set, otherwise the work entry. Grouping by the article means
@@ -58,7 +88,7 @@ export default function Lightbox() {
     };
     document.addEventListener("click", onClick);
     return () => document.removeEventListener("click", onClick);
-  }, []);
+  }, [cancelClear]);
 
   // showModal() has to run after the new src is in the DOM, or the dialog opens
   // on the previous image for a frame.
@@ -77,12 +107,20 @@ export default function Lightbox() {
    * path funnels through this one function instead, so the lock cannot leak.
    */
   const dismiss = useCallback(() => {
+    // The scroll lock is released synchronously, never on the timer: a pending
+    // timeout is exactly the kind of thing that leaves the page unscrollable.
     document.documentElement.style.overflow = "";
-    setGroup([]);
-    setI(0);
     const el = ref.current;
     if (el?.open) el.close();
-  }, []);
+    // close() only drops [open]; CSS holds the dialog in the top layer for the
+    // length of the exit. Emptying the group now would fade out a blank box.
+    cancelClear();
+    clearTimer.current = window.setTimeout(() => {
+      clearTimer.current = null;
+      setGroup([]);
+      setI(0);
+    }, exitMs());
+  }, [cancelClear]);
 
   // Kept in a ref so the key handler binds once instead of per navigation.
   // Written in an effect, not during render: refs are not render-time state.

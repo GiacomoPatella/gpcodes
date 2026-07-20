@@ -92,7 +92,7 @@
       "id": "src/app/globals.css",
       "label": "globals.css",
       "kind": "style",
-      "loc": 1707,
+      "loc": 1806,
       "imports": 1,
       "importedBy": 1
     },
@@ -148,7 +148,7 @@
       "id": "src/components/CommandPalette.tsx",
       "label": "CommandPalette.tsx",
       "kind": "component",
-      "loc": 323,
+      "loc": 377,
       "imports": 3,
       "importedBy": 1
     },
@@ -188,7 +188,7 @@
       "id": "src/components/Lightbox.tsx",
       "label": "Lightbox.tsx",
       "kind": "component",
-      "loc": 204,
+      "loc": 242,
       "imports": 1,
       "importedBy": 1
     },
@@ -462,7 +462,7 @@
   "stats": {
     "files": 23,
     "edges": 48,
-    "loc": 6417,
+    "loc": 6608,
     "externals": 10
   }
 }

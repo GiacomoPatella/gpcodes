@@ -37,6 +37,17 @@
   --radius-lg: 16px;
   --header-h: 3.5rem;
 
+  /* ---- surface motion. Two jobs, so two pairs. Exits are deliberately
+     shorter than enters: an exit that matches its enter reads as slow,
+     because by then you have already decided to leave. --ease-exit has no
+     slow start, so the surface begins leaving on the first frame: immediate,
+     but not a cut. ---- */
+  --dur-enter: 160ms;
+  --dur-lb-enter: 180ms; /* the lightbox is a bigger surface, so it opens slower */
+  --dur-exit: 110ms;
+  --ease-enter: cubic-bezier(0.2, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 0.7, 1);
+
   /* ============================================================
      ACCENT: swap the site's accent by changing this ONE line.
      Everything else (text-safe shade, dark-mode variant, washes)
@@ -1043,22 +1054,62 @@ kbd {
   background: color-mix(in srgb, var(--bg, #fbfbfc) 55%, transparent);
   backdrop-filter: blur(2px);
 }
-.palette[open] {
-  animation: palette-in 0.16s cubic-bezier(0.2, 0, 0.2, 1);
+/* Enter and exit share one mechanism, so the exit is a decision rather than an
+   omission. The asymmetry is free: a transition runs at the duration of the
+   state it moves *to*, so the closed rule owns the exit and the [open] rule
+   owns the enter. `overlay` and `display` need allow-discrete, or the dialog
+   leaves the top layer on frame one and there is nothing left to fade. */
+.palette {
+  opacity: 0;
+  transform: translateY(-4px) scale(0.99);
+  transition:
+    opacity var(--dur-exit) var(--ease-exit),
+    transform var(--dur-exit) var(--ease-exit),
+    overlay var(--dur-exit) allow-discrete,
+    display var(--dur-exit) allow-discrete;
 }
-@keyframes palette-in {
-  from {
+.palette[open] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-enter) var(--ease-enter),
+    transform var(--dur-enter) var(--ease-enter),
+    overlay var(--dur-enter) allow-discrete,
+    display var(--dur-enter) allow-discrete;
+}
+@starting-style {
+  .palette[open] {
     opacity: 0;
     transform: translateY(-6px) scale(0.985);
   }
-  to {
-    opacity: 1;
-    transform: none;
+}
+/* The backdrop is a separate box: opacity on the dialog does not reach it, so
+   it carries its own pair or the wash would snap off while the panel fades. */
+.palette::backdrop {
+  opacity: 0;
+  transition:
+    opacity var(--dur-exit) var(--ease-exit),
+    overlay var(--dur-exit) allow-discrete,
+    display var(--dur-exit) allow-discrete;
+}
+.palette[open]::backdrop {
+  opacity: 1;
+  transition:
+    opacity var(--dur-enter) var(--ease-enter),
+    overlay var(--dur-enter) allow-discrete,
+    display var(--dur-enter) allow-discrete;
+}
+@starting-style {
+  .palette[open]::backdrop {
+    opacity: 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .palette[open] {
-    animation: none;
+  .palette,
+  .palette[open],
+  .palette::backdrop,
+  .palette[open]::backdrop {
+    transition: none;
   }
 }
 .palette-input-row {
@@ -1650,8 +1701,12 @@ button.fig-frame:hover {
   border-color: var(--muted);
 }
 
-/* Opening animation. Transform and opacity only, and the dialog is not a
-   sticky ancestor of anything, so no containing-block trap here. */
+/* Transform and opacity only, and the dialog is not a sticky ancestor of
+   anything, so no containing-block trap here.
+
+   The box keeps its own scale-in on enter; the exit is a straight fade of the
+   whole dialog. Scaling back down on the way out fights the eye, which is
+   already moving back to the page behind. */
 @keyframes lb-in {
   from {
     opacity: 0;
@@ -1659,11 +1714,55 @@ button.fig-frame:hover {
   }
 }
 .lb[open] .lb-box {
-  animation: lb-in 180ms ease-out;
+  animation: lb-in var(--dur-lb-enter) ease-out;
+}
+.lb {
+  opacity: 0;
+  transition:
+    opacity var(--dur-exit) var(--ease-exit),
+    overlay var(--dur-exit) allow-discrete,
+    display var(--dur-exit) allow-discrete;
+}
+.lb[open] {
+  opacity: 1;
+  transition:
+    opacity var(--dur-lb-enter) ease-out,
+    overlay var(--dur-lb-enter) allow-discrete,
+    display var(--dur-lb-enter) allow-discrete;
+}
+@starting-style {
+  .lb[open] {
+    opacity: 0;
+  }
+}
+.lb::backdrop {
+  opacity: 0;
+  transition:
+    opacity var(--dur-exit) var(--ease-exit),
+    overlay var(--dur-exit) allow-discrete,
+    display var(--dur-exit) allow-discrete;
+}
+.lb[open]::backdrop {
+  opacity: 1;
+  transition:
+    opacity var(--dur-lb-enter) ease-out,
+    overlay var(--dur-lb-enter) allow-discrete,
+    display var(--dur-lb-enter) allow-discrete;
+}
+@starting-style {
+  .lb[open]::backdrop {
+    opacity: 0;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .lb[open] .lb-box {
     animation: none;
+  }
+  .lb,
+  .lb[open],
+  .lb::backdrop,
+  .lb[open]::backdrop {
+    transition: none;
   }
   button.fig-frame {
     transition: none;
