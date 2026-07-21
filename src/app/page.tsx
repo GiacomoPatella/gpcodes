@@ -99,12 +99,13 @@ export default function Home() {
               whether I can become&nbsp;one.
             </p>
 
-            {/* Everything the prose already says (role, tenure, Passionfruit)
-                is gone. What's left is only what it doesn't: where, exactly,
-                and how to reach me. */}
+            {/* The eyebrow carries name and role; the prose carries tenure and
+                Passionfruit. All that's left here is how to reach me. The
+                coordinates were removed as rhythm noise (Giacomo, 21 Jul): this
+                metadata is kept as raw material for future inline hover moments,
+                not a data readout. See the roadmap note in docs/STATE.md. */}
             <div className="hero-meta">
               <p className="hero-meta-line">
-                Florence, Italy · 43.77°N 11.26°E ·{" "}
                 <a href="mailto:gp@gpcodes.com">gp@gpcodes.com</a>
               </p>
               <CopyPrompt />

@@ -403,12 +403,14 @@ kbd {
     border-color var(--dur-hover) var(--ease-hover);
 }
 /* The visual box is 32px inside a 56px bar. The pointer target is grown to the
-   40px floor with a pseudo-element, so the hit area changes and the look does
-   not. */
+   44px touch standard with a pseudo-element, so the hit area changes and the
+   look does not. -7px on both axes clears 44px (the rendered glyph box is a
+   hair under 32px, so -6px measured 43); the ⌘K trigger to its left is --sp-4
+   (16px) away, so the two expanded targets do not butt together. */
 .icon-btn::before {
   content: "";
   position: absolute;
-  inset: -4px;
+  inset: -7px;
 }
 .icon-btn:active {
   transform: var(--press);
@@ -504,13 +506,13 @@ kbd {
   position: relative;
   transition: color var(--dur-hover) var(--ease-hover);
 }
-/* Grown on the block axis only: the links sit --sp-1 apart, so widening the
-   inline axis would butt two hit areas together, which is worse than a small
-   target. */
+/* Grown on the block axis only, to the 44px touch standard: the links sit
+   --sp-1 apart, so widening the inline axis would butt two hit areas together,
+   which is worse than a small target. */
 .fmenu-link::before {
   content: "";
   position: absolute;
-  inset-block: -6px;
+  inset-block: -8px;
   inset-inline: 0;
 }
 .fmenu-link:active {
@@ -612,10 +614,13 @@ kbd {
   transition: color var(--dur-hover) var(--ease-hover),
     border-color var(--dur-hover) var(--ease-hover);
 }
+/* Block axis grown to the 44px touch standard; inline grown as far as the
+   16px gap to the theme toggle allows without the targets butting together. */
 .palette-trigger::before {
   content: "";
   position: absolute;
-  inset: -4px;
+  inset-block: -8px;
+  inset-inline: -6px;
 }
 .palette-trigger:active {
   transform: var(--press);
@@ -650,10 +655,10 @@ kbd {
   font-weight: 500;
 }
 
-/* The hero's metadata, demoted from a six-cell table to one quiet line:
-   only what the prose above does not already say (place, coordinates,
-   address). The hairline groups it with the copy-as-prompt row below into
-   a single subdued block. */
+/* The hero's metadata, demoted from a six-cell table to one quiet line: the
+   contact address, which is all the prose above does not already say. The
+   hairline groups it with the copy-as-prompt row below into a single subdued
+   block. (Coordinates removed 21 Jul as rhythm noise.) */
 .hero-meta {
   margin-top: var(--sp-7);
   padding-top: var(--sp-4);
