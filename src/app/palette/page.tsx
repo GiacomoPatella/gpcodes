@@ -122,6 +122,24 @@ export default function PalettePage() {
           is exactly what the swap ships. Toggle the theme to check dark mode.
         </p>
 
+        <nav className="proto-index" aria-label="Hero prototypes">
+          <span className="mono-label">hero prototypes</span>
+          <ul>
+            <li>
+              <Link href="/palette/morph">/palette/morph</Link> — v1, static nav
+              morphing into the floating menu (tier 2 rubber-band)
+            </li>
+            <li>
+              <Link href="/palette/face">/palette/face</Link> — v2, interactive
+              stippling-halftone face in the hero
+            </li>
+            <li>
+              <Link href="/palette/drench">/palette/drench</Link> — earlier
+              drenched-hero + morph experiment
+            </li>
+          </ul>
+        </nav>
+
         <AccentPicker />
 
         {ACCENTS.map((a) => (

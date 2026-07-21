@@ -1,6 +1,6 @@
 # Current state and outstanding work
 
-Written 19 Jul 2026, last updated 20 Jul, as a handoff so no context is lost on a session clear.
+Written 19 Jul 2026, last updated 21 Jul, as a handoff so no context is lost on a session clear.
 Branch `direction/b2`. Read alongside `BRIEF.md`, `REVISION.md`, `CONTENT.md`, `MAP.md`, `PASS3.md`.
 The Notion doc "Portfolio" (under "Build") holds the decision history.
 
@@ -34,9 +34,13 @@ Earlier, 19 and 20 Jul:
 **The two things waiting on Giacomo**, both detailed below: a corrected `onboarding-goals`
 export, and whether Okappy and FRANK-E come back at all.
 
-Next unblocked piece of work, if you want one: **where humour lives**, still the longest-standing
-open question and the biggest gap between this site and the personality he wants. The 404 route
-now exists and is deliberately unfunny, so there is a real surface waiting for that copy.
+Next up, once Giacomo gives the go-ahead after a clear: **two hero prototypes** (Version 1 the
+gloopy static-nav morph, Version 2 the interactive stippling-halftone face). Both specced under
+"Next up: two hero prototypes" below. Read that first.
+
+Longer-standing and still open: **where humour lives**, the biggest gap between this site and the
+personality he wants. The 404 route now exists and is deliberately unfunny, so there is a real
+surface waiting for that copy. It overlaps the hero hover-moments roadmap below.
 
 ---
 
@@ -585,6 +589,164 @@ New this round, not yet in earlier briefs:
 - https://amicro.vercel.app/: interactions, transitions, hover effects
 
 Full reference list with Giacomo's own notes is in `BRIEF.md` and the Notion doc.
+
+---
+
+## Two hero prototypes. BUILT 21 Jul, awaiting Giacomo's pick
+
+**Both are built, untracked under `src/app/palette/` (drench precedent), live
+site untouched. `npm run build` passes, lint 0 errors.** Findable from the
+`/palette` accent page, which now carries a "hero prototypes" index. Verified in
+a real browser (`npx agent-browser`, light and dark), screenshots taken.
+
+- **V1: `/palette/morph`** (`src/app/palette/morph/page.tsx`). Full-width static
+  bar with content on the hero's left edge, detaching on first scroll into the
+  centred pill. Tier 2 rubber-band built (not tier 3 goo). Both STATE fixes
+  landed: the pill width is **measured** from a hidden ghost of the condensed
+  content (not the hardcoded 48rem), and the **scroll-up jitter is gone** because
+  the overshoot easing and the squash keyframe live only on the DETACH direction
+  (`[data-condensed]`); re-attaching to the top uses a plain ease-out, so the
+  reverse cannot fight its own bounce. Local nav stand-in like drench, only the
+  theme toggle wired for real. The squash is CSS-only (bound to the condensed
+  state), so there is no setState-in-effect.
+- **V2: `/palette/face`** (`page.tsx` + `FaceField.tsx`). Real `<Menu>` kept, an
+  interactive halftone portrait fills the dead hero right half at >=1024px (hides
+  below, hero goes single-column). Reuses the wordmark engine's discipline
+  (offscreen sample, token() colour, gated build, **settle-and-stop**) with new
+  physics: damped springs home + cursor repulsion. Background is dropped by
+  **distance-from-corner-colour**, not a brightness threshold, so a skin highlight
+  matching the backdrop's luminance does not punch a hole in the face. Reduced
+  motion draws the settled portrait; touch gets a tap-impulse fallback. Dev
+  sliders for density / dot size / cutout / repel radius / force / colour.
+
+  **Face source (STATE open item a): RESOLVED 21 Jul.** Giacomo saved a
+  high-res square headshot (2162x2162) to `public/face-source.jpg` (it arrived
+  named `face-suorce.jpg`, a typo, renamed). `FaceField` still falls back to
+  `/avatar-384.jpg` if the file is ever missing, so the route always renders.
+
+  **Background separation took two tries, worth recording.** The subject's black
+  t-shirt reaches the BOTTOM edge of the photo, so estimating the backdrop from
+  the whole border ring poisoned it with dark pixels and cut the entire face. A
+  four-corner average also failed: the backdrop is vignetted, so a single
+  reference colour left a halo of surviving cells. What works: estimate the
+  backdrop from the **top region only** (top row + upper 40% of the side
+  columns, reliably above the shoulders), then drop every cell within a
+  `cutout` fraction of the tonal range. `cutout` is a **slider**, default 0.20:
+  it is the dial between a cleanly floating face (higher) and a fuller particle
+  field (lower), which is a taste call left to Giacomo. At 0.20 the face floats
+  clean, verified in-browser against the real headshot.
+
+  Coherence (open item c) is now a live A/B: this is the second particle moment
+  after the footer wordmark. Both exist for the comparison; whether both survive
+  or the face becomes the sole signature is still Giacomo's call.
+
+  **NEXT SESSION, the one open V2 item (Giacomo, 21 Jul):** he **loves the
+  physics** (repulsion + damped spring return), keep it untouched. The problem is
+  **the portrait is not recognisably him.** Likely causes to weigh, not obey:
+  - **Grid too coarse for identity.** At pitch 6 over a ~475px field that is only
+    ~79 cells across; faces need finer sampling to carry likeness. Try dropping
+    pitch (needs the dot size and repel tuning to follow) and/or a larger field.
+  - **The tone metric is the deeper issue.** Dot size is driven by
+    distance-from-background, which is great for *cutting the silhouette* but
+    flattens the *internal* modelling (eye sockets, nose shadow, mouth, brow)
+    that actually reads as a specific person. For cells INSIDE the subject,
+    size should probably come from **luminance/shading**, not distance-from-bg.
+    A two-stage map is the likely fix: distance-from-bg decides IF a cell is
+    subject (the float), luminance decides its dot SIZE (the likeness).
+  - Also consider a gentle contrast/gamma stretch on the in-subject luminance so
+    mid-tones separate, and check the square crop is not cutting the face too
+    tight (`objectPosition`/crop of the 2162 source).
+  This is the whole task for tomorrow; the morph (V1) is done pending his pick.
+
+Original specs, kept for reference:
+
+Giacomo wanted **two isolated prototypes to compare**, built the way the drenched
+hero was (own route under `src/app/palette/`, live site untouched, he picks after
+seeing them).
+
+**Version 1: static nav morphing into the floating menu, on the homepage.** Port
+the morph from the drench prototype (`src/app/palette/drench/`) to the real hero.
+The argument for it is alignment: the hero is left-aligned but the floating menu
+is centred; a full-width bar whose content aligns to the hero's left edge, morphing
+into the centred pill, physically reconciles the two. Giacomo wants the morph
+**more exaggerated, almost gloopy while detaching** from the static bar. Tiers:
+(1) elastic overshoot, dialled up; (2) squash-and-stretch rubber-band; (3) true
+SVG goo/metaball. **Recommended: build tier 2 first**; tier 3 (goo) fights the
+frosted/backdrop-blur material and risks reading gimmicky. Also fix, as part of
+this: the scroll-up jitter (overshoot fighting direction) and the fixed-width pill
+(measure content instead of the hardcoded 48rem). Note: makes `Menu` a client
+component (scroll state), a small move off the mostly-static architecture.
+
+**Version 2: keep the floating menu, add an interactive element to the right of
+the hero.** Giacomo's face (from the avatar photo) forming in a **stippling /
+halftone particle** field, filling the empty hero right half the impeccable
+critique flagged (~45% dead space >=1024px). The cursor moving through it breaks
+the particles, which spring back home. Reuse the `ParticleWordmark` engine
+(`src/components/ParticleWordmark.tsx`): sample source luminance on a grid, dot
+size/density by darkness, cursor repulsion with damped spring return, and the same
+settle-and-stop / reduced-motion discipline so it idles when undisturbed. Open
+items: (a) **needs a higher-res square face export**, the avatar is only 96/192px;
+(b) desktop-only interaction, needs a touch fallback (settled halftone, maybe
+tap-to-disturb) and stacks/hides on narrow viewports; (c) **coherence**: two
+particle moments (hero face + footer wordmark) may feel repetitive, decide whether
+both live or the face becomes the signature.
+
+### 21 Jul outcomes (this session), before the clear
+
+- **Drenched-hero experiment parked** at `src/app/palette/drench/` (untracked,
+  noindex, live hero untouched). Interactive: four grounds (lead = committed
+  petrol) + a drenched/current toggle + the morphing nav. Built to answer the
+  impeccable critique's second P0, "the accent does not exist" (accent on 10 of
+  ~1600 colour slots, chroma 0.033, perceptually grey). Giacomo: "leave it there
+  for the moment." Reason it's not a one-line swap: `--accent` drives ink and
+  washes only, a drench is a surface change.
+- **Homepage, done and verified (uncommitted at time of writing):** hero
+  coordinates removed as rhythm noise, email returned to its original inline
+  position (a CTA-promotion attempt was reverted, the hero is not a place for a
+  CTA). Touch targets on the nav controls raised to a true 44px block axis,
+  measured live with `elementFromPoint`: `.icon-btn` 44, `.palette-trigger` 46,
+  `.fmenu-link` 46.
+- **Impeccable critique tail, still open:** flat type scale (P3, wants a
+  before/after, high blast radius, not silent), mono overuse (deliberately held,
+  it is entangled with the unresolved headline direction question), and the
+  smaller findings. The CTA finding was addressed differently than the critique
+  proposed: not a CTA, see the hover-moments roadmap below.
+
+## Roadmap: the hero as inline hover moments. Parked, Giacomo 21 Jul
+
+Not for now, but the direction the hero metadata is being kept for. The flat
+`Florence, Italy · 43.77°N 11.26°E` coordinate line was removed on 21 Jul as
+rhythm noise precisely because it was the *lifeless* version of this idea, and
+an earlier attempt to promote the email into a call-to-action was reverted the
+same day: the hero is not a place for a CTA or a data readout.
+
+The idea instead: rework the hero prose so the functional facts become
+highlighted or underlined words woven into the sentences, each one an excuse for
+a hover-reveal that shows personality.
+
+- **Florence.** Copy along the lines of "...living in Florence..." with Florence
+  underlined; on hover, a preview card with a photo of the city and a live
+  weather card, e.g. "33°, Sunny". (The removed coordinates become this.)
+- **The LLM prompt CTAs.** The copy-as-prompt affordance, mentioned inline in
+  the prose rather than as a bare button row; on hover, a small preview card of
+  the prompt / what it does.
+- **Side projects.** The things he's currently experimenting with, named inline;
+  each with a small preview card on hover.
+
+Why it is good: it turns metadata (location, contact, machine CTAs, side work)
+into delight embedded *in the sentence*, not a separate block, and it answers the
+humour / personality gap on the one surface everyone sees first.
+
+Things to weigh when it is picked up:
+- **Weather needs live data** for Florence. Static export, so a client-side fetch
+  or a tiny build-time step, not a hardcoded string.
+- **Hover has no touch equivalent.** The preview cards need a tap/focus fallback,
+  or they are desktop-only garnish. This is a reusable inline-popover primitive,
+  not a one-off.
+- It is a **hero copy rewrite plus an interaction system**, so it lands with the
+  humour-gap work, not as a quick pass. See "Where humour lives" under open
+  questions, and it sits alongside the drenched-hero experiment at
+  `src/app/palette/drench/`.
 
 ---
 
