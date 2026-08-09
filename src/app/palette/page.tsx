@@ -133,10 +133,6 @@ export default function PalettePage() {
               <Link href="/palette/face">/palette/face</Link> — v2, interactive
               stippling-halftone face in the hero
             </li>
-            <li>
-              <Link href="/palette/drench">/palette/drench</Link> — earlier
-              drenched-hero + morph experiment
-            </li>
           </ul>
         </nav>
 

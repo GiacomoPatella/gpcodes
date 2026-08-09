@@ -70,7 +70,7 @@
       "kind": "external",
       "loc": 0,
       "imports": 0,
-      "importedBy": 11
+      "importedBy": 10
     },
     {
       "id": "scripts/graph.mjs",
@@ -137,18 +137,10 @@
       "importedBy": 0
     },
     {
-      "id": "src/app/palette/drench/page.tsx",
-      "label": "drench/page.tsx",
-      "kind": "route",
-      "loc": 330,
-      "imports": 2,
-      "importedBy": 0
-    },
-    {
       "id": "src/app/palette/face/FaceField.tsx",
       "label": "FaceField.tsx",
       "kind": "lib",
-      "loc": 563,
+      "loc": 688,
       "imports": 1,
       "importedBy": 1
     },
@@ -164,7 +156,7 @@
       "id": "src/app/palette/morph/page.tsx",
       "label": "morph/page.tsx",
       "kind": "route",
-      "loc": 317,
+      "loc": 391,
       "imports": 3,
       "importedBy": 0
     },
@@ -172,7 +164,7 @@
       "id": "src/app/palette/page.tsx",
       "label": "palette/page.tsx",
       "kind": "route",
-      "loc": 169,
+      "loc": 165,
       "imports": 5,
       "importedBy": 0
     },
@@ -198,7 +190,7 @@
       "kind": "component",
       "loc": 71,
       "imports": 2,
-      "importedBy": 4
+      "importedBy": 3
     },
     {
       "id": "src/components/Fig.tsx",
@@ -276,7 +268,7 @@
       "id": "src/lib/graph.json",
       "label": "graph.json",
       "kind": "lib",
-      "loc": 560,
+      "loc": 544,
       "imports": 0,
       "importedBy": 1
     },
@@ -419,14 +411,6 @@
       "to": "src/data/site.ts"
     },
     {
-      "from": "src/app/palette/drench/page.tsx",
-      "to": "react"
-    },
-    {
-      "from": "src/app/palette/drench/page.tsx",
-      "to": "src/components/CopyPrompt.tsx"
-    },
-    {
       "from": "src/app/palette/face/FaceField.tsx",
       "to": "react"
     },
@@ -552,9 +536,9 @@
     }
   ],
   "stats": {
-    "files": 28,
-    "edges": 61,
-    "loc": 8403,
+    "files": 27,
+    "edges": 59,
+    "loc": 8252,
     "externals": 10
   }
 }

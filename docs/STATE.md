@@ -1017,6 +1017,32 @@ a real browser (`npx agent-browser`, light and dark), screenshots taken.
     two widely separated scroll positions.
   - **Not yet confirmed by Giacomo.**
 
+- **Cleanup, 9 Aug 2026.** With the morph and face work committed
+  (`683c49e`), Giacomo asked to clear out what the hero-prototype work had
+  left behind:
+  - **Branches:** `direction/a-editorial` and `direction/c-tactile` deleted.
+    Both were full alternate homepage directions from the original A/B/C
+    exploration (see `docs/STATE.md` history above and the Notion doc);
+    `direction/b` was the one picked, and `direction/b2` is its continuation.
+    Neither deleted branch was ever pushed to `origin` (only `main` and
+    `direction/b2` are there), so this was unrecoverable. Confirmed with
+    Giacomo first, including showing him a live screenshot of all three
+    (`npx agent-browser`, via temporary `git worktree`s with their own
+    `npm install`, torn down after) before he chose. `direction/b-instrument`
+    (the un-continued "B" itself, as opposed to the A/C alternates) was left
+    alone, not part of what was asked.
+  - **`/palette/drench` removed.** It was Version 1's own precedent (the
+    "drenched hero + morph" experiment the real morph nav was ported and
+    tiered up from, see "Original specs" below), superseded once V1 landed
+    on the homepage-hero route, so unlike `/palette/morph` and
+    `/palette/face` (both still open, neither confirmed as final) it wasn't
+    actually in play any more. Removed the route
+    (`src/app/palette/drench/page.tsx`) and its entry in the
+    `/palette` hero-prototypes index (`src/app/palette/page.tsx`),
+    regenerated `src/lib/graph.json` via `npm run graph`. The comment in
+    `morph/page.tsx` crediting drench as V1's precedent was left alone: true
+    history, not a live link.
+
 Original specs, kept for reference:
 
 Giacomo wanted **two isolated prototypes to compare**, built the way the drenched
