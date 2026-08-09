@@ -5,13 +5,20 @@ import { useEffect, useRef } from "react";
 /**
  * The interactive halftone face for hero prototype v2.
  *
- * A portrait sampled into a dot field: each cell of a grid becomes one particle
- * whose size is how far that patch of the photo sits from the flat background
- * colour, so the subject floats free of the backdrop instead of the whole
- * square filling in. The cursor pushes particles aside; a damped spring pulls
- * each back to its home cell. It settles and STOPS when undisturbed, the same
- * discipline as ParticleWordmark: a permanently running RAF in the hero is
- * exactly how "not laggy" gets broken.
+ * A portrait sampled into a dot field, built in two stages per cell: distance
+ * from the backdrop colour decides whether a cell is part of the subject at
+ * all (the float, the clean silhouette), then luminance inside that mask
+ * decides the dot's size (the likeness). Distance-from-background alone
+ * flattens internal shading, eye sockets, the underside of the brow, the
+ * corners of the mouth, into one another, which is exactly what makes a
+ * halftone read as a specific person rather than a generic silhouette. The
+ * cursor pushes particles aside; a damped spring pulls each back to its home
+ * cell. The entrance is a different effect on purpose: dots sit at their home
+ * cell throughout, no travel and no rotation, and a white flash over the top
+ * quickly fades away to reveal them, like a photo just taken. It settles and
+ * STOPS when undisturbed, the same discipline as
+ * ParticleWordmark: a permanently running RAF in the hero is exactly how "not
+ * laggy" gets broken.
  *
  * Reuses the wordmark's engine ideas (offscreen sample, token() for colour,
  * gated build, settle-and-stop) but the physics are new: springs + repulsion
@@ -27,7 +34,7 @@ export type FaceConfig = {
   repelRadius: number;
   /** cursor repulsion strength */
   repelStrength: number;
-  /** largest dot radius in CSS px (darkest / most-contrasting cells) */
+  /** largest dot radius in CSS px (darkest cells within the subject) */
   maxDotR: number;
   /** background cutout, 0..1 of the tonal range: higher floats the face more */
   cutout: number;
@@ -74,6 +81,8 @@ export default function FaceField(cfg: FaceConfig) {
       hx: number; hy: number; // home
       x: number; y: number;   // current
       vx: number; vy: number; // velocity
+      ox: number; oy: number; // small starting offset from home for the entrance pop-in
+      delay: number;          // ms this particle waits before it starts appearing
       r: number;              // dot radius
     };
     let particles: P[] = [];
@@ -82,6 +91,45 @@ export default function FaceField(cfg: FaceConfig) {
     let side = 0; // css px, square
 
     const pointer = { x: -1e4, y: -1e4, active: false };
+
+    // Formation entrance: no rotation, no big travel, but not a single flat
+    // fade either. Each dot pops in on its own clock: a short fade-in plus a
+    // few-pixel settle from a small starting offset, staggered outward from
+    // the centre so the reveal has visible texture instead of the whole
+    // image just materialising at once. A brief white flash rides on top for
+    // the "photo just taken" feel.
+    let entranceActive = false;
+    let entranceT0: number | null = null;
+    const FLASH_DURATION = 240;  // the white overlay's own fade-out
+    const POP_DURATION = 260;    // each dot's own fade + settle, once its delay elapses
+    const POP_STAGGER = 300;     // max extra delay for the farthest-from-centre dot
+    const POP_SHIFT = 8;         // css px each dot starts offset from its home cell
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    // Auto "demo swipe": once per mount, a beat after the entrance settles, a
+    // synthetic cursor sweeps through the field using the SAME repel/spring
+    // code path as a real pointer, so it teaches "this responds to you"
+    // rather than playing a separate canned effect. Cancels the instant a
+    // real pointer shows up, so it never fights genuine interaction, and
+    // never runs at all under reduced motion.
+    let userInteracted = false;
+    let demoPending = false;
+    let demoTimer = 0;
+    const demo = {
+      active: false,
+      t0: null as number | null,
+      duration: 1100,
+      from: { x: 0, y: 0 },
+      to: { x: 0, y: 0 },
+    };
+    const easeInOutCubic = (t: number) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const startDemo = () => {
+      demo.active = true;
+      demo.t0 = null;
+      demo.from = { x: -side * 0.12, y: side * 0.5 };
+      demo.to = { x: side * 1.12, y: side * 0.46 };
+    };
 
     /** Resolve a CSS custom property to a concrete colour string. */
     const token = (name: string) => {
@@ -139,30 +187,122 @@ export default function FaceField(cfg: FaceConfig) {
         a: { r: number; g: number; b: number },
         b: { r: number; g: number; b: number },
       ) => Math.hypot(a.r - b.r, a.g - b.g, a.b - b.b);
+      const luminance = (c: { r: number; g: number; b: number }) =>
+        0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
 
-      // Background reference from the TOP REGION only: the top row plus the
-      // upper 40% of the side columns. The full border ring cannot be trusted
-      // because the subject's shoulders/shirt reach the bottom edge, which would
-      // poison the estimate with dark pixels. The area above the shoulders and
-      // beside the head is reliably backdrop in a portrait.
-      const samples: { r: number; g: number; b: number }[] = [];
+      // Border samples from the TOP REGION only: the top row plus the upper
+      // 40% of the side columns. The full border ring cannot be trusted
+      // because the subject's shoulders/shirt reach the bottom edge, which
+      // would poison the estimate with dark pixels. The area above the
+      // shoulders and beside the head is reliably backdrop in a portrait.
+      const border: { i: number; j: number; c: { r: number; g: number; b: number } }[] = [];
       const upper = Math.max(1, Math.floor(cols * 0.4));
-      for (let i = 0; i < cols; i++) samples.push(at(i, 0));
-      for (let j = 1; j < upper; j++) samples.push(at(0, j), at(cols - 1, j));
-      const bg = samples.reduce(
-        (a, c) => ({
-          r: a.r + c.r / samples.length,
-          g: a.g + c.g / samples.length,
-          b: a.b + c.b / samples.length,
-        }),
-        { r: 0, g: 0, b: 0 },
-      );
+      for (let i = 0; i < cols; i++) border.push({ i, j: 0, c: at(i, 0) });
+      for (let j = 1; j < upper; j++) {
+        border.push({ i: 0, j, c: at(0, j) });
+        border.push({ i: cols - 1, j, c: at(cols - 1, j) });
+      }
 
-      // Farthest cell from bg, to normalise the tonal range.
-      let maxD = 1;
+      // The backdrop is not flat, it is vignetted: it darkens with distance
+      // from the frame's centre. A single flat average reads the far corners
+      // as "different from the background" purely because of that falloff,
+      // not because anything is actually there, which is exactly what
+      // produced floating halo blobs at a low cutout, they are genuinely
+      // connected to the subject through the wide shoulder/shirt band at the
+      // bottom of the frame, not a thin seam an erosion pass could sever.
+      // Fit each channel as a PLANE over (i, j), not just a function of
+      // radius from centre, using the same trusted border samples, so every
+      // cell is judged against its own expected local background. A radius-
+      // only fit assumes the backdrop is symmetric, but this one is not: the
+      // right side measures consistently brighter than the left at matching
+      // radius (row 15 of the border sample: left channel-average 134 vs
+      // right 137), a directional gradient, angled light on the backdrop,
+      // that a radial model averages away and then under-predicts on the
+      // brighter side, which is exactly what produced a lingering fringe
+      // skewed to the right rather than an even ring.
+      const cx = (cols - 1) / 2;
+      const cy = (cols - 1) / 2;
+      const fitPlane = (get: (c: { r: number; g: number; b: number }) => number) => {
+        let n = 0;
+        let sx = 0;
+        let sy = 0;
+        let sxx = 0;
+        let syy = 0;
+        let sxy = 0;
+        let sc = 0;
+        let sxc = 0;
+        let syc = 0;
+        for (const s of border) {
+          const x = s.i - cx;
+          const y = s.j - cy;
+          const c = get(s.c);
+          n++;
+          sx += x;
+          sy += y;
+          sxx += x * x;
+          syy += y * y;
+          sxy += x * y;
+          sc += c;
+          sxc += x * c;
+          syc += y * c;
+        }
+        // Normal equations for least-squares c ~= a + bx*x + by*y, solved by
+        // Cramer's rule on the 3x3 system.
+        const M = [
+          [n, sx, sy],
+          [sx, sxx, sxy],
+          [sy, sxy, syy],
+        ];
+        const v = [sc, sxc, syc];
+        const det3 = (m: number[][]) =>
+          m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) -
+          m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) +
+          m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+        const D = det3(M);
+        if (Math.abs(D) < 1e-6) return { a: sc / n, bx: 0, by: 0 };
+        const withCol = (col: number) =>
+          M.map((row, ri) => row.map((val, ci) => (ci === col ? v[ri] : val)));
+        return {
+          a: det3(withCol(0)) / D,
+          bx: det3(withCol(1)) / D,
+          by: det3(withCol(2)) / D,
+        };
+      };
+      const fitR = fitPlane((c) => c.r);
+      const fitG = fitPlane((c) => c.g);
+      const fitB = fitPlane((c) => c.b);
+      // Clamp to a valid channel range: the fit is only trustworthy inside
+      // the region the border samples actually cover, and extrapolating it
+      // toward the centre (where the face sits) or past a corner can send a
+      // channel far outside 0..255, manufacturing a huge synthetic distance
+      // for a cell that never earned one.
+      const clamp255 = (v: number) => Math.min(255, Math.max(0, v));
+      const bgAt = (i: number, j: number) => {
+        const x = i - cx;
+        const y = j - cy;
+        return {
+          r: clamp255(fitR.a + fitR.bx * x + fitR.by * y),
+          g: clamp255(fitG.a + fitG.bx * x + fitG.by * y),
+          b: clamp255(fitB.a + fitB.bx * x + fitB.by * y),
+        };
+      };
+
+      // Farthest cell from its local background, to normalise the
+      // SEGMENTATION range only: this decides which cells are the subject.
+      // It says nothing about dot size. A 99th-percentile, not a literal
+      // max: one leftover bad-fit outlier at an extreme corner would
+      // otherwise blow the whole range open and swallow the entire face as
+      // "background", which is exactly what the unclamped version did at the
+      // default settings.
+      const allDist: number[] = [];
       for (let j = 0; j < cols; j++)
         for (let i = 0; i < cols; i++)
-          maxD = Math.max(maxD, dist(at(i, j), bg));
+          allDist.push(dist(at(i, j), bgAt(i, j)));
+      allDist.sort((a, b) => a - b);
+      const maxD = Math.max(
+        1,
+        allDist[Math.floor(allDist.length * 0.99)],
+      );
 
       const { maxDotR, cutout } = cfgRef.current;
       // Everything within `cutout` of the tonal range counts as background. A
@@ -170,23 +310,77 @@ export default function FaceField(cfg: FaceConfig) {
       // different cuts, and it is the dial between a floating face and a fuller
       // particle field, which is a taste call for Giacomo.
       const bgCut = maxD * cutout;
-      const gamma = 0.72; // lift mid-contrast so the face is not only its darkest parts
-      const span = Math.max(1, maxD - bgCut);
-      const next: P[] = [];
+
+      // Which cells clear bgCut. Earlier drafts tried to clean this up with
+      // a morphological opening (erode away thin bridges to background
+      // noise, keep the largest surviving blob, dilate it back out). That
+      // fought the wrong problem: a face is porous (eyes, nostrils,
+      // highlights all read as background-ish), so erosion fragmented the
+      // head into pieces too small to survive while the solid shirt/
+      // shoulders stayed intact, and "largest surviving blob" picked the
+      // shoulders and threw the entire face away. The radial background
+      // model below already removes the actual cause of stray background
+      // noise (a vignette misread as subject), so no cleanup pass is needed
+      // on top of it.
+      const N = cols * cols;
+      const subject = new Uint8Array(N);
+      for (let j = 0; j < cols; j++)
+        for (let i = 0; i < cols; i++)
+          if (dist(at(i, j), bgAt(i, j)) > bgCut) subject[j * cols + i] = 1;
+
+      // Two-stage map. Stage 1 (above) decided membership; stage 2 decides
+      // size. Distance-from-bg cuts a clean silhouette but flattens what is
+      // INSIDE it: an eye socket and a cheek can sit at similar distance from
+      // a light backdrop and would earn near-identical dots, which is why the
+      // one-stage version produced a floating outline with no face inside it.
+      // Luminance inside the mask is what actually carries shading, so it
+      // drives size instead. This first pass finds the subject cells and the
+      // luminance range among only those cells, not the whole frame, so a
+      // dark backdrop or a bright shirt never skews the stretch.
+      const inside: { i: number; j: number; l: number }[] = [];
       for (let j = 0; j < cols; j++) {
         for (let i = 0; i < cols; i++) {
-          const d = dist(at(i, j), bg);
-          if (d <= bgCut) continue;
-          const t = Math.pow((d - bgCut) / span, gamma);
-          const r = t * maxDotR;
-          // No minimum-radius floor: a floor draws the backdrop as a full field
-          // of tiny dots instead of letting the subject float. Cells too faint
-          // to earn a real dot are dropped entirely.
-          if (r < 0.5) continue;
-          const hx = (i + 0.5) * cell;
-          const hy = (j + 0.5) * cell;
-          next.push({ hx, hy, x: hx, y: hy, vx: 0, vy: 0, r });
+          if (!subject[j * cols + i]) continue;
+          inside.push({ i, j, l: luminance(at(i, j)) });
         }
+      }
+
+      // Percentile clip, not true min/max: one specular highlight (an eye
+      // catchlight, a tooth in an open-mouth smile) or one deep shadow
+      // crevice would otherwise anchor an end of the range and drag every
+      // ordinary midtone cell toward it.
+      const byL = [...inside].sort((a, b) => a.l - b.l);
+      const pct = (p: number) =>
+        byL[Math.min(byL.length - 1, Math.floor(byL.length * p))]?.l ?? 0;
+      const lMin = pct(0.03);
+      const lMax = pct(0.97);
+      const lSpan = Math.max(1, lMax - lMin);
+
+      // gamma > 1 pushes ordinary midtone skin toward SMALL dots and saves
+      // large ones for what is actually dark: eyebrows, eye sockets, nostril
+      // shadow, beard. A gamma below 1 (tried first) does the reverse: it
+      // compresses light-to-mid tones toward the large-dot end together,
+      // which is why that pass rendered as one dark mass with no shape in
+      // it rather than separating skin from the features sitting on it.
+      const gamma = 1.9;
+      // Small floor rather than zero: a hard cutoff at the bright end would
+      // erase forehead/cheek highlights instead of drawing them as small
+      // dots, which reads as literal holes punched in the face.
+      const minT = 0.08;
+      const next: P[] = [];
+      for (const { i, j, l } of inside) {
+        // Darker cell -> bigger dot, the way an ink halftone puts more
+        // coverage where the source is darker. Inside the mask that darkness
+        // IS the shading, sockets, nostrils, the underside of the brow, that
+        // reads as a specific face rather than how far the patch sits from
+        // the backdrop.
+        const norm = Math.min(1, Math.max(0, (lMax - l) / lSpan));
+        const t = minT + (1 - minT) * Math.pow(norm, gamma);
+        const r = t * maxDotR;
+        if (r < 0.35) continue;
+        const hx = (i + 0.5) * cell;
+        const hy = (j + 0.5) * cell;
+        next.push({ hx, hy, x: hx, y: hy, vx: 0, vy: 0, ox: 0, oy: 0, delay: 0, r });
       }
       particles = next;
       host.dataset.ready = "true";
@@ -202,10 +396,79 @@ export default function FaceField(cfg: FaceConfig) {
       }
     }
 
+    /** Per-particle small offset + stagger delay for the entrance pop-in. */
+    function primeEntrance() {
+      const cx = side / 2;
+      const cy = side / 2;
+      const maxR = Math.hypot(side, side) / 2; // centre-to-corner, for delay normalisation
+      for (const p of particles) {
+        const a = ((p.hx + p.hy) % 6.283) + p.r; // deterministic-ish angle
+        const mag = POP_SHIFT * (0.5 + (p.r % 1) * 0.5);
+        p.ox = Math.cos(a * 3.1) * mag;
+        p.oy = Math.sin(a * 2.3) * mag;
+        const distFromCentre = Math.hypot(p.hx - cx, p.hy - cy);
+        p.delay = (distFromCentre / maxR) * POP_STAGGER;
+      }
+    }
+
     const K = 0.055; // spring stiffness toward home
     const DAMP = 0.82; // velocity retained per frame
 
-    function step() {
+    function step(now: number) {
+      if (entranceActive) {
+        if (entranceT0 === null) entranceT0 = now;
+        const elapsed = now - entranceT0;
+        const flashAlpha = 1 - easeOutCubic(Math.min(1, elapsed / FLASH_DURATION));
+        let allDone = true;
+        ctx.clearRect(0, 0, side, side);
+        ctx.fillStyle = ink;
+        for (const p of particles) {
+          const t = Math.min(1, Math.max(0, (elapsed - p.delay) / POP_DURATION));
+          if (t < 1) allDone = false;
+          const e = easeOutCubic(t);
+          const rf = 1 - e; // remaining fraction of this particle's starting offset
+          ctx.globalAlpha = e;
+          ctx.beginPath();
+          ctx.arc(p.hx + p.ox * rf, p.hy + p.oy * rf, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        if (flashAlpha > 0) {
+          ctx.fillStyle = "#fff";
+          ctx.globalAlpha = flashAlpha;
+          ctx.fillRect(0, 0, side, side);
+          ctx.globalAlpha = 1;
+        }
+        if (allDone && flashAlpha <= 0) {
+          entranceActive = false;
+          running = false;
+          raf = 0;
+          if (demoPending && !userInteracted) {
+            demoPending = false;
+            demoTimer = window.setTimeout(() => {
+              if (userInteracted || reduced()) return;
+              startDemo();
+              wake();
+            }, 450);
+          }
+          return;
+        }
+        raf = requestAnimationFrame(step);
+        running = true;
+        return;
+      }
+      if (demo.active) {
+        if (demo.t0 === null) demo.t0 = now;
+        const t = Math.min(1, (now - demo.t0) / demo.duration);
+        const e = easeInOutCubic(t);
+        pointer.x = demo.from.x + (demo.to.x - demo.from.x) * e;
+        pointer.y = demo.from.y + (demo.to.y - demo.from.y) * e;
+        pointer.active = true;
+        if (t >= 1) {
+          demo.active = false;
+          pointer.active = false;
+        }
+      }
       const { repelRadius: R, repelStrength: S } = cfgRef.current;
       const R2 = R * R;
       let moving = false;
@@ -237,7 +500,7 @@ export default function FaceField(cfg: FaceConfig) {
           moving = true;
       }
       draw();
-      if (moving || pointer.active) {
+      if (moving || pointer.active || demo.active) {
         raf = requestAnimationFrame(step);
         running = true;
       } else {
@@ -250,6 +513,17 @@ export default function FaceField(cfg: FaceConfig) {
         draw();
         running = false;
         raf = 0;
+        // First settle after the entrance: queue the demo sweep for a beat
+        // later, as its own wake cycle, so the RAF loop still fully stops in
+        // between rather than idling through the pause.
+        if (demoPending && !userInteracted) {
+          demoPending = false;
+          demoTimer = window.setTimeout(() => {
+            if (userInteracted || reduced()) return;
+            startDemo();
+            wake();
+          }, 450);
+        }
       }
     }
     const wake = () => {
@@ -259,18 +533,6 @@ export default function FaceField(cfg: FaceConfig) {
       }
     };
 
-    /** Scatter every particle off its home, then let the springs reassemble it.
-        The formation entrance and the reset-after-resize both reuse this. */
-    function scatter() {
-      for (const p of particles) {
-        const a = ((p.hx + p.hy) % 6.283) + p.r; // deterministic-ish angle
-        const spread = side * 0.55;
-        p.x = p.hx + Math.cos(a * 3.1) * spread * (0.3 + (p.r % 1));
-        p.y = p.hy + Math.sin(a * 2.3) * spread * (0.3 + (p.r % 1));
-        p.vx = p.vy = 0;
-      }
-    }
-
     // ---- pointer interaction (mouse hover + touch drag/tap) ----
     const toLocal = (e: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
@@ -279,12 +541,18 @@ export default function FaceField(cfg: FaceConfig) {
     };
     const onMove = (e: PointerEvent) => {
       if (reduced()) return;
+      userInteracted = true;
+      demo.active = false;
+      entranceActive = false;
       toLocal(e);
       pointer.active = true;
       wake();
     };
     const onDown = (e: PointerEvent) => {
       if (reduced()) return;
+      userInteracted = true;
+      demo.active = false;
+      entranceActive = false;
       toLocal(e);
       pointer.active = true;
       // Touch has no hover, so a tap gives a one-off outward impulse and then
@@ -333,8 +601,11 @@ export default function FaceField(cfg: FaceConfig) {
         return;
       }
       if (entrance && visible) {
-        scatter();
+        primeEntrance();
         played = true;
+        demoPending = true;
+        entranceActive = true;
+        entranceT0 = null;
         wake();
       } else if (played) {
         draw();
@@ -368,8 +639,11 @@ export default function FaceField(cfg: FaceConfig) {
         for (const e of entries) {
           visible = e.isIntersecting;
           if (visible && !played && particles.length && !reduced()) {
-            scatter();
+            primeEntrance();
             played = true;
+            demoPending = true;
+            entranceActive = true;
+            entranceT0 = null;
             wake();
           }
         }
@@ -392,6 +666,7 @@ export default function FaceField(cfg: FaceConfig) {
 
     return () => {
       if (raf) cancelAnimationFrame(raf);
+      if (demoTimer) clearTimeout(demoTimer);
       io.disconnect();
       ro.disconnect();
       themeObserver.disconnect();

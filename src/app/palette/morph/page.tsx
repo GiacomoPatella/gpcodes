@@ -83,20 +83,50 @@ export default function MorphLab() {
   const [condensed, setCondensed] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const ghostRef = useRef<HTMLDivElement>(null);
-  const sentinelRef = useRef<HTMLDivElement>(null);
+  const lastY = useRef(0);
 
-  /* Condense the instant the page leaves the very top. A 1px sentinel at scroll
-     origin: present in view => at top => bar expanded. Binary, so there is no
-     scroll-position hysteresis to fight. */
+  /* Detach the instant the page leaves the very top, and stay detached for as
+     long as the user keeps scrolling further down, however slowly. Re-attach
+     fires well before scroll actually gets back to the top (REATTACH_PX), so
+     the return transition has time to finish before the gesture itself ends,
+     rather than visibly still catching up after it does.
+
+     Direction, comparing y against the PREVIOUS sample, decides which rule
+     applies, not just position against a fixed pair of thresholds. Position
+     alone is unstable here: for any y strictly between 0 and REATTACH_PX,
+     "detach at y > 0" and "re-attach at y <= REATTACH_PX" both match at once,
+     so which one wins depends only on which was evaluated last, and toggles
+     on every single sample while y sits in that band. A fast, decisive
+     scroll jumps clean over the band in one or two samples and never shows
+     it; a slow one dwells there for many samples and visibly shakes, stretch
+     and squash firing over and over, which is exactly what a slow downward
+     scroll surfaced. Checking whether y grew or shrank since the last sample
+     resolves the ambiguity correctly: moving down through the band condenses
+     and stays condensed regardless of how slowly; only moving up through it
+     can re-attach early. */
   useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setCondensed(!entry.isIntersecting),
-      { threshold: 0 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    const REATTACH_PX = 160;
+    let ticking = false;
+    const check = () => {
+      const y = window.scrollY;
+      const dy = y - lastY.current;
+      lastY.current = y;
+      setCondensed((prev) => {
+        if (y <= 0) return false;
+        if (dy > 0) return true;
+        if (dy < 0) return prev && y > REATTACH_PX;
+        return prev;
+      });
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(check);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    check();
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   /* Measure the condensed pill width from a hidden ghost rendered at the compact
@@ -121,8 +151,6 @@ export default function MorphLab() {
   return (
     <div id="top" className="mlab" ref={wrapRef}>
       <style>{CSS}</style>
-      {/* scroll-origin marker: in view => at top => nav expanded */}
-      <div ref={sentinelRef} className="mlab-sentinel" aria-hidden="true" />
 
       <MorphNav condensed={condensed} />
 
@@ -185,7 +213,6 @@ export default function MorphLab() {
 
 const CSS = `
 .mlab { min-height: 220vh; }
-.mlab-sentinel { position: absolute; top: 0; height: 1px; width: 1px; }
 /* fixed bar overlays the top, so the content starts below one bar height */
 .mlab-main { padding-top: var(--header-h); }
 
@@ -194,17 +221,24 @@ const CSS = `
    ============================================================ */
 .mnav {
   --dur-morph: 460ms;
-  /* DETACH owns the overshoot (settles into the pill with a rubber-band).
-     RE-ATTACH (the base rule) is a calm ease-out: no overshoot, so scrolling
-     back to the top cannot fight its own bounce. */
-  --ease-detach: cubic-bezier(0.5, 1.5, 0.55, 1);
+  /* RE-ATTACH is deliberately quicker than DETACH: it now triggers a little
+     before scroll actually reaches the top (see the scroll effect in
+     MorphLab), so a shorter duration is what makes it land at, rather than
+     noticeably after, the moment the gesture itself ends. Detach keeps the
+     slower --dur-morph, since it triggers instantly and can afford to take
+     its time. */
+  --dur-return: 320ms;
+  /* DETACH: a soft decelerate, no overshoot past the pill shape (paired with
+     a gentle single-squash keyframe below for the gooey feel, not a bounce).
+     RE-ATTACH (the base rule) is the same calm ease-out with no keyframe. */
+  --ease-detach: cubic-bezier(0.32, 0.9, 0.34, 1);
   --ease-return: cubic-bezier(0.2, 0, 0.2, 1);
   position: fixed; top: 0; left: 0; right: 0; z-index: 60;
   display: flex; justify-content: center;
   pointer-events: none;
   /* the wrapper carries the float gap; the box carries the shape */
   transform: translateY(0);
-  transition: transform var(--dur-morph) var(--ease-return);
+  transition: transform var(--dur-return) var(--ease-return);
 }
 .mnav[data-condensed] {
   transform: translateY(var(--sp-3));
@@ -215,6 +249,12 @@ const CSS = `
   pointer-events: auto;
   box-sizing: border-box;
   width: 100%;
+  /* Centres .mnav-inner inside the box at all times, so centring is never the
+     job of the inner's own margin. Belt-and-braces with the inner's
+     transitioned, always-100%-of-box sizing below: between the two, nothing
+     about the inner's position or size is ever a single instantaneous jump. */
+  display: flex;
+  justify-content: center;
   color: var(--ink);
   /* one constant frosted surface, so hero content passes UNDER the bar and
      never through it; only the shape changes on scroll. */
@@ -227,10 +267,10 @@ const CSS = `
   box-shadow: none;
   transform-origin: top center;
   transition:
-    width var(--dur-morph) var(--ease-return),
-    border-color var(--dur-morph) var(--ease-return),
-    border-radius var(--dur-morph) var(--ease-return),
-    box-shadow var(--dur-morph) var(--ease-return);
+    width var(--dur-return) var(--ease-return),
+    border-color var(--dur-return) var(--ease-return),
+    border-radius var(--dur-return) var(--ease-return),
+    box-shadow var(--dur-return) var(--ease-return);
 }
 .mnav[data-condensed] .mnav-box {
   width: var(--pill-w, min(46rem, calc(100vw - var(--sp-4))));
@@ -242,39 +282,73 @@ const CSS = `
     border-color var(--dur-morph) var(--ease-detach),
     border-radius var(--dur-morph) var(--ease-detach),
     box-shadow var(--dur-morph) var(--ease-detach);
-  /* the gloop: a squash then a jiggle. Bound to the condensed state, so it
-     plays once when the bar detaches and is simply absent on re-attach (the
-     rule no longer matches), which is why scrolling back up never bounces.
-     transform is free on the box (translateY lives on the wrapper). */
+  /* the gloop: one gentle squash, no jiggle back past 1. Bound to the
+     condensed state, so it plays once when the bar detaches and is simply
+     absent on re-attach (the rule no longer matches), which is why scrolling
+     back up never bounces. transform is free on the box (translateY lives on
+     the wrapper). */
   animation: mnav-squash var(--dur-morph) both;
 }
 @keyframes mnav-squash {
   0%   { transform: scaleY(1) scaleX(1); }
-  34%  { transform: scaleY(0.7) scaleX(1.045); }
-  64%  { transform: scaleY(1.075) scaleX(0.99); }
-  84%  { transform: scaleY(0.97) scaleX(1.004); }
+  45%  { transform: scaleY(0.95) scaleX(1.012); }
   100% { transform: scaleY(1) scaleX(1); }
 }
 
 /* EXPANDED inner: container-aligned, so the wordmark sits on the hero's left
-   edge. Controls are pushed right by the rule's auto margin. */
+   edge. Controls are pushed right by the rule's auto margin.
+   width used to be 100% of the box, deriving its size live from whatever the
+   box's own width transition currently was. That kept them visually in sync
+   at rest, but broke arrival timing: the box's rest width is the full
+   viewport (edge-to-edge bar) while the inner's is capped to --container, a
+   SMALLER number, so "inner = 100% of box, clamped" hit its cap and froze
+   partway through the box's journey, well before the box's own ease-out
+   reached its slower, longer tail. That is the "content springs into place,
+   then the edges take forever to catch up" lag. Fix: give the inner its OWN
+   width transition, targeting min(--container, 100vw) directly rather than
+   deriving from the box. Same duration and easing as the box's width
+   transition below (--dur-return here, --dur-morph on the condensed side),
+   just a different endpoint, so both are just two ordinary length-to-length
+   tweens sharing one clock: whatever their distances, they both finish at
+   the same instant. (Two curves that share a start value, the same easing
+   and duration, and end at B <= A are provably never inverted in between:
+   the narrower one, this inner, can never outrun the box that contains it.)
+   Same idea for .mnav-rule's auto margin below: left as "auto 0" in both
+   states, so the pushed gap it creates shrinks continuously to zero as inner
+   narrows, instead of being force-zeroed the instant detach starts.
+   Padding-inline is the one deliberately different, packed-when-condensed
+   value, and gets the same treatment: its own transition, same clock. */
 .mnav-inner {
   box-sizing: border-box;
-  max-width: var(--container); width: 100%; margin-inline: auto;
+  width: min(var(--container), 100vw);
   height: var(--header-h);
   padding-inline: var(--sp-5);
   display: flex; align-items: center; gap: var(--sp-4);
+  transition:
+    width var(--dur-return) var(--ease-return),
+    padding-inline var(--dur-return) var(--ease-return);
 }
 @media (min-width: 768px) { .mnav-inner { padding-inline: var(--sp-6); } }
 
-/* CONDENSED inner: compact, packed, container padding dropped. The ghost is
-   always rendered in this state to measure the pill. */
-.mnav[data-condensed] .mnav-inner,
+.mnav[data-condensed] .mnav-inner {
+  /* Same target as .mnav-box's condensed width below: at rest, condensed,
+     the inner exactly fills the box, no separate chrome around it. */
+  width: var(--pill-w, min(46rem, calc(100vw - var(--sp-4))));
+  padding-inline: var(--sp-4) var(--sp-3);
+  transition:
+    width var(--dur-morph) var(--ease-detach),
+    padding-inline var(--dur-morph) var(--ease-detach);
+}
+
+/* The measuring ghost is the one place that still wants a hard, untransitioned
+   condensed layout: it exists only to report the pill's natural width, and
+   width: auto (rather than a fixed target meant for the real, animated nav)
+   is what makes that measurement well-defined. Its rule margin is pinned to
+   0 for the same reason: an accurate "tightest possible" width. */
 .mnav-ghost .mnav-inner {
-  max-width: none; width: auto; margin-inline: 0;
+  width: auto;
   padding-inline: var(--sp-4) var(--sp-3);
 }
-.mnav[data-condensed] .mnav-rule,
 .mnav-ghost .mnav-rule { margin-inline: 0; }
 
 .mnav-home { display: inline-flex; align-items: center; gap: var(--sp-3); text-decoration: none; min-width: 0; color: inherit; }

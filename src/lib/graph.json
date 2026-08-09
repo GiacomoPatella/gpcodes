@@ -148,7 +148,7 @@
       "id": "src/app/palette/face/FaceField.tsx",
       "label": "FaceField.tsx",
       "kind": "lib",
-      "loc": 413,
+      "loc": 563,
       "imports": 1,
       "importedBy": 1
     },
@@ -554,7 +554,7 @@
   "stats": {
     "files": 28,
     "edges": 61,
-    "loc": 8253,
+    "loc": 8403,
     "externals": 10
   }
 }

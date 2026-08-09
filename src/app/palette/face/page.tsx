@@ -24,11 +24,11 @@ import FaceField, { type FaceConfig } from "./FaceField";
  */
 const DEFAULTS: FaceConfig = {
   src: "/face-source.jpg",
-  pitch: 6,
+  pitch: 4,
   repelRadius: 95,
   repelStrength: 2.4,
-  maxDotR: 2.7,
-  cutout: 0.2,
+  maxDotR: 4,
+  cutout: 0.05,
   color: "ink",
 };
 

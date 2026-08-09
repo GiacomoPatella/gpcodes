@@ -640,23 +640,382 @@ a real browser (`npx agent-browser`, light and dark), screenshots taken.
   after the footer wordmark. Both exist for the comparison; whether both survive
   or the face becomes the sole signature is still Giacomo's call.
 
-  **NEXT SESSION, the one open V2 item (Giacomo, 21 Jul):** he **loves the
-  physics** (repulsion + damped spring return), keep it untouched. The problem is
-  **the portrait is not recognisably him.** Likely causes to weigh, not obey:
-  - **Grid too coarse for identity.** At pitch 6 over a ~475px field that is only
-    ~79 cells across; faces need finer sampling to carry likeness. Try dropping
-    pitch (needs the dot size and repel tuning to follow) and/or a larger field.
-  - **The tone metric is the deeper issue.** Dot size is driven by
-    distance-from-background, which is great for *cutting the silhouette* but
-    flattens the *internal* modelling (eye sockets, nose shadow, mouth, brow)
-    that actually reads as a specific person. For cells INSIDE the subject,
-    size should probably come from **luminance/shading**, not distance-from-bg.
-    A two-stage map is the likely fix: distance-from-bg decides IF a cell is
-    subject (the float), luminance decides its dot SIZE (the likeness).
-  - Also consider a gentle contrast/gamma stretch on the in-subject luminance so
-    mid-tones separate, and check the square crop is not cutting the face too
-    tight (`objectPosition`/crop of the 2162 source).
-  This is the whole task for tomorrow; the morph (V1) is done pending his pick.
+  **V2 likeness fix: DONE, 8 Aug 2026.** The two-stage map landed: distance
+  from a fitted background model decides subject membership, luminance decides
+  dot size, so internal facial shading (eyebrows, eyes, nose, mustache, beard)
+  now reads instead of flattening into one blob. Three real bugs found and
+  fixed along the way, in `FaceField.tsx`'s `build()`:
+  1. **Gamma was inverted.** `gamma < 1` compresses luminance toward the
+     large-dot end, so an ordinary midtone rendered at ~64% of max dot size and
+     the face came out as one dark mass. Fixed to `gamma = 1.9` (>1 pushes
+     midtones toward small dots, reserves large dots for genuinely dark areas),
+     plus 3rd/97th-percentile clipping on the luminance range so one catchlight
+     or tooth cannot skew the whole scale.
+  2. **Floating halo at low `cutout`.** A single flat background-average colour
+     could not account for the backdrop's vignette, so far corners registered
+     as "far from background" purely from vignette falloff, producing a
+     disconnected dot cluster near the shoulder. Traced by dumping the raw
+     subject mask as ASCII art rather than guessing. Morphological cleanup
+     (erosion + connected-component "largest blob wins") was tried as the fix
+     and **caused a worse regression**: erosion fragments the porous face
+     interior (eyes, nostrils, highlights create many internal single-cell
+     gaps) faster than the solid shirt/shoulders, so the shirt won as "the
+     subject" and the whole head was erased at default settings. That code was
+     fully removed. The real fix is a **background model**: border samples
+     (top row + upper 40% of the side columns, the only region guaranteed to
+     be backdrop and not shirt) fit to a full **plane** over (x, y) per RGB
+     channel via least squares (3x3 normal equations, Cramer's rule), not just
+     a flat average or a radius-only model. `maxD` (the segmentation scale) is
+     the 99th percentile of per-cell distance from this model, not the literal
+     max, so one outlier cannot blow up the threshold.
+  3. **Asymmetric fringe at heavy settings** (confirmed by direct pixel
+     sampling: the backdrop is measurably brighter on the right than the left
+     at matching radius, e.g. row 15 left ≈134 vs right ≈137) is why a
+     radius-only model still left a fringe. The planar fit (independent linear
+     terms in x and y, not just radius from centre) captures that directional
+     gradient and reduced the fringe from a large prominent triangular cloud
+     to faint, localised speckle near the hair/ear at the most extreme slider
+     settings.
+
+  **Remaining fringe at `cutout: 0.05` (the slider floor) is expected, not a
+  bug.** At that threshold the algorithm trusts the background model to within
+  5% of its max residual, which is inside the real noise floor of a JPEG photo
+  (compression artefacts, sensor noise). No background model will be exact
+  enough to stay clean that close to zero tolerance. Two options if it is ever
+  worth chasing further: raise the slider's practical floor (e.g. 0.08-0.10),
+  or denoise the source photo before sampling. Left alone for now, Giacomo's
+  call, 8 Aug: **"let's keep it like this for the moment with the edited
+  settings."**
+
+  **Defaults changed, 8 Aug 2026**, to Giacomo's preferred settings from live
+  testing: `pitch: 4, maxDotR: 4, cutout: 0.05, color: "ink"` (was `pitch: 6,
+  maxDotR: 2.7, cutout: 0.2`). `repelRadius`/`repelStrength` untouched, the
+  physics were never in question. Verified: `tsc`, lint (only pre-existing
+  unrelated `no-img-element` warnings), and `npm run build` all clean.
+
+  **V2 is done for now.** Both hero prototypes have had their known issues
+  addressed; the morph (V1) is next, see below.
+
+  **V2 addition, 8 Aug 2026: auto demo swipe.** A hover affordance is
+  invisible until someone happens to move the cursor over the portrait, so
+  `FaceField.tsx` now runs a one-time synthetic sweep to teach it. Once per
+  mount, a beat (450ms) after the entrance formation settles, a fake pointer
+  sweeps from just off the left edge to just off the right edge over ~1.1s
+  (`easeInOutCubic`), then releases. It is not a separate canned effect: the
+  sweep drives the exact same `pointer.x/y` + `pointer.active` state the real
+  repel/spring code already reads in `step()`, so what plays is the real
+  interaction, just cursor-less. Mechanism:
+  - `demoPending` is set at both entrance triggers (the `rebuild(entrance)`
+    path and the `IntersectionObserver` first-view path), and consumed the
+    first time `step()`'s settle branch fires after entrance, i.e. once
+    formation has fully stopped moving. `demoTimer` (a plain
+    `setTimeout`) then fires `startDemo()` + `wake()` 450ms later, as its own
+    RAF cycle, rather than idling the loop through the pause.
+  - `startDemo()` sets `demo.active` and a `from`/`to` pair
+    (`{x: -side*0.12, y: side*0.5}` to `{x: side*1.12, y: side*0.46}`);
+    `step(now)` interpolates `pointer.x/y` along it every frame while
+    `demo.active`, using the frame's own RAF timestamp for `demo.t0` so the
+    duration is exact regardless of when the callback first fires.
+  - **Cancels instantly on real interaction.** `onMove`/`onDown` set
+    `userInteracted = true` and `demo.active = false` before anything else,
+    so a genuine cursor arriving mid-sweep hands off cleanly with no fight
+    between the synthetic and real positions. `userInteracted` also blocks
+    the demo from ever being scheduled again for that mount.
+  - Respects reduced motion at both the scheduling site and the fire site
+    (`reduced()` re-checked inside the `setTimeout` callback, since
+    preference can change between the two).
+  - Verified in a real browser: RAF-frame-count sampling showed the expected
+    three-phase shape (entrance settle, a stop, then a second motion burst
+    matching the sweep plus spring-return tail, then a full stop), a 10fps
+    `agent-browser` recording showed the visible repel wave crossing the
+    face and resolving back to the settled portrait, and a
+    `requestAnimationFrame`-count check under `prefers-reduced-motion`
+    returned zero, confirming it never runs there.
+  - **Not yet seen by Giacomo in a real browser.** Tuning knobs if he wants
+    it faster/slower, sooner/later, or a different path: the 450ms delay,
+    the 1100ms duration, and the `from`/`to` points, all in `startDemo()`.
+
+  **V2 entrance rewritten, 9 Aug 2026: staggered pop-in, not spring/spiral.**
+  The original formation entrance reused the same damped-spring physics as
+  the cursor repel: `scatter()` flung every particle away from home, then the
+  spring pulled it back, which could overshoot/oscillate before settling —
+  the same bounce complaint as V1's morph nav, just in a different prototype.
+  Landed via several rejected iterations, worth keeping so nobody re-tries
+  them:
+  1. **Fixed-angle spiral** (each particle's scatter offset rotated through a
+     shared angle while shrinking to zero) removed the spring overshoot by
+     construction, but every particle turning through the identical angle in
+     lockstep read as "one rigid disk doing a quarter-turn," not organic.
+     Per-particle stagger (delay by distance-from-centre) and per-particle
+     swirl-angle variance softened but did not fix this — Giacomo's call:
+     "don't use rotation."
+  2. **Plain global white-flash fade** (dots drawn at final position/full
+     opacity immediately, a white overlay fading out on top) removed motion
+     entirely but read as "no intro animation" — a single uniform fade has no
+     per-element texture.
+  3. **What landed:** dots stay at home position (no travel), but each one
+     starts ~4-8px offset (`POP_SHIFT`, per-particle deterministic angle) and
+     invisible, then fades in (`ctx.globalAlpha`) while easing that small
+     offset to zero (`easeOutCubic`). Each particle's start is delayed by
+     distance from centre (`POP_STAGGER`, 300ms max), so the reveal ripples
+     outward instead of firing at once. A brief white overlay (`FLASH_DURATION`,
+     240ms) rides on top for the "photo just taken" beat. `scatter()` was
+     removed; `primeEntrance()` (sets `ox`/`oy`/`delay` per particle) replaces
+     it at both entrance-trigger sites (`rebuild`'s entrance branch and the
+     `IntersectionObserver` first-view branch). Total entrance is fast
+     (~300-560ms) and self-contained in `step()`'s `entranceActive` branch,
+     which still returns before the interaction-spring code runs, same
+     settle-and-stop discipline as before.
+  4. **Verification technique, worth reusing:** sub-500ms transitions are too
+     fast for `agent-browser` video-recording + `ffmpeg` frame extraction to
+     reliably catch — individual frames land pre/post-transition, not mid-way,
+     because the CLI round-trip has its own latency relative to the real
+     animation clock. Fix: temporarily multiply the duration constants (used
+     6x here) so the same code path plays out slowly enough to confirm the
+     *shape* of the motion on video, then restore the real fast values
+     afterward. `tsc --noEmit` and `eslint` both clean at every step.
+  - **Not yet confirmed by Giacomo in a real browser.** Tuning knobs:
+    `FLASH_DURATION`, `POP_DURATION`, `POP_STAGGER`, `POP_SHIFT`, all declared
+    together near the top of the effect in `FaceField.tsx`.
+
+- **V1 bounce dialled back, 8 Aug 2026.** Giacomo liked the morph animation
+  but not the extra spring bounce on the transition between full-width and
+  floating (and back); wanted it smooth, maybe slightly gooey, not as bouncy
+  as the tier-2 build had been. Both stacking sources of overshoot (diagnosed
+  in the previous STATE pass, kept below for the exact mechanism) were toned
+  down in `src/app/palette/morph/page.tsx`:
+  - `--ease-detach` changed from `cubic-bezier(0.5, 1.5, 0.55, 1)` (the `1.5`
+    control point overshoots well past 1) to `cubic-bezier(0.32, 0.9, 0.34,
+    1)`, a soft decelerate whose control points never exceed 1, so
+    `transform`/`width`/`border-radius`/`box-shadow` all settle without
+    overshoot-and-bounce-back.
+  - `mnav-squash` collapsed from a four-keyframe squash-then-double-jiggle
+    (scaleY swinging 0.7 to 1.075 to 0.97 to 1) to one gentle squash-and-
+    release (scaleY dips to 0.95, scaleX to 1.012, straight back to 1, no
+    second overshoot). This is what keeps the "gooey" character without the
+    bounce: the shape still gives on detach, it just doesn't spring past its
+    target and back.
+  - Re-attach untouched: still the calm `--ease-return`, no keyframe, so the
+    scroll-up jitter fix stays exactly as it was.
+  - Verified by sampling, not just eyeballing: frame-by-frame `eval` polling
+    in a real browser showed `.mnav-box` width decreasing monotonically from
+    1440px to 638px with no overshoot-and-settle-back, and the squash
+    keyframe's computed `transform` peaking once (scaleY ~0.95 around
+    250ms) then recovering smoothly to `matrix(1,0,0,1,0,0)` with nothing
+    exceeding 1 on the way back.
+  - `--dur-morph: 460ms` unchanged.
+  - **Not yet confirmed by Giacomo.** Shown as changed; still wants his own
+    look before this is called settled.
+
+- **V1 detach jump fixed, 9 Aug 2026.** Giacomo flagged (screenshot from a scroll
+  recording) that content jumped from centred to left-aligned the instant the
+  full-width bar started detaching, only on that direction: not on re-attach,
+  and shouldn't happen on detach either. Root cause: `.mnav-box`'s `width`
+  animates over `--dur-morph`, but `.mnav-inner`'s own centring
+  (`margin-inline: auto` <-> `0`, plus `max-width`/`padding-inline`) has no
+  transition and snaps the instant `[data-condensed]` flips. On detach that
+  meant the inner packed itself flush-left inside a box still near full width,
+  then the box caught up and the pill "recentred" a moment later, reading as a
+  jump. Re-attach didn't show it because the wrapper's `justify-content:
+  center` keeps the box itself centred either way, so a symmetric width change
+  around a fixed centre masked the inner's own snap.
+  - Fix: `.mnav-box` is now `display: flex; justify-content: center;`, so
+    `.mnav-inner` is centred inside the box at all times regardless of its own
+    margin/width. The inner's instant snap still happens (untouched, still no
+    transition on it) but now always happens around the box's centre, so
+    there's nothing to jump.
+  - Verified by sampling, not eyeballing: `agent-browser eval` polled
+    `getBoundingClientRect()` on `.mnav-box` and `.mnav-inner` every ~20-30ms
+    across both directions. `innerCenter - boxCenter` stayed exactly `0` at
+    every sample, detach and re-attach, including the instant the inner's
+    width snaps from 1152px to 636px mid-transition.
+  - Note for next session: this ran against the Chrome MCP tools first and
+    silently produced flat/frozen samples because the window was hidden
+    (`document.visibilityState === "hidden"`, see the hidden-window memory);
+    switched to `npx agent-browser` and got real data. Same failure shape as
+    always: check the tool before concluding the code is broken.
+  - **Superseded same day, see below: the centring fix was correct but only
+    treated one symptom of a bigger problem.**
+
+- **V1 size snap fixed, 9 Aug 2026 (same day as above).** Giacomo tried the
+  centring fix live and it made things feel *more* jittery, not less: content
+  now jumped straight to its final condensed size and centred position the
+  instant detach triggered, then the box's translucent background "shortened
+  with a significant delay" around already-settled content. Correct diagnosis
+  of the previous fix: centring the box masked the ALIGNMENT half of the snap
+  (inner jumping flush-left) but the SIZE half (inner's `width`, `max-width`,
+  `padding-inline`, `margin-inline` all switching value with no transition,
+  same root cause as before) was still there and, once alignment stopped
+  hiding it, became the dominant visible artefact: the wordmark itself now
+  visibly leapt from the hero's left edge to viewport-centre in one frame.
+  - Real fix this time: stop giving the inner two discrete layouts to snap
+    between at all. `.mnav-inner` is now `width: 100%; max-width:
+    var(--container)` in BOTH states (was `width: auto` / no max-width when
+    condensed) — since the box's own `width` already animates smoothly
+    between full-viewport and the pill, an inner that is always "100% of
+    whatever the box currently is" tracks that animation for free, with
+    nothing of its own to snap. `margin-inline: auto` came off entirely
+    (redundant now that the box centres via flex from the earlier fix).
+    `.mnav-rule`'s auto margin (pushes ⌘K/theme to the far right when
+    expanded) is no longer force-zeroed on condense either: left as `auto 0`
+    in both states, the pushed gap it creates just continuously shrinks to
+    nothing as the inner narrows, which is the same "let an existing
+    transition do the work for free" trick. The one property that is
+    genuinely a two-value swap, `padding-inline` (roomy at rest, packed once
+    condensed), now has its own `transition: padding-inline var(--dur-morph)
+    var(--ease-detach|return)`, mirroring exactly how the box already splits
+    its own transition by direction. The measuring ghost keeps the old hard
+    `width: auto` / zeroed-rule layout (still correct and necessary there:
+    it exists purely to report the pill's natural width, and that has to be
+    computed against real "shrink to content" sizing, not "100% of a box
+    that doesn't exist yet").
+  - Verified the same way, sampling not eyeballing: `agent-browser eval`
+    polled `.mnav-box` width, `.mnav-inner` width, and computed
+    `padding-left` on `.mnav-inner` every ~25-30ms across both directions.
+    All three now move together at every sample (e.g. detach: 1280/1152/32px
+    -> 638/636/16px, strictly monotonic, no value ever jumping ahead of or
+    lagging the others); `innerCenter - boxCenter` still holds at `0`
+    throughout from the earlier fix.
+  - The binary trigger itself (condense the instant the sentinel leaves view,
+    no scroll-position hysteresis) is unchanged and was a deliberate earlier
+    call, see the "Condense the instant..." comment in `MorphLab`'s effect.
+    Giacomo's "detaches 1 nanosecond after I touch the scroll" complaint may
+    partly be about that instant trigger rather than the animation quality;
+    worth a direct question before touching it, since it was a deliberate
+    fix for a different bug (scroll-position hysteresis jitter) and a
+    scroll-linked (non-binary) alternative is a materially bigger change.
+  - **Not yet confirmed by Giacomo.**
+
+- **V1 re-attach arrival timing fixed, 9 Aug 2026 (same day).** Giacomo tried
+  the size-snap fix live: much better, but on RE-ATTACH (floating back up to
+  fixed) the content "springs too quickly to the fixed position" while "the
+  bottom border lines take too long to reach the edges" — content arriving,
+  then the bar visibly still growing around it for a beat after. Diagnosis:
+  `.mnav-inner`'s `width: 100%` was still being read live off `.mnav-box`,
+  which is correct for keeping them in sync AT REST, but wrong for arrival
+  timing, because the box and inner have different rest widths by design
+  (box = full viewport edge-to-edge bar, inner = capped to `--container` so
+  content aligns with the hero). Deriving inner's width as "100% of box,
+  clamped to --container" means the clamp engages, and inner FREEZES, the
+  moment the box's live width crosses the container threshold, which on a
+  typical viewport happens well before the box's own ease-out finishes its
+  slower, longer decelerating tail out to full width. Content stops moving
+  a good fraction of a second before the bar does, exactly the reported lag.
+  - Fix: `.mnav-inner` now has its OWN `width` transition, target
+    `min(var(--container), 100vw)`, no longer derived from the box at all.
+    Same `--dur-morph` and the same `--ease-detach`/`--ease-return` split as
+    the box's own width transition, just a different endpoint. Two lengths
+    that share a start value and a clock, animated with the same easing and
+    duration, always reach their own (possibly different) end values at
+    exactly the same time — that's what makes "detach/attach at the same
+    moment" hold regardless of how much further the box travels than the
+    inner. It also can't overshoot: since the inner's target is never bigger
+    than the box's, and both start equal and move via the same easing curve,
+    the inner is mathematically guaranteed to stay <= the box at every
+    instant in between, not just at the endpoints, so it can never visually
+    escape the bar it lives in.
+  - Condensed target for the inner is now literally the same expression as
+    the box's own condensed width (`var(--pill-w, min(46rem, calc(100vw -
+    var(--sp-4))))`), so detach was already fine (both had the same target
+    already) and stays fine.
+  - Verified by sampling: `agent-browser eval` polled both widths every
+    20ms through a full re-attach. Before: inner froze at 1152px around
+    t=570ms while the box kept animating to 1280px until t=791ms, a ~220ms
+    gap. After: inner reaches 1152px at t=761ms and the box reaches 1280px
+    at t=782ms, within one sampling tick of each other, i.e. effectively
+    simultaneous. Detach re-verified unaffected (box/inner both still land
+    on the shared pill width together, as before).
+  - **Not yet confirmed by Giacomo.**
+
+- **V1 re-attach speed and trigger point, 9 Aug 2026 (same day).** With
+  arrival timing fixed, Giacomo asked for the re-attach transition itself to
+  be faster, and to start a little before the scroll gesture actually reaches
+  the top rather than only after: "it currently lags bc it starts after the
+  scroll reaches the top."
+  - **Trigger:** replaced the old 1px `IntersectionObserver` sentinel (which
+    could only ever fire at exactly `scrollY === 0`, hence the lag Giacomo
+    felt: nothing happens until the gesture is fully over) with a scroll
+    listener carrying two distinct thresholds instead of one: detach still
+    fires the instant `scrollY > 0` (unchanged, was already immediate and
+    nobody asked to change it), but re-attach now fires as soon as `scrollY
+    <= 64` (`--sp-8`) rather than requiring `scrollY === 0`. Kept binary
+    (still just a `boolean`, `requestAnimationFrame`-batched), so the
+    "no hysteresis to fight" property the old sentinel comment cared about
+    still holds: a scroll position between 0 and 64 is stable either way, it
+    just depends which edge you arrived from, so there's no rapid on/off
+    flicker to worry about, only a deliberately earlier start point on the
+    way up. The sentinel div and its CSS rule were dead code once this
+    landed, removed both.
+  - **Speed:** `--dur-morph` (460ms) now only drives the DETACH direction;
+    re-attach gets its own `--dur-return: 320ms` on the wrapper transform,
+    the box's width/border/radius/shadow, and the inner's width/padding
+    transitions (everywhere the base, non-`[data-condensed]` rule applies).
+    Detach keeps the slower duration; it triggers instantly, so it can
+    afford to take longer, and Giacomo didn't ask to change it.
+  - Verified: `agent-browser eval`, scroll-position + `data-condensed`
+    reads confirmed condensed stays true at `y=70`, flips false at `y=50`,
+    and detach still flips true instantly at `y=1`. Box-width sampling
+    through a full re-attach showed the transition completing in ~300ms
+    (started ~t=42-61ms after the scroll command, landed at 1280px by
+    t=341ms), matching the new 320ms duration rather than the old 460ms.
+  - **Not yet confirmed by Giacomo.**
+
+- **V1 re-attach threshold widened, and a real slow-scroll bug found and
+  fixed, 9 Aug 2026 (same day).** Giacomo: still felt laggy, wanted the
+  return transition starting earlier than the 64px the previous pass landed.
+  Separately, a slow, deliberate scroll DOWN from fixed made the bar "shake,
+  dance, stretch and shrink" repeatedly, "undecided if to shrink to float or
+  not." A fast, decisive scroll never showed it.
+  - **Threshold:** `REATTACH_PX` raised from 64 to 160. Plain tuning, not a
+    design-token value; picked for feel (more runway for the 320ms return
+    transition to actually finish before a real scroll gesture's deceleration
+    tail ends).
+  - **The shake was a genuine bug in the previous pass's hysteresis, not a
+    vague feeling: found and fixed.** The earlier fix, `setCondensed(prev =>
+    scrollY > (prev ? REATTACH_PX : 0))`, reasoned that a position between 0
+    and REATTACH_PX is "stable either way, just depends which edge you
+    arrived from" — true only if the state updates atomically once per
+    crossing. It does not: this is a per-scroll-sample check with no memory
+    of direction, so for ANY y strictly between 0 and REATTACH_PX, "detach at
+    y > 0" and "re-attach at y <= REATTACH_PX" are BOTH satisfied
+    simultaneously, and which one the code evaluates depends only on `prev`,
+    i.e. on the OUTCOME of the previous sample, not on which direction the
+    user is actually scrolling. Slowly scrolling down through that band
+    produces a new sample roughly every animation frame, and the two rules
+    took turns winning on alternating samples: condense (prev was false, y >
+    0) is followed immediately next frame by re-attach (prev is now true, but
+    y still not > REATTACH_PX), which flips prev back to false, so the NEXT
+    frame condenses again, and so on for every single frame spent inside the
+    band. That is the shake, literally the squash keyframe and width
+    transition re-triggering every ~16ms. A fast scroll jumps the whole band
+    in one or two samples and never dwells there, which is why it looked
+    fine.
+  - Fix: track direction, not just position. A `lastY` ref compares each
+    sample to the previous one (`dy = y - lastY.current`); moving down
+    (`dy > 0`) always condenses and holds, regardless of position within the
+    band; moving up (`dy > 0` false, `dy < 0`) is the only case allowed to
+    re-attach, and only once past REATTACH_PX; no net movement holds
+    whatever the state already was. This removes the ambiguity that made the
+    old check position-only and direction-blind: the two rules can no longer
+    both fire for the same y, because which one applies now depends on which
+    way you got there.
+  - Verified by simulating a slow scroll, not just a fast one, which is
+    exactly the case the earlier eyeballing (and earlier `agent-browser`
+    verification, which only ever tested single big jumps) missed: stepped
+    `scrollY` in 3px increments across the whole 0-300px range (down) and
+    300-0px range (up), reading `data-condensed` after every step. Zero
+    flips-back-and-forth (`flapped: false`) in both directions; condensed
+    turns on at the first step past 0 and stays on the whole way down;
+    re-attach now flips at exactly y=160 on the way up, matching the new
+    threshold.
+  - Lesson for next time: the original binary sentinel comment's claim (single
+    threshold, "no hysteresis to fight") was correct for THAT design because
+    it only ever had one threshold in the first place. The moment a second,
+    direction-dependent threshold was introduced, position alone stopped
+    being sufficient information, and this needed catching by simulating a
+    slow multi-sample crossing, not just checking the before/after value at
+    two widely separated scroll positions.
+  - **Not yet confirmed by Giacomo.**
 
 Original specs, kept for reference:
 
