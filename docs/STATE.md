@@ -1043,6 +1043,107 @@ a real browser (`npx agent-browser`, light and dark), screenshots taken.
     `morph/page.tsx` crediting drench as V1's precedent was left alone: true
     history, not a live link.
 
+- **Both hero prototypes shipped to the real homepage together, 9 Aug 2026.**
+  Giacomo's call: not a pick-one-of-two, both V1 and V2 land on `/` at once.
+  This is the decision the "Not yet confirmed by Giacomo" notes above were
+  waiting on.
+  - **Nav (`src/components/Menu.tsx`).** Now a client component. Takes a new
+    `morph` prop, default `false` (every other page: `/lab`, `/lab/architecture`,
+    `/palette`, `/palette/face`, `/404`, unchanged, still the plain
+    always-floating `.fmenu` pill, verified by checking `.mnav` does not
+    exist in their DOM). The homepage passes `morph`, getting the full-width
+    bar that detaches into that same pill on scroll. The actual nav content
+    (avatar/wordmark, IA links, soon-tooltips, ⌘K, theme toggle) is now a
+    shared `MenuInner`, rendered identically by both modes; a `ghost` variant
+    swaps `CommandPalette`/`ThemeToggle` for inert same-size stand-ins for the
+    hidden pill-width-measuring copy, since `CommandPalette` owns fixed DOM
+    ids and a global ⌘K listener that must exist exactly once. The `.mnav`/
+    `.mnav-box`/`.mnav-inner` mechanics moved from the prototype's inline
+    `<style>` into `globals.css` as shared, permanent rules; the actual nav
+    ITEMS reuse the existing `.fmenu-home`/`.fmenu-avatar`/`.wordmark`/
+    `.fmenu-links`/`.fmenu-link`/`.fmenu-soon-wrap`/`.fmenu-tip`/
+    `.fmenu-rule`/`.palette-trigger`/`.icon-btn` verbatim rather than a
+    parallel `.mnav-*` item class family, which is also what guarantees the
+    condensed end state is pixel-identical to the plain pill (verified: same
+    padding-inline, border-radius, shadow, background, blur, sp-3 float
+    offset) rather than two class families someone has to keep in sync by
+    hand. One real difference had to be added: `.fmenu-rule` has no
+    push-right margin in the compact pill (nothing to push into there), but
+    the full-width bar needs it to send ⌘K/theme to the far right like a
+    normal header, so `.mnav-inner .fmenu-rule { margin-inline: auto 0; }` is
+    a new, scoped addition, left off `.fmenu-rule` itself. Also fixed in
+    passing: the reduced-motion block never covered `.mnav-inner`'s own
+    width/padding transition (a pre-existing gap from the prototype), added.
+    `/palette/morph` itself was left untouched (own local `NavInner`
+    stand-in, own inline `<style>` with the same class names): the page's own
+    later-loaded styles win the cascade over the new global ones by DOM
+    order, verified no visual regression, but it is now genuinely duplicated
+    CSS rather than a single source of truth. Worth collapsing the prototype
+    down to `<Menu current="/palette/morph" morph />` at some point, the way
+    `/palette/face` already uses the real `<Menu>`; not done this pass to
+    keep the diff to what was asked.
+  - **Face (`src/components/FaceField.tsx`, moved from
+    `src/app/palette/face/FaceField.tsx`).** Exports `FACE_DEFAULTS`, the
+    same tuned constants `/palette/face` was already using, now the single
+    source for both places. Homepage hero (`src/app/page.tsx`) restructured
+    into a two-column grid at >=1024px (`.hero-grid`/`.hero-copy`/
+    `.hero-face`, moved into `globals.css` from the prototype's inline
+    `<style>`), face on the right, hidden and single-column below that,
+    exactly as `/palette/face` already behaved.
+  - **A real, non-obvious bug, found and fixed: the face never rendered on
+    the homepage at first** (blank canvas, silent). Root cause: `page.tsx`
+    is a Server Component; `<FaceField {...FACE_DEFAULTS} />` imported
+    `FACE_DEFAULTS` as a plain data value from `FaceField.tsx`, a `"use
+    client"` module. A named value export from a client module does not
+    survive the server-to-client serialization boundary as real data, it
+    resolves to a client-reference marker; every field of the spread came
+    through `undefined`, `cols = Math.max(8, Math.round(side / pitch))`
+    went `NaN`, and `getImageData(0, 0, NaN, NaN)` threw (WebIDL rejects
+    `NaN` for a `long` argument), caught by Next's error overlay, canvas
+    left blank since `build()` bailed before populating any particles.
+    `/palette/face` never hit this because its own page is already a client
+    component (`"use client"` at the top), so passing `FACE_DEFAULTS` there
+    is an ordinary same-side import.
+    - Fix attempt 1, wrong: a parameter default,
+      `function FaceField(cfg: FaceConfig = FACE_DEFAULTS)`. Resolves the
+      right value at runtime, but `<FaceField />` still failed to
+      type-check: JSX with no attributes produces a props type of `{}`, and
+      TypeScript checks `{}` against the parameter's own annotated type
+      (`FaceConfig`), not what the default would resolve to; `{}` is missing
+      every required field.
+    - Fix attempt 2, also wrong: `cfgProp?: FaceConfig` resolved with
+      `cfgProp ?? FACE_DEFAULTS` inside the body. Same failure, same reason:
+      `{}` does not satisfy `FaceConfig | undefined` either (it is not
+      literally `undefined`).
+    - **What actually worked:** every field individually destructured with
+      its own default from `FACE_DEFAULTS`, typed as `Partial<FaceConfig> =
+      {}`. `{}` trivially satisfies `Partial`, so `<FaceField />`
+      type-checks; `/palette/face`'s full `{...cfg}` spread still
+      type-checks too, since a complete `FaceConfig` is always a valid
+      `Partial<FaceConfig>`. Reproduced and confirmed the exact failing/
+      passing pattern in isolation (a throwaway `src/repro.tsx`, deleted
+      after) before touching the real component, rather than guessing
+      between the three approaches against the full dev server each time.
+  - Verified end to end in a real browser (`agent-browser`, the Chrome MCP
+    window is backgrounded again this session, see the hidden-window
+    memory): homepage screenshot at 1440px shows the full-width bar and the
+    rendered halftone portrait together; scripted scroll confirms
+    `data-condensed` still flips correctly and the condensed pill is
+    visually identical to the old floating pill; `/lab` screenshot confirms
+    the plain pill, unaffected, `/lab`'s own item highlighted; 768px and
+    390px screenshots confirm the face hides and the nav's own existing
+    breakpoints (soon-links drop, then the tld, then the ⌘K label) still
+    fire correctly in morph mode; `/palette/morph` re-screenshotted, no
+    visual regression from the now-duplicated CSS. `npx tsc --noEmit`,
+    `npx eslint src` (0 errors, the same 3 deliberate `no-img-element`
+    warnings plus one more from the same line now reached via `MenuInner`'s
+    second call site) and `npm run build` all clean; also removed one
+    genuinely stale `eslint-disable-next-line react-hooks/exhaustive-deps`
+    in `FaceField.tsx` that ESLint flagged as unused once other things
+    moved around it.
+  - **Not yet confirmed by Giacomo in a real browser** (only verified by the
+    agent so far, per the hidden-window constraint this session).
+
 Original specs, kept for reference:
 
 Giacomo wanted **two isolated prototypes to compare**, built the way the drenched

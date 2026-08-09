@@ -3,7 +3,7 @@
 import { useState } from "react";
 import CopyPrompt from "@/components/CopyPrompt";
 import Menu from "@/components/Menu";
-import FaceField, { type FaceConfig } from "./FaceField";
+import FaceField, { FACE_DEFAULTS, type FaceConfig } from "@/components/FaceField";
 
 /**
  * HERO PROTOTYPE, VERSION 2. Dev aid, noindex, live site untouched.
@@ -22,18 +22,8 @@ import FaceField, { type FaceConfig } from "./FaceField";
  * decision of whether both survive, or the face becomes the sole signature, is
  * Giacomo's and is easier to make with the two side by side.
  */
-const DEFAULTS: FaceConfig = {
-  src: "/face-source.jpg",
-  pitch: 4,
-  repelRadius: 95,
-  repelStrength: 2.4,
-  maxDotR: 4,
-  cutout: 0.05,
-  color: "ink",
-};
-
 export default function FaceLab() {
-  const [cfg, setCfg] = useState<FaceConfig>(DEFAULTS);
+  const [cfg, setCfg] = useState<FaceConfig>(FACE_DEFAULTS);
   const set = <K extends keyof FaceConfig>(k: K, v: FaceConfig[K]) =>
     setCfg((c) => ({ ...c, [k]: v }));
 

@@ -48,7 +48,55 @@ const COLOR_TOKEN: Record<FaceConfig["color"], string> = {
   accent: "--accent-ink",
 };
 
-export default function FaceField(cfg: FaceConfig) {
+/** Giacomo's tuned settings from live testing, 8 Aug 2026 (see docs/STATE.md).
+ *  The single source of truth for both the homepage hero and the /palette/face
+ *  tuning harness, so the two can never quietly drift apart. */
+export const FACE_DEFAULTS: FaceConfig = {
+  src: "/face-source.jpg",
+  pitch: 4,
+  repelRadius: 95,
+  repelStrength: 2.4,
+  maxDotR: 4,
+  cutout: 0.05,
+  color: "ink",
+};
+
+/**
+ * Every field individually defaulted via destructuring, not a single
+ * `cfg: FaceConfig = FACE_DEFAULTS` parameter default: page.tsx (a Server
+ * Component) renders this with no props at all, because a plain data value
+ * imported from a "use client" module does not survive the server-to-client
+ * boundary as real data (it resolves to a client-reference marker, so every
+ * field came through undefined, cols went NaN, and getImageData threw).
+ * Resolving defaults inside the client module itself needs nothing to cross
+ * that boundary. A single whole-object default, or even an optional
+ * `cfgProp?: FaceConfig` resolved with `??`, both LOOK like they should let
+ * `<FaceField />` type-check, but neither does: JSX with no attributes
+ * produces a props type of `{}`, and TypeScript checks `{}` against the
+ * parameter's own annotated type (`FaceConfig`, or `FaceConfig | undefined`)
+ * rather than accounting for what the default resolves to at runtime; `{}`
+ * satisfies neither. `Partial<FaceConfig> = {}` is what actually
+ * type-checks, since `{}` is trivially a valid `Partial`. /palette/face still
+ * passes a full `FaceConfig` via `{...cfg}`, itself a valid `Partial`.
+ */
+export default function FaceField({
+  src = FACE_DEFAULTS.src,
+  pitch = FACE_DEFAULTS.pitch,
+  repelRadius = FACE_DEFAULTS.repelRadius,
+  repelStrength = FACE_DEFAULTS.repelStrength,
+  maxDotR = FACE_DEFAULTS.maxDotR,
+  cutout = FACE_DEFAULTS.cutout,
+  color = FACE_DEFAULTS.color,
+}: Partial<FaceConfig> = {}) {
+  const cfg: FaceConfig = {
+    src,
+    pitch,
+    repelRadius,
+    repelStrength,
+    maxDotR,
+    cutout,
+    color,
+  };
   const hostRef = useRef<HTMLDivElement>(null);
   // Latest config in a ref so the pointer handlers and RAF loop read live
   // values without the effect tearing down and rebuilding on every tweak.
@@ -681,7 +729,6 @@ export default function FaceField(cfg: FaceConfig) {
     // Rebuilt only when the SOURCE changes; live tuning reads cfgRef so the
     // field is not town down on every slider nudge. pitch/maxDotR need a
     // rebuild, handled by the caller keying the component on them.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <div className="face-field" ref={hostRef} />;

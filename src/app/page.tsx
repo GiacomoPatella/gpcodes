@@ -2,6 +2,7 @@ import CopyPrompt from "@/components/CopyPrompt";
 import Fig from "@/components/Fig";
 import ParticleWordmark from "@/components/ParticleWordmark";
 import Menu from "@/components/Menu";
+import FaceField from "@/components/FaceField";
 import { TESTIMONIALS, VISIBLE_WORK, isHidden } from "@/data/site";
 
 /* The graphic design contact sheet, eleven pieces across five clients.
@@ -77,38 +78,52 @@ export default function Home() {
         skip to content
       </a>
 
-      <Menu current="/" />
+      <Menu current="/" morph />
 
       <main id="main" className="flex-1">
         {/* ============ HERO ============ */}
         <section className="hero" aria-labelledby="hero-title">
-          <div className="container">
-            <p className="mono-label">
-              Giacomo Patella · senior product designer
-            </p>
-            <h1 id="hero-title" style={{ marginTop: "var(--sp-4)" }}>
-              I make complicated products easier to live&nbsp;with.
-            </h1>
-            {/* The eyebrow already carries name and role, and hero-meta carries
-                Florence, so the dek says neither. What is left is the part
-                nothing else on the page says: how long, where now, where next. */}
-            <p className="dek">
-              Over a decade of that now, most recently the AI workspace at{" "}
-              <strong>Passionfruit</strong>. Lately I&rsquo;m deep in AI
-              tooling, working out what a design engineer actually is and
-              whether I can become&nbsp;one.
-            </p>
-
-            {/* The eyebrow carries name and role; the prose carries tenure and
-                Passionfruit. All that's left here is how to reach me. The
-                coordinates were removed as rhythm noise (Giacomo, 21 Jul): this
-                metadata is kept as raw material for future inline hover moments,
-                not a data readout. See the roadmap note in docs/STATE.md. */}
-            <div className="hero-meta">
-              <p className="hero-meta-line">
-                <a href="mailto:gp@gpcodes.com">gp@gpcodes.com</a>
+          <div className="container hero-grid">
+            <div className="hero-copy">
+              <p className="mono-label">
+                Giacomo Patella · senior product designer
               </p>
-              <CopyPrompt />
+              <h1 id="hero-title" style={{ marginTop: "var(--sp-4)" }}>
+                I make complicated products easier to live&nbsp;with.
+              </h1>
+              {/* The eyebrow already carries name and role, and hero-meta carries
+                  Florence, so the dek says neither. What is left is the part
+                  nothing else on the page says: how long, where now, where next. */}
+              <p className="dek">
+                Over a decade of that now, most recently the AI workspace at{" "}
+                <strong>Passionfruit</strong>. Lately I&rsquo;m deep in AI
+                tooling, working out what a design engineer actually is and
+                whether I can become&nbsp;one.
+              </p>
+
+              {/* The eyebrow carries name and role; the prose carries tenure and
+                  Passionfruit. All that's left here is how to reach me. The
+                  coordinates were removed as rhythm noise (Giacomo, 21 Jul): this
+                  metadata is kept as raw material for future inline hover moments,
+                  not a data readout. See the roadmap note in docs/STATE.md. */}
+              <div className="hero-meta">
+                <p className="hero-meta-line">
+                  <a href="mailto:gp@gpcodes.com">gp@gpcodes.com</a>
+                </p>
+                <CopyPrompt />
+              </div>
+            </div>
+
+            {/* Interactive halftone portrait, filling the ~45% of dead hero
+                space the impeccable critique flagged at >=1024px. Hidden below
+                that: single-column, as the hero always was. Decorative, so it
+                carries no accessible content of its own. No props, deliberately:
+                this is a Server Component rendering a Client Component, and
+                FaceField resolves its own tuned defaults internally, see the
+                comment on FaceField itself for why that has to happen there
+                rather than here. */}
+            <div className="hero-face" aria-hidden="true">
+              <FaceField />
             </div>
           </div>
         </section>

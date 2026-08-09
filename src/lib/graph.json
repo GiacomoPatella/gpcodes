@@ -70,7 +70,7 @@
       "kind": "external",
       "loc": 0,
       "imports": 0,
-      "importedBy": 10
+      "importedBy": 11
     },
     {
       "id": "scripts/graph.mjs",
@@ -92,7 +92,7 @@
       "id": "src/app/globals.css",
       "label": "globals.css",
       "kind": "style",
-      "loc": 1963,
+      "loc": 2175,
       "imports": 1,
       "importedBy": 1
     },
@@ -132,23 +132,15 @@
       "id": "src/app/page.tsx",
       "label": "app/page.tsx",
       "kind": "route",
-      "loc": 697,
-      "imports": 5,
+      "loc": 712,
+      "imports": 6,
       "importedBy": 0
-    },
-    {
-      "id": "src/app/palette/face/FaceField.tsx",
-      "label": "FaceField.tsx",
-      "kind": "lib",
-      "loc": 688,
-      "imports": 1,
-      "importedBy": 1
     },
     {
       "id": "src/app/palette/face/page.tsx",
       "label": "face/page.tsx",
       "kind": "route",
-      "loc": 207,
+      "loc": 197,
       "imports": 4,
       "importedBy": 0
     },
@@ -193,6 +185,14 @@
       "importedBy": 3
     },
     {
+      "id": "src/components/FaceField.tsx",
+      "label": "FaceField.tsx",
+      "kind": "component",
+      "loc": 735,
+      "imports": 1,
+      "importedBy": 2
+    },
+    {
       "id": "src/components/Fig.tsx",
       "label": "Fig.tsx",
       "kind": "component",
@@ -228,8 +228,8 @@
       "id": "src/components/Menu.tsx",
       "label": "Menu.tsx",
       "kind": "component",
-      "loc": 99,
-      "imports": 3,
+      "loc": 231,
+      "imports": 4,
       "importedBy": 6
     },
     {
@@ -268,7 +268,7 @@
       "id": "src/lib/graph.json",
       "label": "graph.json",
       "kind": "lib",
-      "loc": 544,
+      "loc": 552,
       "imports": 0,
       "importedBy": 1
     },
@@ -396,6 +396,10 @@
     },
     {
       "from": "src/app/page.tsx",
+      "to": "src/components/FaceField.tsx"
+    },
+    {
+      "from": "src/app/page.tsx",
       "to": "src/components/Fig.tsx"
     },
     {
@@ -411,20 +415,16 @@
       "to": "src/data/site.ts"
     },
     {
-      "from": "src/app/palette/face/FaceField.tsx",
-      "to": "react"
-    },
-    {
       "from": "src/app/palette/face/page.tsx",
       "to": "react"
-    },
-    {
-      "from": "src/app/palette/face/page.tsx",
-      "to": "src/app/palette/face/FaceField.tsx"
     },
     {
       "from": "src/app/palette/face/page.tsx",
       "to": "src/components/CopyPrompt.tsx"
+    },
+    {
+      "from": "src/app/palette/face/page.tsx",
+      "to": "src/components/FaceField.tsx"
     },
     {
       "from": "src/app/palette/face/page.tsx",
@@ -487,6 +487,10 @@
       "to": "src/lib/machine.ts"
     },
     {
+      "from": "src/components/FaceField.tsx",
+      "to": "react"
+    },
+    {
       "from": "src/components/Fig.tsx",
       "to": "src/lib/images.json"
     },
@@ -520,6 +524,10 @@
     },
     {
       "from": "src/components/Menu.tsx",
+      "to": "react"
+    },
+    {
+      "from": "src/components/Menu.tsx",
       "to": "src/components/CommandPalette.tsx"
     },
     {
@@ -537,8 +545,8 @@
   ],
   "stats": {
     "files": 27,
-    "edges": 59,
-    "loc": 8252,
+    "edges": 61,
+    "loc": 8656,
     "externals": 10
   }
 }

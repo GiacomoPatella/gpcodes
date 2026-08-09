@@ -598,6 +598,182 @@ kbd {
     display: none;
   }
 }
+
+/* ---- the morphing nav (homepage only, Menu's `morph` prop) ----
+   A full-width static bar at rest, content aligned to the hero's left edge
+   like a normal header, that detaches into the same floating pill above on
+   first scroll. The condensed end state is deliberately identical to
+   .fmenu/.fmenu-wrap at rest (same padding-inline, border-radius, shadow,
+   background, blur, sp-3 float offset): reusing .fmenu-home, .fmenu-*,
+   .palette-trigger and .icon-btn below for the actual nav items is what
+   guarantees that, rather than two class families kept in sync by hand.
+   Ported from src/app/palette/morph/page.tsx; the fix history (detach/
+   re-attach jump, size-snap lag, arrival timing, trigger point, a real
+   slow-scroll hysteresis bug) is in docs/STATE.md. */
+
+.mnav {
+  --dur-morph: 460ms;
+  /* RE-ATTACH is quicker than DETACH: it triggers before scroll actually
+     reaches the top (see Menu's scroll effect), so a shorter duration is
+     what makes it land at, rather than after, the moment the gesture ends.
+     Detach triggers instantly and can afford to take its time. */
+  --dur-return: 320ms;
+  /* DETACH: a soft decelerate, no overshoot past the pill shape (paired with
+     a gentle single-squash keyframe below for the gooey feel, not a bounce).
+     RE-ATTACH (the base rule) is the same calm ease-out with no keyframe. */
+  --ease-detach: cubic-bezier(0.32, 0.9, 0.34, 1);
+  --ease-return: cubic-bezier(0.2, 0, 0.2, 1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  transform: translateY(0);
+  transition: transform var(--dur-return) var(--ease-return);
+}
+.mnav[data-condensed] {
+  transform: translateY(var(--sp-3));
+  transition: transform var(--dur-morph) var(--ease-detach);
+}
+
+.mnav-box {
+  pointer-events: auto;
+  box-sizing: border-box;
+  width: 100%;
+  /* Centres .mnav-inner inside the box at all times, so centring is never
+     the job of the inner's own margin. */
+  display: flex;
+  justify-content: center;
+  color: var(--ink);
+  /* one constant frosted surface, so hero content passes UNDER the bar and
+     never through it; only the shape changes on scroll. Matches .fmenu. */
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid transparent;
+  border-bottom-color: var(--line);
+  border-radius: 0;
+  box-shadow: none;
+  transform-origin: top center;
+  transition:
+    width var(--dur-return) var(--ease-return),
+    border-color var(--dur-return) var(--ease-return),
+    border-radius var(--dur-return) var(--ease-return),
+    box-shadow var(--dur-return) var(--ease-return);
+}
+.mnav[data-condensed] .mnav-box {
+  width: var(--pill-w, min(46rem, calc(100vw - var(--sp-4))));
+  border-color: var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  transition:
+    width var(--dur-morph) var(--ease-detach),
+    border-color var(--dur-morph) var(--ease-detach),
+    border-radius var(--dur-morph) var(--ease-detach),
+    box-shadow var(--dur-morph) var(--ease-detach);
+  /* the gloop: one gentle squash, no jiggle back past 1. Bound to the
+     condensed state, so it plays once on detach and is simply absent on
+     re-attach, which is why scrolling back up never bounces. */
+  animation: mnav-squash var(--dur-morph) both;
+}
+@keyframes mnav-squash {
+  0% {
+    transform: scaleY(1) scaleX(1);
+  }
+  45% {
+    transform: scaleY(0.95) scaleX(1.012);
+  }
+  100% {
+    transform: scaleY(1) scaleX(1);
+  }
+}
+
+/* Inner is always 100% of the box in EXPANDED terms, but with its own width
+   transition (not derived live from the box, see docs/STATE.md) targeting
+   min(--container, 100vw): the box's rest width is the full viewport, the
+   inner's is capped to the container so content aligns with the hero, and
+   deriving one from the other live broke arrival timing. Same duration and
+   easing as the box above, just a different endpoint, so both finish at the
+   same instant regardless of how far each one travels. */
+.mnav-inner {
+  box-sizing: border-box;
+  width: min(var(--container), 100vw);
+  height: var(--header-h);
+  padding-inline: var(--sp-5);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  transition:
+    width var(--dur-return) var(--ease-return),
+    padding-inline var(--dur-return) var(--ease-return);
+}
+@media (min-width: 768px) {
+  .mnav-inner {
+    padding-inline: var(--sp-6);
+  }
+}
+.mnav[data-condensed] .mnav-inner {
+  /* Same target as .mnav-box's condensed width above: at rest, condensed,
+     the inner exactly fills the box, matching .fmenu's own padding. */
+  width: var(--pill-w, min(46rem, calc(100vw - var(--sp-4))));
+  padding-inline: var(--sp-4) var(--sp-3);
+  transition:
+    width var(--dur-morph) var(--ease-detach),
+    padding-inline var(--dur-morph) var(--ease-detach);
+}
+/* .fmenu-rule has no push in the compact pill: there is nothing to push
+   into. Here, at rest, the bar is much wider than its content, so the same
+   rule (left untouched otherwise) pushes ⌘K/theme to the far right, like a
+   normal header; as the bar narrows on detach, the pushed gap it creates
+   shrinks continuously to zero on its own, with nothing to snap. */
+.mnav-inner .fmenu-rule {
+  margin-inline: auto 0;
+}
+
+/* The measuring ghost: laid out, sized to content, but never seen or hit. It
+   exists only to report the pill's natural width, so it gets a hard,
+   untransitioned condensed layout unconditionally, and its rule margin is
+   pinned to 0 (not the push above) for the same reason: an accurate
+   "tightest possible" width. */
+.mnav-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: max-content;
+  visibility: hidden;
+  pointer-events: none;
+}
+.mnav-ghost .mnav-box {
+  width: max-content;
+}
+.mnav-ghost .mnav-inner {
+  width: auto;
+  padding-inline: var(--sp-4) var(--sp-3);
+}
+.mnav-ghost .mnav-inner .fmenu-rule {
+  margin-inline: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mnav,
+  .mnav .mnav-box,
+  .mnav-inner {
+    transition: none;
+  }
+  .mnav[data-condensed] .mnav-box {
+    animation: none;
+  }
+}
+@media print {
+  .mnav {
+    display: none;
+  }
+}
+
 .palette-trigger {
   display: inline-flex;
   align-items: center;
@@ -682,6 +858,42 @@ kbd {
 .hero-meta-line a:hover {
   text-decoration-color: var(--accent-ink);
   color: var(--accent-ink);
+}
+
+/* ---- hero face field (>=1024px only) ----
+   Fills the ~45% of dead hero space the impeccable critique flagged with an
+   interactive halftone portrait. Ported from src/app/palette/face/; ink
+   colour, cursor repulsion with damped spring return. Single-column and
+   hidden below 1024px, same as it always was. */
+.hero-grid {
+  overflow: clip;
+}
+.hero-face {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 30rem);
+    align-items: center;
+    gap: var(--sp-8);
+  }
+  .hero-copy {
+    min-width: 0;
+  }
+  .hero-face {
+    display: block;
+    justify-self: end;
+    width: 100%;
+    max-width: 30rem;
+    aspect-ratio: 1 / 1;
+  }
+}
+.face-field {
+  width: 100%;
+  height: 100%;
+  /* so a drag over the field disturbs it instead of scrolling the page */
+  touch-action: none;
 }
 
 /* ---- copy-as-prompt row (the demoted machine-readable control) ---- */
